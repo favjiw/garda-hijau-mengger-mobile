@@ -19,14 +19,23 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // Server API Garda Hijau. Dokumentasi: https://gardahijau.codelabspace.or.id/api-docs
+        buildConfigField("String", "BASE_URL", "\"https://gardahijau.codelabspace.or.id/\"")
+
         // Mode demo: true = semua request API dijawab data contoh (lihat model/remote/mock).
         buildConfigField("boolean", "USE_MOCK_API", "false")
     }
 
     buildTypes {
         debug {
-            // Server smartmaggot.my.id sedang mati -> build debug memakai data contoh.
-            // Ubah ke "false" kalau server sudah menyala.
+            // Build debug memakai server asli.
+            buildConfigField("boolean", "USE_MOCK_API", "false")
+        }
+        // Build "demo": seperti debug, tapi semua data dari MockApiStore (tanpa server).
+        // Buat APK-nya dengan: ./gradlew assembleDemo
+        create("demo") {
+            initWith(getByName("debug"))
+            matchingFallbacks += listOf("debug")
             buildConfigField("boolean", "USE_MOCK_API", "true")
         }
         release {

@@ -152,7 +152,8 @@ class PrediksiFragment : Fragment() {
     }
 
     /** Format tanggal yang dikirim ke DetailSiklusActivity (EXTRA_TANGGAL), jangan diubah dulu. */
-    private fun formatDate(dateString: String): String {
+    private fun formatDate(dateString: String?): String {
+        if (dateString.isNullOrBlank()) return ""
         return try {
             val inputFormat = if (dateString.contains("T")) {
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
@@ -164,7 +165,7 @@ class PrediksiFragment : Fragment() {
             val date = inputFormat.parse(dateString)
             outputFormat.format(date ?: Date())
         } catch (e: Exception) {
-            dateString
+            dateString.orEmpty()
         }
     }
 

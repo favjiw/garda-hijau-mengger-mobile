@@ -13,8 +13,8 @@ import kotlin.math.roundToInt
  * Data contoh untuk MODE DEMO. Disimpan di memori: data yang ditambah lewat aplikasi
  * (catatan sampah, siklus, fase) ikut muncul sampai aplikasi ditutup.
  *
- * Bentuk JSON mengikuti class di model/remote/response. Kalau API asli berubah,
- * sesuaikan juga di sini.
+ * Bentuk JSON mengikuti dokumentasi API (<BASE_URL>/api-docs). Kalau API asli berubah,
+ * sesuaikan juga di sini. Jumlah telur & pakan pada fase dalam GRAM.
  */
 object MockApiStore {
 
@@ -23,6 +23,14 @@ object MockApiStore {
     }
 
     private const val USER_ID = 1
+
+    /** Sama dengan contoh GET /api/prediksi/opsi di dokumentasi API. */
+    private val MEDIA_TELUR = listOf(
+        "Ampas atau Limbah Organik Basah",
+        "Campuran Media (Kombinasi Kering & Basah)",
+        "Dedak atau Bekatul",
+        "Kotoran Ternak (Fermentasi)",
+    )
     private var username = "pengelola.rw5"
     private var rw = "RW5"
 
@@ -52,7 +60,10 @@ object MockApiStore {
             when {
                 method == "POST" && p == "/api/auth/login" -> login(input)
                 method == "POST" && p == "/api/auth/register" -> register(input)
-                method == "POST" && p == "/api/auth/logout" -> ok(JSONObject().put("message", "Berhasil keluar"))
+                method == "POST" && p == "/api/auth/logout" -> ok(JSONObject().put("success", true).put("message", "Logout berhasil"))
+                method == "GET" && p == "/api/auth/me" -> ok(
+                    JSONObject().put("success", true).put("user", JSONObject().put("id", USER_ID).put("username", username).put("rw", rw))
+                )
 
                 method == "GET" && p == "/api/pencacahan" -> ok(
                     JSONObject().put("status", "success").put("data", JSONArray(pencacahan.sortedByDescending { it.getString("tanggalWaktu") }))
@@ -74,6 +85,18 @@ object MockApiStore {
                     ok(JSONObject().put("success", true).put("data", JSONArray(prediksi[id].orEmpty())))
                 }
                 method == "GET" && p == "/api/prediksi/total" -> prediksiTotal()
+                method == "GET" && p == "/api/prediksi/opsi" -> ok(
+                    JSONObject().put("success", true).put(
+                        "data",
+                        JSONObject().put(
+                            "opsi",
+                            JSONObject()
+                                .put("mediaTelur", JSONArray(MEDIA_TELUR))
+                                .put("cuaca", JSONArray(listOf("Clear", "Clouds", "Rain", "Thunderstorm")))
+                                .put("musim", JSONArray(listOf("Hujan", "Kemarau", "Pancaroba")))
+                        )
+                    )
+                )
 
                 method == "GET" && p == "/api/notifikasi" -> ok(
                     JSONObject().put("success", true).put("data", JSONArray(notifikasi))
@@ -85,8 +108,7 @@ object MockApiStore {
                     ok(JSONObject().put("success", true).put("updated", if (item != null) 1 else 0))
                 }
 
-                // Chatbot (base URL berbeda, path sama-sama diawali /api)
-                method == "POST" && p == "/api/query" -> chatbot(input)
+                method == "POST" && p == "/api/chatbot/tanya" -> chatbot(input)
 
                 else -> error(404, "Endpoint ini belum ada di mode demo: $method $p")
             }
@@ -103,7 +125,10 @@ object MockApiStore {
         if (name.isEmpty() || password.isEmpty()) return error(400, "Nama pengguna dan kata sandi wajib diisi")
         username = name
         val user = JSONObject().put("id", USER_ID).put("username", username).put("rw", rw)
-        return ok(JSONObject().put("message", "Login berhasil").put("user", user).put("token", "token-demo"))
+        return ok(
+            JSONObject().put("success", true).put("message", "Login berhasil")
+                .put("token", "token-demo").put("expiresIn", "7d").put("user", user)
+        )
     }
 
     private fun register(input: JSONObject): Pair<Int, String> {
@@ -111,8 +136,8 @@ object MockApiStore {
         rw = input.optString("rw", rw).ifEmpty { rw }
         val user = JSONObject()
             .put("id", USER_ID).put("username", username).put("rw", rw)
-            .put("password", "********").put("createdAt", iso.format(Date()))
-        return ok(JSONObject().put("message", "Registrasi berhasil").put("user", user))
+            .put("createdAt", iso.format(Date()))
+        return ok(JSONObject().put("success", true).put("message", "Register berhasil").put("user", user))
     }
 
     private fun addPencacahan(input: JSONObject): Pair<Int, String> {
@@ -139,7 +164,7 @@ object MockApiStore {
             .put("catatan", input.optString("catatan"))
             .put("createdAt", iso.format(Date()))
         siklus.add(item)
-        // Server membuat fase PENETASAN otomatis (aplikasi tidak punya form untuk fase ini).
+        // Mode demo langsung membuat fase PENETASAN; PrediksiRepository hanya menambahkannya bila belum ada.
         fase[id] = mutableListOf(
             faseJson(id, "PENETASAN", tanggal, "Telur dipindahkan ke wadah penetasan", jumlahTelur = item.getInt("jumlahTelur"))
         )
@@ -147,24 +172,36 @@ object MockApiStore {
     }
 
     private fun addFase(siklusId: Int, input: JSONObject): Pair<Int, String> {
-        val parent = siklus.find { it.getInt("id") == siklusId } ?: return error(404, "Siklus tidak ditemukan")
+        siklus.find { it.getInt("id") == siklusId } ?: return error(404, "Siklus tidak ditemukan")
         val jenis = input.optString("jenis").uppercase()
-        val tanggal = input.optString("tanggal").ifEmpty { iso.format(Date()) }
-        val keterangan = input.optString("catatan")
+        if (jenis !in listOf("PENETASAN", "PEMBESARAN", "PANEN")) return error(400, "Jenis fase tidak valid")
+        val tanggal = input.optString("tanggal")
+        if (tanggal.isEmpty()) return error(400, "Tanggal wajib diisi")
+        val keterangan = input.optString("keterangan")
+        val telurGram = input.optInt("jumlahTelur", 0)
+        val pakanGram = input.optDouble("jumlahMakanan", 0.0).let { if (it.isNaN()) 0.0 else it }
         val list = fase.getOrPut(siklusId) { mutableListOf() }
-        list.removeAll { it.getString("jenis") == jenis }
 
-        val item = when (jenis) {
-            "PEMBESARAN" -> faseJson(siklusId, jenis, tanggal, keterangan, jumlahMakanan = input.optInt("jumlahMakanan", 0))
-            "PANEN" -> {
-                val pakan = list.find { it.getString("jenis") == "PEMBESARAN" }?.optInt("jumlahMakanan", 0) ?: 0
-                val hasilKg = perkiraanKg(parent.optInt("jumlahTelur", 0), pakan)
-                val pred = prediksiJson(siklusId, hasilKg)
-                prediksi[siklusId] = mutableListOf(pred)
-                faseJson(siklusId, jenis, tanggal, keterangan, prediksiPanen = pred)
+        if (jenis == "PANEN") {
+            // Server asli memanggil layanan AI di sini (bisa ±15 detik). Fase tidak disimpan bila gagal.
+            if (telurGram < 1 || pakanGram < 1) {
+                return error(400, "jumlahTelur dan jumlahMakanan wajib diisi (minimal 1) untuk fase PANEN")
             }
-            else -> faseJson(siklusId, jenis, tanggal, keterangan, jumlahTelur = input.optInt("jumlahTelur", 0))
+            val pred = prediksiJson(siklusId, perkiraanKg(telurGram, pakanGram / 1000.0))
+            val item = faseJson(siklusId, jenis, tanggal, keterangan, jumlahTelur = telurGram, jumlahMakananGram = pakanGram, prediksiPanen = pred)
+            list.removeAll { it.getString("jenis") == jenis }
+            list.add(item)
+            prediksi[siklusId] = mutableListOf(pred)
+            val faseTanpaPrediksi = JSONObject(item.toString()).apply { remove("prediksiPanen") }
+            return ok(JSONObject().put("success", true).put("data", JSONObject().put("fase", faseTanpaPrediksi).put("prediksiPanen", pred)))
         }
+
+        list.removeAll { it.getString("jenis") == jenis }
+        val item = faseJson(
+            siklusId, jenis, tanggal, keterangan,
+            jumlahTelur = telurGram.takeIf { it > 0 },
+            jumlahMakananGram = pakanGram.takeIf { it > 0 },
+        )
         list.add(item)
         return ok(JSONObject().put("success", true).put("data", item))
     }
@@ -182,7 +219,8 @@ object MockApiStore {
     }
 
     private fun chatbot(input: JSONObject): Pair<Int, String> {
-        val question = input.optString("query", input.optString("question", input.optString("message"))).trim()
+        val question = input.optString("pertanyaan").trim()
+        if (question.isEmpty()) return error(400, "Pertanyaan wajib diisi")
         val q = question.lowercase()
         val answer = when {
             "menetas" in q || "telur" in q ->
@@ -197,13 +235,10 @@ object MockApiStore {
                 "Ini jawaban contoh dari mode demo. Saat server menyala, GardaBot akan menjawab pertanyaan seputar maggot dan pemilahan sampah."
         }
         return ok(
-            JSONObject()
-                .put("answer", answer)
-                .put("question", question)
-                .put("sources", JSONArray())
-                .put("tokens_used", 0)
-                .put("model", "mode-demo")
-                .put("num_sources", 0)
+            JSONObject().put("success", true).put(
+                "data",
+                JSONObject().put("jawaban", answer).put("sumber", JSONArray())
+            )
         )
     }
 
@@ -230,9 +265,9 @@ object MockApiStore {
         }
 
         // Siklus maggot: satu sudah ada perkiraan panen besar, satu sedang membesar, satu baru menetas.
-        seedSiklus(mulaiHariLalu = 22, telur = 40, media = "Dedak", pakanKg = 50, besarHariLalu = 18)
-        seedSiklus(mulaiHariLalu = 12, telur = 40, media = "Dedak", pakanKg = 40, besarHariLalu = 8)
-        seedSiklus(mulaiHariLalu = 5, telur = 35, media = "Kotoran Ternak", pakanKg = null, besarHariLalu = null)
+        seedSiklus(mulaiHariLalu = 22, telur = 40, media = MEDIA_TELUR[2], pakanKg = 50, besarHariLalu = 18)
+        seedSiklus(mulaiHariLalu = 12, telur = 40, media = MEDIA_TELUR[2], pakanKg = 40, besarHariLalu = 8)
+        seedSiklus(mulaiHariLalu = 5, telur = 35, media = MEDIA_TELUR[3], pakanKg = null, besarHariLalu = null)
 
         notifikasi.addAll(
             listOf(
@@ -260,10 +295,10 @@ object MockApiStore {
         val list = mutableListOf(faseJson(id, "PENETASAN", mulai, "Telur dipindahkan ke wadah penetasan", jumlahTelur = telur))
         if (pakanKg != null && besarHariLalu != null) {
             val tanggalBesar = isoAt(besarHariLalu, hour = 8, minute = 0)
-            list.add(faseJson(id, "PEMBESARAN", tanggalBesar, "Pakan sisa sayur dari pasar", jumlahMakanan = pakanKg))
-            val pred = prediksiJson(id, perkiraanKg(telur, pakanKg))
+            list.add(faseJson(id, "PEMBESARAN", tanggalBesar, "Pakan sisa sayur dari pasar", jumlahMakananGram = pakanKg * 1000.0))
+            val pred = prediksiJson(id, perkiraanKg(telur, pakanKg.toDouble()))
             prediksi[id] = mutableListOf(pred)
-            list.add(faseJson(id, "PANEN", tanggalBesar, "Fase panen otomatis", prediksiPanen = pred))
+            list.add(faseJson(id, "PANEN", tanggalBesar, "", jumlahTelur = telur, jumlahMakananGram = pakanKg * 1000.0, prediksiPanen = pred))
         }
         fase[id] = list
     }
@@ -271,7 +306,7 @@ object MockApiStore {
     // ------------------------------------------------------------------ pembantu
 
     /** Rumus contoh, BUKAN model ML: cukup untuk menghasilkan angka yang masuk akal. */
-    private fun perkiraanKg(telurGram: Int, pakanKg: Int): Double =
+    private fun perkiraanKg(telurGram: Int, pakanKg: Double): Double =
         ((pakanKg * 0.2 + telurGram * 0.05) * 10).roundToInt() / 10.0
 
     private fun withPrediksi(item: JSONObject): JSONObject {
@@ -286,15 +321,15 @@ object MockApiStore {
         tanggal: String,
         keterangan: String,
         jumlahTelur: Int? = null,
-        jumlahMakanan: Int = 0,
+        jumlahMakananGram: Double? = null,
         prediksiPanen: JSONObject? = null,
     ): JSONObject = JSONObject()
         .put("id", nextId++)
         .put("siklusId", siklusId)
         .put("jenis", jenis)
         .put("tanggal", tanggal)
-        .put("keterangan", keterangan)
-        .put("jumlahMakanan", jumlahMakanan)
+        .put("keterangan", keterangan.ifEmpty { null } ?: JSONObject.NULL)
+        .put("jumlahMakanan", jumlahMakananGram ?: JSONObject.NULL)
         .put("jumlahTelur", jumlahTelur ?: JSONObject.NULL)
         .put("prediksiPanen", prediksiPanen ?: JSONObject.NULL)
         .put("createdAt", tanggal)

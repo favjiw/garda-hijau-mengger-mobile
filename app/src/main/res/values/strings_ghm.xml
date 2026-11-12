@@ -107,7 +107,7 @@
     <string name="ghm_lihat_rincian_perkiraan">Lihat rincian perkiraan panen, %1$s kg</string>
     <string name="ghm_catatan_fase">Catatan fase</string>
     <string name="ghm_fase_telur_isi">%1$s gram telur di media %2$s.</string>
-    <string name="ghm_fase_pakan">Pakan %1$d kg.</string>
+    <string name="ghm_fase_pakan">Pakan %1$s kg.</string>
     <string name="ghm_tombol_catat_fase_besar">Catat fase besar</string>
     <string name="ghm_belum_ada_fase">Belum ada fase yang dicatat.</string>
     <string name="ghm_galat_id_siklus">Siklus tidak ditemukan</string>
@@ -166,7 +166,7 @@
     <string name="ghm_saran_dilarang">Sampah apa yang dilarang untuk maggot?</string>
     <string name="ghm_hint_pertanyaan">Tulis pertanyaan</string>
     <string name="ghm_kirim">Kirim pertanyaan</string>
-    <string name="ghm_gardabot_mengetik">GardaBot sedang menulis jawaban…</string>
+    <string name="ghm_gardabot_mengetik">GardaBot sedang mengetik…</string>
     <string name="ghm_gardabot_galat">Maaf, GardaBot belum bisa menjawab. Periksa internet lalu coba lagi.</string>
 
     <!-- Notifikasi -->
@@ -181,4 +181,23 @@
     <string name="ghm_tidak_ada_catatan">Tidak ada catatan.</string>
     <string name="ghm_dicatat_pada">Dicatat %1$s</string>
     <string name="ghm_detail_notifikasi_judul">Detail notifikasi</string>
+
+    <!-- Server & pesan galat (lihat PesanGalat.kt) -->
+    <string name="ghm_galat_jaringan">Tidak bisa terhubung ke server. Periksa internet lalu coba lagi.</string>
+    <string name="ghm_galat_waktu_habis">Server terlalu lama menjawab. Coba lagi.</string>
+    <string name="ghm_galat_sesi">Sesi kamu sudah berakhir. Silakan masuk lagi.</string>
+    <string name="ghm_galat_404">Data tidak ditemukan.</string>
+    <string name="ghm_galat_429">Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.</string>
+    <string name="ghm_galat_503">Layanan AI sedang tidak tersedia. Coba lagi nanti.</string>
+    <string name="ghm_galat_umum">Terjadi kesalahan. Coba lagi.</string>
+    <string name="ghm_coba_lagi">Coba lagi</string>
+    <string name="ghm_catatan_tersimpan">Catatan sampah tersimpan</string>
+
+    <!-- Perkiraan panen (fase PANEN memicu prediksi AI) -->
+    <string name="ghm_menghitung_perkiraan">Menghitung perkiraan panen…</string>
+    <string name="ghm_fase_tersimpan_perkiraan_gagal">Fase besar tersimpan, tapi perkiraan panen belum bisa dihitung: %1$s Coba lagi dari halaman siklus.</string>
+    <string name="ghm_galat_telur_siklus">Jumlah telur siklus ini tidak ditemukan, jadi perkiraan panen tidak bisa dihitung.</string>
+    <string name="ghm_langkah_hitung_perkiraan">Fase besar sudah dicatat, tapi perkiraan panen belum ada. Ketuk tombol di bawah untuk menghitungnya.</string>
+    <string name="ghm_tombol_hitung_perkiraan">Hitung perkiraan panen</string>
+    <string name="ghm_memuat_pilihan_media">Memuat pilihan media…</string>
 </resources>

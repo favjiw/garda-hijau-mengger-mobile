@@ -113,7 +113,7 @@
                     android:maxLength="6" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Media telur: nilai dari MediaTelurType -->
+            <!-- Media telur: pilihan dari GET /api/prediksi/opsi (dibuat di TambahSiklusActivity) -->
             <TextView
                 style="@style/Text.GHM.Label"
                 android:layout_width="wrap_content"
@@ -122,54 +122,44 @@
                 android:text="@string/ghm_label_media_telur" />
 
             <LinearLayout
+                android:id="@+id/layoutPilihanMedia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:orientation="vertical" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnMediaDedak"
-                    style="@style/Widget.GHM.Button.Pilihan"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
-                    android:text="@string/ghm_media_dedak" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnMediaKotoranTernak"
-                    style="@style/Widget.GHM.Button.Pilihan"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:text="@string/ghm_media_kotoran_ternak" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvMediaMemuat"
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ghm_memuat_pilihan_media"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <LinearLayout
+                android:id="@+id/layoutMediaGagal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:background="@drawable/bg_ghm_kartu"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvMediaGagal"
+                    style="@style/Text.GHM.Kecil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Layanan AI sedang tidak tersedia. Coba lagi nanti." />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnMediaLimbahOrganik"
-                    style="@style/Widget.GHM.Button.Pilihan"
-                    android:layout_width="0dp"
+                    android:id="@+id/btnMuatUlangMedia"
+                    style="@style/Widget.GHM.Button.Saran"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
-                    android:text="@string/ghm_media_limbah_organik" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnMediaCampuran"
-                    style="@style/Widget.GHM.Button.Pilihan"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:text="@string/ghm_media_campuran" />
+                    android:layout_marginTop="12dp"
+                    android:text="@string/ghm_coba_lagi" />
             </LinearLayout>
 
             <TextView

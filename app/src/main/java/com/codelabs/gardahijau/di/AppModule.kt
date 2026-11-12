@@ -4,8 +4,6 @@ import android.content.Context
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.model.remote.network.ApiConfig
 import com.codelabs.gardahijau.model.remote.network.MainApiService
-import com.codelabs.gardahijau.model.remote.network.ChatbotApiService
-import com.codelabs.gardahijau.model.remote.network.FlaskApiService
 import com.codelabs.gardahijau.model.remote.response.RemoteDataSource
 import com.codelabs.gardahijau.repository.PrediksiRepository
 import dagger.Module
@@ -19,19 +17,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    /** Satu klien untuk semua endpoint (termasuk chatbot). Singleton supaya OkHttp tidak dibuat berulang. */
     @Provides
-    fun provideMainApiService(userPreferences: UserPreferences): MainApiService {
-        return ApiConfig.getMainApiService(userPreferences)
-    }
-
-    @Provides
-    fun provideChatbotApiService(): ChatbotApiService {
-        return ApiConfig.getChatbotApiService()
-    }
-
-    @Provides
-    fun provideFlaskApiService(): FlaskApiService {
-        return ApiConfig.getFlaskApiService()
+    @Singleton
+    fun provideMainApiService(
+        @ApplicationContext context: Context,
+        userPreferences: UserPreferences,
+    ): MainApiService {
+        return ApiConfig.getMainApiService(context, userPreferences)
     }
 
     @Provides

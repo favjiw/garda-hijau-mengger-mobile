@@ -143,6 +143,7 @@
             android:imeOptions="actionSend"
             android:importantForAutofill="no"
             android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="2000"
             android:maxLines="4"
             android:minHeight="54dp"
             android:paddingStart="18dp"

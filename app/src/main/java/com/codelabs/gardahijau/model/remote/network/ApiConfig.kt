@@ -1,79 +1,49 @@
 package com.codelabs.gardahijau.model.remote.network
 
+import android.content.Context
 import com.codelabs.gardahijau.BuildConfig
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.model.remote.mock.MockApiInterceptor
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
+/**
+ * Satu Retrofit untuk semua endpoint (akun, sampah, siklus, prediksi, notifikasi, chatbot).
+ * Base URL dari BuildConfig.BASE_URL (app/build.gradle.kts).
+ */
 class ApiConfig {
     companion object {
-        fun getMainApiService(userPreferences: UserPreferences): MainApiService {
-            val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
-            val authInterceptor = Interceptor { chain ->
-                val original = chain.request()
-                val token = runBlocking { userPreferences.getAuthToken().firstOrNull().orEmpty() }
-
-                val requestBuilder = original.newBuilder()
-                    .addHeader("Content-Type", "application/json")
-                if (token.isNotEmpty()) {
-                    requestBuilder.addHeader("Authorization", "Bearer $token")
-                }
-
-                val request = requestBuilder.build()
-                chain.proceed(request)
-            }
-
+        fun getMainApiService(context: Context, userPreferences: UserPreferences): MainApiService {
             val clientBuilder = OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .addInterceptor(authInterceptor)
+                // Prediksi panen (fase PANEN) dan chatbot bisa butuh sampai ±15 detik.
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .callTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(AuthInterceptor(context.applicationContext, userPreferences))
+
+            if (BuildConfig.DEBUG) {
+                // Log hanya di build debug; header token & body login tidak ikut tercatat di release.
+                val logging = HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                    redactHeader("Authorization")
+                }
+                clientBuilder.addInterceptor(logging)
+            }
             if (BuildConfig.USE_MOCK_API) {
                 clientBuilder.addInterceptor(MockApiInterceptor())
             }
-            val client = clientBuilder.build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.smartmaggot.my.id/")
+                .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
+                .client(clientBuilder.build())
                 .build()
 
             return retrofit.create(MainApiService::class.java)
         }
-
-
-        fun getChatbotApiService(): ChatbotApiService {
-            val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
-            val builder = Retrofit.Builder()
-                .baseUrl("https://chatbot.smartmaggot.my.id/")
-                .addConverterFactory(GsonConverterFactory.create())
-            if (BuildConfig.USE_MOCK_API) {
-                builder.client(OkHttpClient.Builder().addInterceptor(MockApiInterceptor()).build())
-            }
-            val retrofit = builder.build()
-
-            return retrofit.create(ChatbotApiService::class.java)
-        }
-
-        fun getFlaskApiService(): FlaskApiService {
-            val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://flaskapi.smartmaggot.my.id/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-            return retrofit.create(FlaskApiService::class.java)
-        }
-
-
     }
-
 }

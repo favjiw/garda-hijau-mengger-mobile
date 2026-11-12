@@ -1,203 +1,136 @@
 package com.codelabs.gardahijau.repository
 
 import android.util.Log
-import com.codelabs.gardahijau.model.remote.body.AddFasePembesaranRequest
-import com.codelabs.gardahijau.model.remote.body.AddFaseRequest
+import com.codelabs.gardahijau.model.remote.body.FaseRequest
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import com.codelabs.gardahijau.model.remote.response.RemoteDataSource
+import com.codelabs.gardahijau.model.remote.response.prediksi.AddFasePanenResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.AddFaseResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.AddSiklusResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetFaseResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetHasilPanenDashboardResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetHasilPanenSiklusResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetSiklusResponse
+import com.codelabs.gardahijau.model.remote.response.prediksi.Opsi
 import javax.inject.Inject
 
 class PrediksiRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
 ) {
-    suspend fun getSiklus(): ApiResponse<GetSiklusResponse> {
-        return try {
-            val response = remoteDataSource.getSiklus()
-            Log.d("PrediksiRepository", "API Response: $response")
-            Log.d("PrediksiRepository", "Success: ${response.success}, Data size: ${response.data?.size}")
-
-            if (response.success) {
-                ApiResponse.Success(response)
-            } else {
-                ApiResponse.Error("Failed to fetch siklus data")
-            }
-        } catch (e: Exception) {
-            Log.e("PrediksiRepository", "Error: ${e.message}", e)
-            ApiResponse.Error(e.message ?: "Unknown error occurred")
-        }
+    suspend fun getSiklus(): ApiResponse<GetSiklusResponse> = panggil("getSiklus") {
+        remoteDataSource.getSiklus()
     }
 
+    /**
+     * Buat siklus, lalu pastikan ada fase PENETASAN (jumlah telur dalam gram).
+     * PENETASAN hanya ditambahkan bila server belum membuatnya, supaya tidak dobel.
+     */
     suspend fun addSiklus(
         tanggalMulai: String,
         jumlahTelur: Int,
         mediaTelur: String,
         catatan: String
     ): ApiResponse<AddSiklusResponse> {
-        return try {
-            val siklusResponse = remoteDataSource.addSiklus(tanggalMulai, jumlahTelur, mediaTelur, catatan)
-            Log.d("PrediksiRepository", "Add Siklus Response: $siklusResponse")
+        val siklus = try {
+            remoteDataSource.addSiklus(tanggalMulai, jumlahTelur, mediaTelur, catatan)
+        } catch (e: Exception) {
+            Log.e(TAG, "addSiklus gagal", e)
+            return ApiResponse.Error(e.pesanGalat())
+        }
+        val siklusId = siklus.data?.id ?: return ApiResponse.Success(siklus)
 
-            if (siklusResponse.success) {
-                val siklusId = siklusResponse.data.id
-                try {
-                    val faseRequest = AddFaseRequest(
-                        tanggal= tanggalMulai,
-                        jenis = "PENETASAN",
-                        jumlahTelur = jumlahTelur,
-                        mediaTelur = mediaTelur,
-                        catatan = "Fase awal setelah penetasan"
-                    )
-                    val faseResponse = remoteDataSource.addFase(siklusId, faseRequest)
-                    Log.d("PrediksiRepository", "Add Fase Response: $faseResponse")
-
-                    if (!faseResponse.success) {
-                        Log.w("PrediksiRepository", "Siklus created but fase creation failed")
-                    }
-                } catch (faseException: Exception) {
-                    Log.e("PrediksiRepository", "Error adding fase: ${faseException.message}", faseException)
-                }
-
-                ApiResponse.Success(siklusResponse)
-            } else {
-                ApiResponse.Error("Failed to add siklus")
+        try {
+            val sudahAda = remoteDataSource.getFase(siklusId).data.orEmpty()
+                .any { it.jenis.equals(JENIS_PENETASAN, ignoreCase = true) }
+            if (!sudahAda) {
+                remoteDataSource.addFase(
+                    siklusId,
+                    FaseRequest(jenis = JENIS_PENETASAN, tanggal = tanggalMulai, jumlahTelur = jumlahTelur)
+                )
             }
         } catch (e: Exception) {
-            Log.e("PrediksiRepository", "Error adding siklus: ${e.message}", e)
-            ApiResponse.Error(e.message ?: "Unknown error occurred")
+            // Siklus sudah tersimpan; fase penetasan yang gagal tidak membatalkannya.
+            Log.w(TAG, "Siklus dibuat, tapi fase PENETASAN gagal: ${e.pesanGalat()}")
         }
+        return ApiResponse.Success(siklus)
     }
 
-    suspend fun getFase(siklusId: Int): ApiResponse<GetFaseResponse> {
-        return try {
-            val response = remoteDataSource.getFase(siklusId)
-            Log.d("PrediksiRepository", "Get Fase Response: $response")
-
-            if (response.success) {
-                ApiResponse.Success(response)
-            } else {
-                ApiResponse.Error("Failed to fetch fase data")
-            }
-        } catch (e: Exception) {
-            Log.e("PrediksiRepository", "Error getting fase: ${e.message}", e)
-            ApiResponse.Error(e.message ?: "Unknown error occurred")
-        }
+    suspend fun getFase(siklusId: Int): ApiResponse<GetFaseResponse> = panggil("getFase") {
+        remoteDataSource.getFase(siklusId)
     }
 
-    suspend fun addFase(
-        siklusId: Int,
-        jenis: String,
-        tanggal: String,
-        jumlahTelur: Int,
-        mediaTelur: String,
-        catatan: String
-    ): ApiResponse<AddFaseResponse> {
-        return try {
-            val faseRequest = AddFaseRequest(
-                jenis = jenis,
-                tanggal = tanggal,
-                jumlahTelur = jumlahTelur,
-                mediaTelur = mediaTelur,
-                catatan = catatan
-            )
-
-            val response = remoteDataSource.addFase(siklusId, faseRequest)
-            Log.d("PrediksiRepository", "Add Fase Response: $response")
-
-            if (response.success) {
-                ApiResponse.Success(response)
-            } else {
-                ApiResponse.Error("Gagal menambahkan fase")
-            }
-        } catch (e: Exception) {
-            Log.e("PrediksiRepository", "Error adding fase: ${e.message}", e)
-            ApiResponse.Error(e.message ?: "Terjadi kesalahan")
-        }
-    }
-
+    /** Fase PEMBESARAN. [pakanGram] disimpan sebagai catatan jumlah pakan (gram). */
     suspend fun addFasePembesaran(
         siklusId: Int,
-        jenis: String,
         tanggal: String,
-        jumlahMakanan: Int,
-        catatan: String
-    ): ApiResponse<AddFaseResponse> {
-        return try {
-            val faseRequest = AddFasePembesaranRequest(
-                jenis = jenis,
+        pakanGram: Double,
+        keterangan: String,
+    ): ApiResponse<AddFaseResponse> = panggil("addFasePembesaran") {
+        remoteDataSource.addFase(
+            siklusId,
+            FaseRequest(
+                jenis = JENIS_PEMBESARAN,
                 tanggal = tanggal,
-                jumlahMakanan = jumlahMakanan,
-                catatan = catatan
+                jumlahMakanan = pakanGram,
+                keterangan = keterangan.ifBlank { null },
             )
-
-            val response = remoteDataSource.addFasePembesaran(siklusId, faseRequest)
-            Log.d("PrediksiRepository", "Add Fase Response: $response")
-
-            if (response.success) {
-                ApiResponse.Success(response)
-            } else {
-                ApiResponse.Error("Gagal menambahkan fase")
-            }
-        } catch (e: Exception) {
-            Log.e("PrediksiRepository", "Error adding fase: ${e.message}", e)
-            ApiResponse.Error(e.message ?: "Terjadi kesalahan")
-        }
+        )
     }
 
+    /**
+     * Fase PANEN: memicu prediksi AI di server (bisa ±15 detik).
+     * [telurGram] dan [pakanGram] wajib >= 1. Bila layanan AI tidak tersedia (503), fase tidak disimpan.
+     */
     suspend fun addFasePanen(
         siklusId: Int,
-        jenis: String,
         tanggal: String,
-        jumlahHasil: Int, // hasil panen
-        catatan: String
-    ): ApiResponse<AddFaseResponse> {
-        return try {
-            val faseRequest = AddFaseRequest(
-                jenis = jenis,
+        telurGram: Int,
+        pakanGram: Double,
+        keterangan: String,
+    ): ApiResponse<AddFasePanenResponse> = panggil("addFasePanen") {
+        remoteDataSource.addFasePanen(
+            siklusId,
+            FaseRequest(
+                jenis = JENIS_PANEN,
                 tanggal = tanggal,
-                jumlahTelur = jumlahHasil,
-                mediaTelur = "",
-                catatan = catatan
+                jumlahTelur = telurGram,
+                jumlahMakanan = pakanGram,
+                keterangan = keterangan.ifBlank { null },
             )
-
-            val response = remoteDataSource.addFase(siklusId, faseRequest)
-            Log.d("PrediksiRepository", "Add Fase Panen Response: $response")
-
-            if (response.success) {
-                ApiResponse.Success(response)
-            } else {
-                ApiResponse.Error("Gagal menambahkan fase panen")
-            }
-        } catch (e: Exception) {
-            Log.e("PrediksiRepository", "Error adding fase panen: ${e.message}", e)
-            ApiResponse.Error(e.message ?: "Terjadi kesalahan")
-        }
+        )
     }
 
+    suspend fun getHasilPanenSiklus(siklusId: Int): ApiResponse<GetHasilPanenSiklusResponse> =
+        panggil("getHasilPanenSiklus") { remoteDataSource.getHasilPanenSiklus(siklusId) }
 
-    suspend fun getHasilPanenSiklus(siklusId: Int): ApiResponse<GetHasilPanenSiklusResponse> {
-        return try {
-            val response = remoteDataSource.getHasilPanenSiklus(siklusId)
-            if (response.success) ApiResponse.Success(response) else ApiResponse.Error("Failed to fetch hasil panen")
-        } catch (e: Exception) {
-            ApiResponse.Error(e.message ?: "Unknown error")
+    suspend fun getHasilPanenDashboard(): ApiResponse<GetHasilPanenDashboardResponse> =
+        panggil("getHasilPanenDashboard") { remoteDataSource.getHasilPanenDashboard() }
+
+    /** Pilihan media telur, cuaca, dan musim dari GET /api/prediksi/opsi. */
+    suspend fun getOpsi(): ApiResponse<Opsi> = try {
+        val opsi = remoteDataSource.getOpsi().data?.opsi
+        if (opsi?.mediaTelur.isNullOrEmpty()) {
+            ApiResponse.Error(com.codelabs.gardahijau.model.remote.network.PesanGalat.dariHttp(503, null))
+        } else {
+            ApiResponse.Success(opsi!!)
         }
+    } catch (e: Exception) {
+        Log.e(TAG, "getOpsi gagal", e)
+        ApiResponse.Error(e.pesanGalat())
     }
 
-    suspend fun getHasilPanenDashboard(): ApiResponse<GetHasilPanenDashboardResponse> {
-        return try {
-            val response = remoteDataSource.getHasilPanenDashboard()
-            ApiResponse.Success(response)
-        } catch (e: Exception) {
-            ApiResponse.Error(e.message.toString())
-        }
+    private inline fun <T> panggil(nama: String, blok: () -> T): ApiResponse<T> = try {
+        ApiResponse.Success(blok())
+    } catch (e: Exception) {
+        Log.e(TAG, "$nama gagal", e)
+        ApiResponse.Error(e.pesanGalat())
     }
 
-
+    companion object {
+        private const val TAG = "PrediksiRepository"
+        const val JENIS_PENETASAN = "PENETASAN"
+        const val JENIS_PEMBESARAN = "PEMBESARAN"
+        const val JENIS_PANEN = "PANEN"
+    }
 }
-

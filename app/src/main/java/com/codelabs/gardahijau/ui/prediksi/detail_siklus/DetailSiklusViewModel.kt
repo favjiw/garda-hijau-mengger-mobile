@@ -19,6 +19,23 @@ class DetailSiklusViewModel @Inject constructor(
     private val _faseData = MutableLiveData<ApiResponse<GetFaseResponse>>()
     val faseData: LiveData<ApiResponse<GetFaseResponse>> = _faseData
 
+    private val _statusPerkiraan = MutableLiveData<ApiResponse<Unit>>()
+    /** Empty = sedang menghitung (prediksi AI bisa ±15 detik), Success = selesai, Error = gagal. */
+    val statusPerkiraan: LiveData<ApiResponse<Unit>> = _statusPerkiraan
+
+    /** Kirim fase PANEN untuk memicu prediksi AI (dipakai bila perkiraan sebelumnya gagal). */
+    fun hitungPerkiraan(siklusId: Int, tanggal: String, telurGram: Int, pakanGram: Double) {
+        if (_statusPerkiraan.value is ApiResponse.Empty) return
+        viewModelScope.launch {
+            _statusPerkiraan.value = ApiResponse.Empty
+            _statusPerkiraan.value = when (val hasil = repository.addFasePanen(siklusId, tanggal, telurGram, pakanGram, "")) {
+                is ApiResponse.Success -> ApiResponse.Success(Unit)
+                is ApiResponse.Error -> hasil
+                ApiResponse.Empty -> ApiResponse.Error("")
+            }
+        }
+    }
+
     fun getFase(siklusId: Int) {
         viewModelScope.launch {
             _faseData.value = ApiResponse.Empty

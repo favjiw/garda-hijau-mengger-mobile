@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
+import com.codelabs.gardahijau.model.remote.network.AuthInterceptor
+import com.codelabs.gardahijau.model.remote.network.PesanGalat
 import com.codelabs.gardahijau.model.remote.response.auth.LogoutResponse
 import com.codelabs.gardahijau.model.remote.response.auth.login.LoginResponse
 import com.codelabs.gardahijau.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.clear
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -35,13 +36,17 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is ApiResponse.Empty -> _isLoading.value = true
                     is ApiResponse.Success -> {
-                        _isLoading.value = false
-                        _loginResult.value = result
+                        // Simpan token DULU, baru kabari layar. Kalau terbalik, MainActivity bisa
+                        // membaca token kosong lalu melempar balik ke halaman Masuk.
                         val token = result.data.token
-                        if (!token.isNullOrEmpty()) {
-                            viewModelScope.launch {
-                                userPreferences.saveAuthToken(token)
-                            }
+                        if (token.isNullOrEmpty()) {
+                            _isLoading.value = false
+                            _loginResult.value = ApiResponse.Error(PesanGalat.dariHttp(500, null))
+                        } else {
+                            userPreferences.saveAuthToken(token)
+                            AuthInterceptor.reset()
+                            _isLoading.value = false
+                            _loginResult.value = result
                         }
                     }
                     is ApiResponse.Error -> {

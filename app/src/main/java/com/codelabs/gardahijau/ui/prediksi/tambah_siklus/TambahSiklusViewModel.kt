@@ -19,6 +19,22 @@ class TambahSiklusViewModel @Inject constructor(
     private val _addSiklusResult = MutableLiveData<ApiResponse<AddSiklusResponse>>()
     val addSiklusResult: LiveData<ApiResponse<AddSiklusResponse>> = _addSiklusResult
 
+    private val _opsiMedia = MutableLiveData<ApiResponse<List<String>>>()
+    /** Pilihan media telur dari server (GET /api/prediksi/opsi). Empty = sedang memuat. */
+    val opsiMedia: LiveData<ApiResponse<List<String>>> = _opsiMedia
+
+    fun muatOpsiMedia() {
+        if (_opsiMedia.value is ApiResponse.Empty) return
+        viewModelScope.launch {
+            _opsiMedia.value = ApiResponse.Empty
+            _opsiMedia.value = when (val hasil = repository.getOpsi()) {
+                is ApiResponse.Success -> ApiResponse.Success(hasil.data.mediaTelur.orEmpty())
+                is ApiResponse.Error -> hasil
+                ApiResponse.Empty -> ApiResponse.Error("")
+            }
+        }
+    }
+
     fun addSiklus(tanggalMulai: String, jumlahTelur: Int, mediaTelur: String, catatan: String) {
         viewModelScope.launch {
             _addSiklusResult.value = ApiResponse.Empty

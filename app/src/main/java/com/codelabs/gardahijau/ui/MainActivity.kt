@@ -16,9 +16,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.codelabs.gardahijau.BuildConfig
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityMainBinding
 import com.codelabs.gardahijau.model.local.data.UserPreferences
+import com.codelabs.gardahijau.model.remote.network.MainApiService
 import com.codelabs.gardahijau.ui.auth.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userPreferences: UserPreferences
+
+    @Inject
+    lateinit var mainApiService: MainApiService
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +61,14 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         binding.navView.setupWithNavController(navController)
+
+        // Pastikan token masih berlaku. 401 ditangani AuthInterceptor (kembali ke halaman Masuk);
+        // error lain (mis. tidak ada internet) diabaikan supaya pengguna tidak ikut keluar.
+        if (!BuildConfig.USE_MOCK_API) {
+            lifecycleScope.launch {
+                runCatching { mainApiService.me() }
+            }
+        }
         }
     }
 

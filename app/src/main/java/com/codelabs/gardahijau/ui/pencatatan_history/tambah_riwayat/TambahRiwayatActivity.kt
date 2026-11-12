@@ -159,7 +159,7 @@ class TambahRiwayatActivity : AppCompatActivity() {
         }
 
         viewModel.addHistoryResult.observe(this) { response ->
-            Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, response.message ?: getString(R.string.ghm_catatan_tersimpan), Toast.LENGTH_SHORT).show()
             setResult(Activity.RESULT_OK)
             finish()
         }

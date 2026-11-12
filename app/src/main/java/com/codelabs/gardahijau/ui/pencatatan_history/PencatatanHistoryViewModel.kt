@@ -1,5 +1,6 @@
 package com.codelabs.gardahijau.ui.pencatatan_history
 
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,7 +33,7 @@ class PencatatanHistoryViewModel @Inject constructor(
                 _historyData.value = response
                 _isLoading.value = false
             } catch (e: Exception) {
-                _errorMessage.value = e.message
+                _errorMessage.value = e.pesanGalat()
                 _isLoading.value = false
             }
         }

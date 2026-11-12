@@ -65,7 +65,7 @@ class HasilPrediksiActivity : AppCompatActivity() {
     private fun displayDihitungDari() {
         val telur = intent.getStringExtra("JUMLAH_TELUR")?.takeIf { it.isNotBlank() }
         val media = intent.getStringExtra("MEDIA_TELUR")?.takeIf { it.isNotBlank() }
-        val pakan = intent.getIntExtra("PAKAN_KG", 0).takeIf { it > 0 }
+        val pakan = intent.getDoubleExtra("PAKAN_KG", 0.0).takeIf { it > 0 }
 
         binding.barisTelur.visibility = if (telur == null) View.GONE else View.VISIBLE
         binding.tvNilaiTelur.text = telur?.let { getString(R.string.ghm_nilai_gram, it) }
@@ -75,7 +75,7 @@ class HasilPrediksiActivity : AppCompatActivity() {
         binding.tvNilaiMedia.text = media?.lowercase(LOCALE_ID)?.replaceFirstChar { it.titlecase(LOCALE_ID) }
 
         binding.barisPakan.visibility = if (pakan == null) View.GONE else View.VISIBLE
-        binding.tvNilaiPakan.text = pakan?.let { getString(R.string.ghm_nilai_kg, it.toString()) }
+        binding.tvNilaiPakan.text = pakan?.let { getString(R.string.ghm_nilai_kg, formatKg(it)) }
 
         binding.cardDihitungDari.visibility =
             if (telur == null && media == null && pakan == null) View.GONE else View.VISIBLE

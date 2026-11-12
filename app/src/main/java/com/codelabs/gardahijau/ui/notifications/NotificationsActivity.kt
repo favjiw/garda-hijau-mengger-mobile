@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -68,6 +69,16 @@ class NotificationsActivity : AppCompatActivity() {
         viewModel.filteredData.observe(this) { list ->
             notificationAdapter.setItems(kelompokkan(list))
             binding.tvKosong.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        viewModel.errorMessage.observe(this) { pesan ->
+            if (!pesan.isNullOrBlank()) {
+                Toast.makeText(this, pesan, Toast.LENGTH_LONG).show()
+                if (notificationAdapter.itemCount == 0) {
+                    binding.tvKosong.text = pesan
+                    binding.tvKosong.visibility = View.VISIBLE
+                }
+            }
         }
 
         viewModel.getNotification()

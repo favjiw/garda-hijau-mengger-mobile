@@ -1,5 +1,6 @@
 package com.codelabs.gardahijau.ui.notifications
 
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,7 +49,7 @@ class NotificationViewModel @Inject constructor(
                 _filteredData.value = originalList // default = semua
                 _isLoading.value = false
             } catch (e: Exception) {
-                _errorMessage.value = e.message
+                _errorMessage.value = e.pesanGalat()
                 _isLoading.value = false
             }
         }

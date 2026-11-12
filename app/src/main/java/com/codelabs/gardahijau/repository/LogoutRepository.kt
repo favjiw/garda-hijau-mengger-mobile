@@ -1,5 +1,6 @@
 package com.codelabs.gardahijau.repository
 
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.model.remote.network.MainApiService
@@ -16,7 +17,7 @@ class LogoutRepository @Inject constructor(
             userPreferences.clear()
             ApiResponse.Success(Unit)
         } catch (e: Exception) {
-            ApiResponse.Error(e.message ?: "Unknown error")
+            ApiResponse.Error(e.pesanGalat())
         }
     }
 }

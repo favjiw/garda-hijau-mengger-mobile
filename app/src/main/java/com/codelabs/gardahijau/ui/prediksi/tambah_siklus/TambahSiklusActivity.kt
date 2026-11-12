@@ -15,7 +15,6 @@ import com.codelabs.gardahijau.databinding.ActivityTambahSiklusBinding
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.ui.util.LOCALE_ID
 import com.codelabs.gardahijau.ui.util.applySystemBarPadding
-import com.codelabs.gardahijau.utils.enumClass.MediaTelurType
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -30,7 +29,8 @@ class TambahSiklusActivity : AppCompatActivity() {
 
     /** Tanggal mulai yang dipilih. Awalnya: hari ini. */
     private val tanggalDipilih: Calendar = Calendar.getInstance()
-    private var mediaDipilih: MediaTelurType? = null
+    /** Teks media persis seperti dari server (dikirim apa adanya ke POST /api/siklus). */
+    private var mediaDipilih: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class TambahSiklusActivity : AppCompatActivity() {
 
         savedInstanceState?.let { state ->
             state.getLong(KEY_TANGGAL, -1L).takeIf { it > 0 }?.let { tanggalDipilih.timeInMillis = it }
-            state.getString(KEY_MEDIA)?.let { nama -> mediaDipilih = MediaTelurType.values().find { it.name == nama } }
+            mediaDipilih = state.getString(KEY_MEDIA)
         }
 
         binding.btnKembali.setOnClickListener { finish() }
@@ -60,7 +60,7 @@ class TambahSiklusActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong(KEY_TANGGAL, tanggalDipilih.timeInMillis)
-        mediaDipilih?.let { outState.putString(KEY_MEDIA, it.name) }
+        mediaDipilih?.let { outState.putString(KEY_MEDIA, it) }
     }
 
     private fun setupDatePicker() {
@@ -86,23 +86,45 @@ class TambahSiklusActivity : AppCompatActivity() {
         )
     }
 
-    /** Empat pilihan media telur (MediaTelurType). Hanya satu yang aktif. */
+    /** Pilihan media telur dari server. Hanya satu yang aktif. */
     private fun setupPilihanMedia() {
-        val pilihan: Map<MaterialButton, MediaTelurType> = mapOf(
-            binding.btnMediaDedak to MediaTelurType.DEDAK,
-            binding.btnMediaKotoranTernak to MediaTelurType.KOTORAN_TERNAK,
-            binding.btnMediaLimbahOrganik to MediaTelurType.LIMBAH_ORGANIK,
-            binding.btnMediaCampuran to MediaTelurType.CAMPURAN,
-        )
-        pilihan.forEach { (button, media) ->
-            button.isChecked = media == mediaDipilih
-            button.setOnClickListener {
-                pilihan.keys.forEach { it.isChecked = it == button }
-                mediaDipilih = media
-                binding.tvMediaError.visibility = View.GONE
+        binding.inputJumlahTelur.doAfterTextChanged { binding.edtJumlahTelur.error = null }
+        binding.btnMuatUlangMedia.setOnClickListener { viewModel.muatOpsiMedia() }
+
+        viewModel.opsiMedia.observe(this) { hasil ->
+            binding.tvMediaMemuat.visibility = if (hasil is ApiResponse.Empty) View.VISIBLE else View.GONE
+            binding.layoutMediaGagal.visibility = if (hasil is ApiResponse.Error) View.VISIBLE else View.GONE
+            when (hasil) {
+                is ApiResponse.Success -> tampilkanPilihanMedia(hasil.data)
+                is ApiResponse.Error -> {
+                    binding.layoutPilihanMedia.removeAllViews()
+                    binding.tvMediaGagal.text = hasil.errorMessage
+                }
+                ApiResponse.Empty -> binding.layoutPilihanMedia.removeAllViews()
             }
         }
-        binding.inputJumlahTelur.doAfterTextChanged { binding.edtJumlahTelur.error = null }
+        if (viewModel.opsiMedia.value !is ApiResponse.Success) viewModel.muatOpsiMedia()
+    }
+
+    private fun tampilkanPilihanMedia(pilihan: List<String>) {
+        val wadah = binding.layoutPilihanMedia
+        wadah.removeAllViews()
+        // Pilihan lama yang tidak ada lagi di server dibuang.
+        if (mediaDipilih != null && mediaDipilih !in pilihan) mediaDipilih = null
+        val tombol = pilihan.map { media ->
+            (layoutInflater.inflate(R.layout.item_pilihan_media, wadah, false) as MaterialButton).apply {
+                text = media
+                isChecked = media == mediaDipilih
+            }
+        }
+        tombol.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                tombol.forEach { it.isChecked = it == button }
+                mediaDipilih = pilihan[index]
+                binding.tvMediaError.visibility = View.GONE
+            }
+            wadah.addView(button)
+        }
     }
 
     private fun setupSaveButton() {
@@ -121,9 +143,9 @@ class TambahSiklusActivity : AppCompatActivity() {
                 valid = false
             }
             if (valid && jumlah != null && media != null) {
-                // Format API sama seperti sebelumnya: yyyy-MM-dd. Nilai media dari MediaTelurType.toString().
+                // Format API sama seperti sebelumnya: yyyy-MM-dd. Media dikirim persis seperti dari server.
                 val tanggalApi = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(tanggalDipilih.time)
-                viewModel.addSiklus(tanggalApi, jumlah, media.toString(), catatan)
+                viewModel.addSiklus(tanggalApi, jumlah, media, catatan)
             }
         }
     }

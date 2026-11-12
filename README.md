@@ -2,9 +2,9 @@
 
 Aplikasi Android untuk pengelola sampah dan peternak maggot BSF (*Black Soldier Fly*) di Kelurahan Mengger. Dengan aplikasi ini pengelola bisa mencatat sampah organik yang masuk, memantau siklus maggot dari telur sampai panen, melihat perkiraan hasil panen, dan bertanya ke asisten GardaBot.
 
-Dibuat untuk program **BEM Mahasiswa Berdampak 2026 — Sinergi Garda Hijau Mengger**, dengan layanan backend dari sistem Smart Maggot (`smartmaggot.my.id`).
+Dibuat untuk program **BEM Mahasiswa Berdampak 2026 — Sinergi Garda Hijau Mengger**. Backend: `https://gardahijau.codelabspace.or.id` ([dokumentasi API](https://gardahijau.codelabspace.or.id/api-docs)).
 
-> **Status:** dalam pengembangan. Build debug memakai [mode demo](#mode-demo) karena server sedang tidak aktif.
+> **Status:** dalam pengembangan. Build debug memakai server asli; build `demo` memakai [data contoh](#mode-demo) tanpa server.
 
 ## Daftar isi
 
@@ -60,37 +60,44 @@ git clone https://github.com/favjiw/garda-hijau-mengger-mobile.git
 
 1. Buka folder hasil clone di Android Studio, lalu tunggu Gradle sync selesai.
 2. Pilih konfigurasi `app` dan jalankan (**Run**) ke emulator atau HP.
-3. Di layar Masuk, isi nama pengguna dan kata sandi apa saja (mode demo).
+3. Di layar Masuk, buat akun lewat **Daftar** atau masuk dengan akun yang sudah ada.
 
 Membangun APK dari terminal:
 
-```bash
-./gradlew assembleDebug
-```
-
-Hasilnya ada di `app/build/outputs/apk/debug/`.
+| Perintah | Hasil | Server |
+|---|---|---|
+| `./gradlew assembleDebug` | `app/build/outputs/apk/debug/app-debug.apk` | Server asli |
+| `./gradlew assembleDemo` | `app/build/outputs/apk/demo/app-demo.apk` | Data contoh (mode demo) |
 
 ## Mode demo
 
-Build **debug** menjawab semua request API dengan data contoh, jadi aplikasi bisa dicoba tanpa server.
+Build **demo** (`./gradlew assembleDemo`) menjawab semua request API dengan data contoh, jadi aplikasi bisa dicoba tanpa server dan tanpa akun.
 
 - Masuk dengan nama pengguna dan kata sandi apa saja.
 - Data contoh: catatan sampah 10 hari terakhir, 3 siklus maggot, perkiraan panen, notifikasi, dan jawaban GardaBot.
 - Data yang ditambahkan lewat aplikasi tersimpan di memori sampai aplikasi ditutup.
-- Perkiraan panen di mode demo memakai rumus sederhana, bukan perhitungan server.
+- Perkiraan panen di mode demo memakai rumus sederhana, bukan model AI server.
 - Kodenya ada di `model/remote/mock/` (`MockApiInterceptor`, `MockApiStore`).
 
-Build **release** selalu memakai server asli.
+Build **debug** dan **release** selalu memakai server asli.
 
 ## Konfigurasi
 
 | Pengaturan | Lokasi | Keterangan |
 |---|---|---|
-| `USE_MOCK_API` | `app/build.gradle.kts` | `true` di blok `debug` = mode demo. Ubah ke `"false"` lalu sync untuk memakai server asli di build debug. |
-| URL API utama | `model/remote/network/ApiConfig.kt` | `https://api.smartmaggot.my.id/`: akun, catatan sampah, siklus, fase, perkiraan panen, notifikasi. |
-| URL chatbot | `model/remote/network/ApiConfig.kt` | `https://chatbot.smartmaggot.my.id/`: GardaBot. |
+| `BASE_URL` | `app/build.gradle.kts` (`defaultConfig`) | `https://gardahijau.codelabspace.or.id/` untuk semua fitur, termasuk GardaBot. |
+| `USE_MOCK_API` | `app/build.gradle.kts` | `true` hanya di build type `demo`. |
 
-Tidak ada kunci API atau rahasia yang perlu diisi. Token login disimpan di DataStore setelah masuk.
+Tidak ada kunci API atau rahasia yang perlu diisi.
+
+**Cara aplikasi memakai API**
+
+- **Login:** `POST /api/auth/login` mengembalikan token (berlaku 7 hari) yang disimpan di DataStore. `AuthInterceptor` memasang header `Authorization: Bearer <token>` di setiap request.
+- **Token kedaluwarsa:** saat aplikasi dibuka, `GET /api/auth/me` dipanggil. Balasan 401 dari endpoint mana pun menghapus token dan membuka halaman Masuk.
+- **Pesan galat:** server membalas `{ "success": false, "message": "..." }`. `PesanGalat` menampilkan `message` apa adanya, dengan pesan bawaan untuk 401, 404, 429 (terlalu banyak permintaan), 503 (layanan AI tidak tersedia), dan masalah jaringan.
+- **Perkiraan panen:** form *Catat fase besar* mengirim fase `PEMBESARAN`, lalu `PANEN` dengan `jumlahTelur` dan `jumlahMakanan` (keduanya **gram**). Fase `PANEN` memicu prediksi AI (bisa ±15 detik). Kalau gagal, perkiraan bisa dihitung ulang dari Detail siklus.
+- **Media telur:** pilihan diambil dari `GET /api/prediksi/opsi`, tidak di-hardcode.
+- **GardaBot:** `POST /api/chatbot/tanya` dengan `{ "pertanyaan": "..." }`; hanya `data.jawaban` yang ditampilkan.
 
 ## Struktur proyek
 
@@ -130,13 +137,15 @@ Saat menambah layar, pakai warna `@color/ghm_*` dan style yang sudah ada. Jangan
 
 ## Pengujian
 
-Proyek ini belum punya pengujian otomatis selain contoh bawaan Android Studio. Untuk menjalankannya:
+`app/src/test/.../ApiKontrakTest.kt` memastikan model aplikasi bisa membaca contoh JSON dari dokumentasi API dan pesan galat sesuai status code. Jalankan:
 
 ```bash
-./gradlew test
+./gradlew testDebugUnitTest
 ```
 
-Pengujian utama saat ini dilakukan manual di emulator dengan mode demo.
+Untuk melihat balasan asli server dengan akun sendiri, jalankan `scripts/cek-api.sh`. Script ini meminta nama pengguna dan kata sandi, lalu menyimpan balasan tiap endpoint di `build/cek-api/` tanpa token.
+
+Alur di layar (masuk, siklus, perkiraan panen, GardaBot) dicek manual di HP atau emulator.
 
 ## Berkontribusi
 

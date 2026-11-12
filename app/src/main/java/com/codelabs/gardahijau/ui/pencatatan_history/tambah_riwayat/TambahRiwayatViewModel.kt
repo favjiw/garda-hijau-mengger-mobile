@@ -1,5 +1,6 @@
 package com.codelabs.gardahijau.ui.pencatatan_history.tambah_riwayat
 
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,7 +35,7 @@ class TambahRiwayatViewModel @Inject constructor(
                 _addHistoryResult.value = response
                 _isLoading.value = false
             } catch (e: Exception) {
-                _errorMessage.value = e.message
+                _errorMessage.value = e.pesanGalat()
                 _isLoading.value = false
             }
         }

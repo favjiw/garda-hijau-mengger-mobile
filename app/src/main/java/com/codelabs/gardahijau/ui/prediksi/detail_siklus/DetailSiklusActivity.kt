@@ -29,6 +29,7 @@ import com.codelabs.gardahijau.ui.widget.tampilkan
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class DetailSiklusActivity : AppCompatActivity() {
@@ -60,7 +61,6 @@ class DetailSiklusActivity : AppCompatActivity() {
 
         binding.tvJudul.text = getString(R.string.ghm_siklus_ke, siklusId)
         binding.btnKembali.setOnClickListener { finish() }
-        binding.btnCatatFase.setOnClickListener { bukaTambahFaseBesar() }
         tampilkanHariKe()
 
         binding.rvSiklus.apply {
@@ -68,6 +68,7 @@ class DetailSiklusActivity : AppCompatActivity() {
             adapter = detailSiklusAdapter
         }
         observeFaseData()
+        observePerkiraan()
     }
 
     /** Dimuat ulang setiap kembali ke layar ini (mis. setelah mencatat fase besar). */
@@ -109,13 +110,12 @@ class DetailSiklusActivity : AppCompatActivity() {
         binding.pita.root.visibility = View.VISIBLE
         binding.pita.tampilkan(tahap)
 
-        // Fase besar belum dicatat: tampilkan langkah berikutnya + tombol.
-        val perluFaseBesar = tahap != TahapSiklus.BESAR
-        binding.cardLangkah.visibility = if (perluFaseBesar) View.VISIBLE else View.GONE
-        binding.layoutFooter.visibility = if (perluFaseBesar) View.VISIBLE else View.GONE
-
-        val pakanKg = faseList.find { it.jenis.uppercase() == "PEMBESARAN" }?.jumlahMakanan
-        tampilkanPerkiraan(faseList.find { it.jenis.uppercase() == "PANEN" }, pakanKg)
+        val pembesaran = faseList.find { it.jenis.uppercase() == "PEMBESARAN" }
+        val panen = faseList.find { it.jenis.uppercase() == "PANEN" }
+        // jumlahMakanan dari server dalam gram. Fase PANEN pasti menyimpannya; PEMBESARAN belum tentu.
+        val pakanGram = (panen?.jumlahMakanan ?: pembesaran?.jumlahMakanan)?.takeIf { it > 0 }
+        tampilkanPerkiraan(panen, pakanGram?.div(1000.0))
+        tampilkanLangkahBerikutnya(tahap, panen, pakanGram)
 
         val baris = susunLinimasa(faseList)
         detailSiklusAdapter.setItems(baris)
@@ -123,7 +123,7 @@ class DetailSiklusActivity : AppCompatActivity() {
     }
 
     /** Kartu "Perkiraan hasil panen" dari prediksiPanen di fase PANEN (dibuat otomatis). */
-    private fun tampilkanPerkiraan(panen: DataGetFase?, pakanKg: Int?) {
+    private fun tampilkanPerkiraan(panen: DataGetFase?, pakanKg: Double?) {
         val prediksi = panen?.prediksiPanen as? Map<*, *>
         val hasilKg = prediksi?.let {
             anyToDouble(it["hasilKg"]) ?: anyToDouble(it["hasilGram"])?.div(1000.0)
@@ -145,7 +145,7 @@ class DetailSiklusActivity : AppCompatActivity() {
             intent.putExtra("SIKLUS_ID", siklusId)
             intent.putExtra("JUMLAH_TELUR", this.intent.getStringExtra("EXTRA_JUMLAH"))
             intent.putExtra("MEDIA_TELUR", this.intent.getStringExtra("EXTRA_MEDIA"))
-            intent.putExtra("PAKAN_KG", pakanKg ?: 0)
+            intent.putExtra("PAKAN_KG", pakanKg ?: 0.0)
             startActivity(intent)
         }
     }
@@ -186,9 +186,10 @@ class DetailSiklusActivity : AppCompatActivity() {
             )
         }
 
+        val pakanPanen = faseList.find { it.jenis.uppercase() == "PANEN" }?.jumlahMakanan
         faseList.find { it.jenis.uppercase() == "PEMBESARAN" }?.let { fase ->
             val isi = listOfNotNull(
-                fase.jumlahMakanan.takeIf { it > 0 }?.let { getString(R.string.ghm_fase_pakan, it) },
+                (fase.jumlahMakanan ?: pakanPanen)?.takeIf { it > 0 }?.let { getString(R.string.ghm_fase_pakan, formatKg(it / 1000.0)) },
                 fase.keterangan?.takeIf { it.isNotBlank() },
             ).joinToString(" ")
             baris += BarisFase(
@@ -200,17 +201,91 @@ class DetailSiklusActivity : AppCompatActivity() {
         return baris
     }
 
-    /** Buka form fase besar dengan extra yang sama seperti sebelumnya. */
-    private fun bukaTambahFaseBesar() {
+    /**
+     * Kartu kuning + tombol bawah:
+     * - Fase besar belum dicatat -> "Catat fase besar".
+     * - Fase besar sudah ada tapi perkiraan belum ada (mis. layanan AI sempat tidak tersedia)
+     *   -> "Hitung perkiraan panen" (kirim fase PANEN lagi memakai data pakan fase besar).
+     */
+    private fun tampilkanLangkahBerikutnya(tahap: TahapSiklus, panen: DataGetFase?, pakanGram: Double?) {
+        val telurGram = intent.getStringExtra("EXTRA_JUMLAH")?.toIntOrNull() ?: 0
+        when {
+            tahap != TahapSiklus.BESAR -> {
+                binding.cardLangkah.visibility = View.VISIBLE
+                binding.tvLangkah.setText(R.string.ghm_langkah_catat_besar)
+                binding.layoutFooter.visibility = View.VISIBLE
+                binding.btnCatatFase.setText(R.string.ghm_tombol_catat_fase_besar)
+                binding.btnCatatFase.setOnClickListener { bukaTambahFaseBesar() }
+            }
+            panen == null && telurGram >= 1 -> {
+                binding.cardLangkah.visibility = View.VISIBLE
+                binding.tvLangkah.setText(R.string.ghm_langkah_hitung_perkiraan)
+                binding.layoutFooter.visibility = View.VISIBLE
+                if (!menghitung) binding.btnCatatFase.setText(R.string.ghm_tombol_hitung_perkiraan)
+                binding.btnCatatFase.setOnClickListener {
+                    if (pakanGram != null) {
+                        // Jumlah pakan sudah tercatat di fase besar: langsung minta perkiraan.
+                        val hariIni = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+                        viewModel.hitungPerkiraan(siklusId, hariIni, telurGram, pakanGram)
+                    } else {
+                        // Jumlah pakan belum ada: isi lewat form, tanpa membuat fase besar kedua.
+                        bukaTambahFase(mode = MODE_HANYA_PANEN)
+                    }
+                }
+            }
+            else -> {
+                binding.cardLangkah.visibility = View.GONE
+                binding.layoutFooter.visibility = View.GONE
+            }
+        }
+    }
+
+    private var menghitung = false
+
+    private fun observePerkiraan() {
+        viewModel.statusPerkiraan.observe(this) { status ->
+            when (status) {
+                is ApiResponse.Empty -> {
+                    menghitung = true
+                    binding.btnCatatFase.isEnabled = false
+                    binding.btnCatatFase.setText(R.string.ghm_menghitung_perkiraan)
+                }
+                is ApiResponse.Success -> {
+                    menghitung = false
+                    binding.btnCatatFase.isEnabled = true
+                    viewModel.getFase(siklusId)
+                }
+                is ApiResponse.Error -> {
+                    menghitung = false
+                    binding.btnCatatFase.isEnabled = true
+                    binding.btnCatatFase.setText(R.string.ghm_tombol_hitung_perkiraan)
+                    Toast.makeText(this, status.errorMessage, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun bukaTambahFaseBesar() = bukaTambahFase(mode = "ADD")
+
+    /**
+     * Buka form fase besar dengan extra yang sama seperti sebelumnya.
+     * [mode] "ADD" = fase besar + perkiraan; [MODE_HANYA_PANEN] = hanya perkiraan (fase besar sudah ada).
+     */
+    private fun bukaTambahFase(mode: String) {
         val intent = Intent(this, TambahFaseActivity::class.java)
         intent.putExtra("SIKLUS_ID", siklusId)
         intent.putExtra("JENIS_FASE", "PEMBESARAN")
         intent.putExtra("JUMLAH_TELUR", this.intent.getStringExtra("EXTRA_JUMLAH")?.toIntOrNull() ?: 0)
         intent.putExtra("MEDIA_TELUR", this.intent.getStringExtra("EXTRA_MEDIA") ?: "")
-        intent.putExtra("MODE", "ADD")
+        intent.putExtra("MODE", mode)
         // Untuk "Hari ke-N" di form fase besar.
         intent.putExtra("TANGGAL_MULAI", this.intent.getStringExtra("EXTRA_TANGGAL_MULAI"))
         startActivity(intent)
+    }
+
+    companion object {
+        /** Sama dengan TambahFaseActivity.MODE_HANYA_PANEN. */
+        private const val MODE_HANYA_PANEN = "PANEN"
     }
 
     private fun anyToDouble(value: Any?): Double? = when (value) {

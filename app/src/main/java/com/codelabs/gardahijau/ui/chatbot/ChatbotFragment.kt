@@ -12,13 +12,13 @@ import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.FragmentChatbotBinding
 import com.codelabs.gardahijau.model.local.data.Author
 import com.codelabs.gardahijau.model.local.data.Chat
-import com.codelabs.gardahijau.model.remote.body.ChatBody
-import com.codelabs.gardahijau.model.remote.network.ApiConfig
+import com.codelabs.gardahijau.model.remote.body.TanyaRequest
+import com.codelabs.gardahijau.model.remote.network.MainApiService
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import com.codelabs.gardahijau.ui.adapter.ChatAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * Tab GardaBot (dulu ChatbotActivity). Navigasi bawah & tinggi status bar diurus MainActivity.
@@ -29,6 +29,9 @@ class ChatbotFragment : Fragment() {
 
     private var _binding: FragmentChatbotBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var mainApiService: MainApiService
 
     private val adapter = ChatAdapter()
     private val chatHistory = ArrayList<Chat>()
@@ -96,21 +99,20 @@ class ChatbotFragment : Fragment() {
         tampilkanPesan()
 
         lifecycleScope.launch {
-            val service = ApiConfig.getChatbotApiService()
-            val response = runCatching {
-                withContext(Dispatchers.IO) {
-                    service.getChatResponse(ChatBody(question = text))
-                }
+            // POST /api/chatbot/tanya. Hanya data.jawaban yang ditampilkan (data.sumber tidak).
+            val jawaban = try {
+                mainApiService.tanyaChatbot(TanyaRequest(pertanyaan = text)).data?.jawaban
+                    ?.takeIf { it.isNotBlank() }
+                    ?: getString(R.string.ghm_gardabot_galat)
+            } catch (e: Exception) {
+                // 429: terlalu banyak pertanyaan; 503: layanan AI tidak tersedia; lainnya: jaringan.
+                e.pesanGalat()
             }
 
             if (chatHistory.isNotEmpty() && chatHistory.last().isTyping) {
                 chatHistory.removeAt(chatHistory.lastIndex)
             }
-            response.onSuccess { res ->
-                chatHistory.add(Chat(text = res.answer, author = Author.AI))
-            }.onFailure {
-                chatHistory.add(Chat(text = getString(R.string.ghm_gardabot_galat), author = Author.AI))
-            }
+            chatHistory.add(Chat(text = jawaban, author = Author.AI))
             menunggu = false
 
             // Tab bisa saja sudah ditinggal saat jawaban datang.

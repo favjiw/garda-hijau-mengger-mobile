@@ -1,5 +1,6 @@
 package com.codelabs.gardahijau.repository
 
+import com.codelabs.gardahijau.model.remote.network.pesanGalat
 import com.codelabs.gardahijau.model.remote.network.ApiConfig
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.model.remote.response.RemoteDataSource
@@ -20,7 +21,7 @@ class RegisterRepository @Inject constructor(
             val response = remoteDataSource.registerAccount(username, password, rw)
             emit(ApiResponse.Success(response))
         } catch (e: Exception) {
-            emit(ApiResponse.Error(e.message ?: "Unknown error"))
+            emit(ApiResponse.Error(e.pesanGalat()))
         }
     }.flowOn(Dispatchers.IO)
 }

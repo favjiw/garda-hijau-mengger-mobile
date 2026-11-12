@@ -115,45 +115,82 @@ class TambahFaseActivity : AppCompatActivity() {
 
             val mode = intent.getStringExtra("MODE") ?: "ADD"
             val siklusId = intent.getIntExtra("SIKLUS_ID", -1)
-            if (mode != "ADD" || siklusId == -1) {
+            if (mode !in listOf("ADD", MODE_HANYA_PANEN) || siklusId == -1) {
                 Toast.makeText(this, R.string.ghm_galat_id_siklus, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val telurGram = intent.getIntExtra("JUMLAH_TELUR", 0)
+            if (telurGram < 1) {
+                // Prediksi panen butuh jumlah telur siklus (gram); tanpa itu server menolak.
+                Toast.makeText(this, R.string.ghm_galat_telur_siklus, Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
             // Format API sama seperti sebelumnya: yyyy-MM-dd.
             val tanggalApi = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(tanggalDipilih.time)
-            viewModel.addFasePembesaranWithPanen(
+            viewModel.simpanFaseBesar(
                 siklusId = siklusId,
-                tanggalPembesaran = tanggalApi,
-                jumlahMakanan = jumlah,
-                catatan = catatan
+                tanggal = tanggalApi,
+                pakanKg = jumlah.toDouble(),
+                telurGram = telurGram,
+                keterangan = catatan,
+                denganFaseBesar = mode != MODE_HANYA_PANEN,
             )
         }
     }
 
     private fun observeAddFase() {
-        viewModel.addFaseResult.observe(this) { response ->
-            when (response) {
-                is ApiResponse.Empty -> {
-                    binding.btnSimpanFase.isEnabled = false
-                    binding.btnSimpanFase.text = getString(R.string.ghm_memproses)
-                }
-                is ApiResponse.Success -> {
-                    // Kembali ke Detail siklus; kartu perkiraan hasil panen dimuat ulang di sana.
+        viewModel.status.observe(this) { status ->
+            when (status) {
+                is StatusFaseBesar.MenyimpanFase -> tampilkanMemuat(getString(R.string.ghm_memproses))
+                // Prediksi AI bisa ±15 detik: beri tahu pengguna supaya tidak mengira aplikasi macet.
+                is StatusFaseBesar.MenghitungPerkiraan -> tampilkanMemuat(getString(R.string.ghm_menghitung_perkiraan))
+                is StatusFaseBesar.Selesai -> {
                     Toast.makeText(this, R.string.ghm_fase_tersimpan, Toast.LENGTH_SHORT).show()
                     setResult(RESULT_OK)
                     finish()
                 }
-                is ApiResponse.Error -> {
-                    binding.btnSimpanFase.isEnabled = true
-                    binding.btnSimpanFase.text = getString(R.string.ghm_tombol_simpan_lihat_perkiraan)
-                    Toast.makeText(this, getString(R.string.ghm_galat_simpan, response.errorMessage), Toast.LENGTH_SHORT).show()
+                is StatusFaseBesar.PerkiraanGagal -> {
+                    if (intent.getStringExtra("MODE") == MODE_HANYA_PANEN) {
+                        // Tidak ada yang tersimpan; biarkan form terbuka supaya bisa dicoba lagi.
+                        selesaiMemuat()
+                        Toast.makeText(this, status.pesan, Toast.LENGTH_LONG).show()
+                        return@observe
+                    }
+                    // Fase besar sudah tersimpan; perkiraan bisa dihitung ulang di Detail siklus.
+                    Toast.makeText(
+                        this,
+                        getString(R.string.ghm_fase_tersimpan_perkiraan_gagal, status.pesan),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    setResult(RESULT_OK)
+                    finish()
+                }
+                is StatusFaseBesar.Gagal -> {
+                    selesaiMemuat()
+                    Toast.makeText(this, getString(R.string.ghm_galat_simpan, status.pesan), Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
+    private fun tampilkanMemuat(teks: String) {
+        binding.btnSimpanFase.isEnabled = false
+        binding.btnSimpanFase.text = teks
+        binding.btnKembali.isEnabled = false
+    }
+
+    private fun selesaiMemuat() {
+        binding.btnSimpanFase.isEnabled = true
+        binding.btnSimpanFase.text = getString(R.string.ghm_tombol_simpan_lihat_perkiraan)
+        binding.btnKembali.isEnabled = true
+    }
+
     companion object {
         private const val KEY_TANGGAL = "tanggal_dipilih"
+
+        /** Fase besar sudah tercatat; form hanya mengirim fase PANEN untuk menghitung perkiraan. */
+        const val MODE_HANYA_PANEN = "PANEN"
     }
 }

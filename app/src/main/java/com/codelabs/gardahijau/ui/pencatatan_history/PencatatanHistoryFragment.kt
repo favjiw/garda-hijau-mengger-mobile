@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.FragmentPencatatanHistoryBinding
 import com.codelabs.gardahijau.model.local.data.UserPreferences
+import com.codelabs.gardahijau.repository.LogoutRepository
+import javax.inject.Inject
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.model.remote.response.hitoryPencacahan.DataItem
 import com.codelabs.gardahijau.ui.adapter.HistoryAdapter
@@ -43,6 +45,12 @@ class PencatatanHistoryFragment : Fragment() {
 
     private var _binding: FragmentPencatatanHistoryBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var logoutRepository: LogoutRepository
+
+    @Inject
+    lateinit var userPreferences: UserPreferences
 
     private val historyAdapter = HistoryAdapter()
     private val loginViewModel: LoginViewModel by viewModels()
@@ -86,7 +94,7 @@ class PencatatanHistoryFragment : Fragment() {
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            Toast.makeText(requireContext(), "Error: $error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { _ ->
@@ -188,7 +196,10 @@ class PencatatanHistoryFragment : Fragment() {
 
                     lifecycleScope.launch {
                         try {
-                            UserPreferences(requireContext()).clear()
+                            // Token di-blacklist di server (POST /api/auth/logout), lalu dihapus di HP.
+                            // Kalau server gagal dihubungi, token tetap dihapus supaya pengguna tetap keluar.
+                            logoutRepository.logout()
+                            userPreferences.clear()
                         } catch (e: Exception) {
                         } finally {
                             loadingDialog.dismiss()
