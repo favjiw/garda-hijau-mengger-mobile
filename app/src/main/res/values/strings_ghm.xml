@@ -57,4 +57,22 @@
     <string name="ghm_keluar_pesan">Kamu perlu masuk lagi untuk mencatat sampah.</string>
     <string name="ghm_batal">Batal</string>
     <string name="ghm_ya_keluar">Keluar</string>
+
+    <!-- Catat sampah -->
+    <string name="ghm_kembali">Kembali</string>
+    <string name="ghm_catat_judul">Catat sampah</string>
+    <string name="ghm_catat_subjudul">Isi setelah sampah selesai ditimbang.</string>
+    <string name="ghm_label_tanggal">Tanggal</string>
+    <string name="ghm_label_pukul">Pukul</string>
+    <string name="ghm_pilih_tanggal">Pilih tanggal</string>
+    <string name="ghm_pilih_pukul">Pilih pukul</string>
+    <string name="ghm_label_berat">Berat sampah</string>
+    <string name="ghm_hint_berat">0</string>
+    <string name="ghm_kurangi_berat">Kurangi 1 kg</string>
+    <string name="ghm_tambah_berat">Tambah 1 kg</string>
+    <string name="ghm_label_catatan_opsional">Catatan (boleh dikosongkan)</string>
+    <string name="ghm_hint_catatan">Misal: banyak sisa sayur dari pasar</string>
+    <string name="ghm_tombol_simpan_catatan">Simpan catatan</string>
+    <string name="ghm_galat_berat_kosong">Isi berat sampah, lebih dari 0 kg</string>
+    <string name="ghm_galat_simpan">Gagal menyimpan: %1$s</string>
 </resources>

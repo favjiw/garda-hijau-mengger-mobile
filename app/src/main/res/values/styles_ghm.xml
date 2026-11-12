@@ -134,6 +134,26 @@
         <item name="android:checkable">true</item>
     </style>
 
+    <!-- Tombol bulat berisi ikon saja (Kembali di "Bilah atas", Kurang/Tambah di kartu berat).
+         Ukuran & warna latar diatur di layout (48dp tunas_50 / 56dp tunas_100). -->
+    <style name="Widget.GHM.Button.Bulat" parent="Widget.Material3.Button.IconButton.Filled">
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="backgroundTint">@color/ghm_tunas_50</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@null</item>
+        <item name="rippleColor">@color/ghm_tunas_100</item>
+        <item name="elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
     <!-- ===== Isian (komponen "Isian") ===== -->
 
     <style name="Widget.GHM.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
