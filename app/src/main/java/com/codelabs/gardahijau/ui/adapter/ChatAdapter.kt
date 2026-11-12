@@ -63,7 +63,8 @@ class ChatAdapter : ListAdapter<Chat, RecyclerView.ViewHolder>(DiffCallback()) {
 
     private class DiffCallback : DiffUtil.ItemCallback<Chat>() {
         override fun areItemsTheSame(oldItem: Chat, newItem: Chat): Boolean =
-            oldItem.timestamp == newItem.timestamp
+            // Pesan saya & "sedang menulis" bisa dibuat di milidetik yang sama.
+            oldItem.timestamp == newItem.timestamp && oldItem.author == newItem.author && oldItem.isTyping == newItem.isTyping
 
         override fun areContentsTheSame(oldItem: Chat, newItem: Chat): Boolean =
             oldItem == newItem

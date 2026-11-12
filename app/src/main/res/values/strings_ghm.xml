@@ -155,4 +155,17 @@
     <string name="ghm_nilai_kg">%1$s kg</string>
     <string name="ghm_catatan_perkiraan">Angka ini hanya perkiraan. Hasil nyata bisa berbeda, terutama kalau suhu dan kelembapan wadah berubah.</string>
     <string name="ghm_tombol_kembali_ke_siklus">Kembali ke siklus</string>
+
+    <!-- GardaBot -->
+    <string name="ghm_gardabot_judul">GardaBot</string>
+    <string name="ghm_gardabot_subjudul">Tanya soal budidaya maggot dan memilah sampah.</string>
+    <string name="ghm_gardabot_sapaan">Halo! Saya bisa bantu soal maggot BSF dan pemilahan sampah. Mau tanya apa?</string>
+    <string name="ghm_coba_tanyakan">Coba tanyakan</string>
+    <string name="ghm_saran_menetas">Berapa lama telur maggot menetas?</string>
+    <string name="ghm_saran_pakan">Pakan apa yang paling bagus?</string>
+    <string name="ghm_saran_dilarang">Sampah apa yang dilarang untuk maggot?</string>
+    <string name="ghm_hint_pertanyaan">Tulis pertanyaan</string>
+    <string name="ghm_kirim">Kirim pertanyaan</string>
+    <string name="ghm_gardabot_mengetik">GardaBot sedang menulis jawaban…</string>
+    <string name="ghm_gardabot_galat">Maaf, GardaBot belum bisa menjawab. Periksa internet lalu coba lagi.</string>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma: ikon/send (Redesign v2) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp"
+    android:height="22dp"
+    android:viewportWidth="22"
+    android:viewportHeight="22"
+    android:autoMirrored="true">
+    <path
+        android:pathData="M20.1667,1.83333L13.75,20.1667L10.0833,11.9167L1.83333,8.25L20.1667,1.83333Z"
+        android:strokeColor="@color/ghm_putih"
+        android:strokeWidth="1.83333"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M20.1667,1.83333L10.0833,11.9167"
+        android:strokeColor="@color/ghm_putih"
+        android:strokeWidth="1.83333"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>
