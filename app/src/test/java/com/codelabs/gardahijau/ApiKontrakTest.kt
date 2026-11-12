@@ -148,6 +148,16 @@ class ApiKontrakTest {
         assertEquals("Halo", tanya.get("pertanyaan").asString)
     }
 
+    @Test
+    fun log_tidakMemuatTokenAtauSandi() {
+        val log = com.codelabs.gardahijau.model.remote.network.ApiConfig.sensorLog(
+            """{"username":"rw4","password":"rahasia123"} {"success":true,"token":"eyJabc.def","user":{}}"""
+        )
+        assertFalse(log.contains("rahasia123"))
+        assertFalse(log.contains("eyJabc"))
+        assertTrue(log.contains("\"username\":\"rw4\""))
+    }
+
     // ------------------------------------------------------------------ pesan galat
 
     private fun httpError(code: Int, body: String): HttpException =
