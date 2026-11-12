@@ -114,7 +114,8 @@ class DetailSiklusActivity : AppCompatActivity() {
         binding.cardLangkah.visibility = if (perluFaseBesar) View.VISIBLE else View.GONE
         binding.layoutFooter.visibility = if (perluFaseBesar) View.VISIBLE else View.GONE
 
-        tampilkanPerkiraan(faseList.find { it.jenis.uppercase() == "PANEN" })
+        val pakanKg = faseList.find { it.jenis.uppercase() == "PEMBESARAN" }?.jumlahMakanan
+        tampilkanPerkiraan(faseList.find { it.jenis.uppercase() == "PANEN" }, pakanKg)
 
         val baris = susunLinimasa(faseList)
         detailSiklusAdapter.setItems(baris)
@@ -122,7 +123,7 @@ class DetailSiklusActivity : AppCompatActivity() {
     }
 
     /** Kartu "Perkiraan hasil panen" dari prediksiPanen di fase PANEN (dibuat otomatis). */
-    private fun tampilkanPerkiraan(panen: DataGetFase?) {
+    private fun tampilkanPerkiraan(panen: DataGetFase?, pakanKg: Int?) {
         val prediksi = panen?.prediksiPanen as? Map<*, *>
         val hasilKg = prediksi?.let {
             anyToDouble(it["hasilKg"]) ?: anyToDouble(it["hasilGram"])?.div(1000.0)
@@ -140,6 +141,11 @@ class DetailSiklusActivity : AppCompatActivity() {
             intent.putExtra("FASE_ID", panen.id)
             intent.putExtra("PREDIKSI_PANEN", panen.prediksiPanen.toString())
             intent.putExtra("HASIL_KG", prediksi["hasilKg"]?.toString() ?: "0")
+            // Untuk "Siklus N" dan kartu "Dihitung dari" di layar Perkiraan panen.
+            intent.putExtra("SIKLUS_ID", siklusId)
+            intent.putExtra("JUMLAH_TELUR", this.intent.getStringExtra("EXTRA_JUMLAH"))
+            intent.putExtra("MEDIA_TELUR", this.intent.getStringExtra("EXTRA_MEDIA"))
+            intent.putExtra("PAKAN_KG", pakanKg ?: 0)
             startActivity(intent)
         }
     }

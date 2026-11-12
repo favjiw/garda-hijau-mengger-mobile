@@ -141,4 +141,18 @@
     <string name="ghm_tombol_simpan_lihat_perkiraan">Simpan dan lihat perkiraan</string>
     <string name="ghm_galat_jumlah_pakan">Isi jumlah pakan dalam kg, lebih dari 0</string>
     <string name="ghm_fase_tersimpan">Fase besar tersimpan</string>
+
+    <!-- Perkiraan panen -->
+    <string name="ghm_perkiraan_panen_judul">Perkiraan panen</string>
+    <string name="ghm_siklus_diperkirakan">Siklus %1$d diperkirakan menghasilkan</string>
+    <string name="ghm_perkiraan_diperkirakan">Diperkirakan menghasilkan</string>
+    <string name="ghm_satuan_kg_maggot">kg maggot</string>
+    <string name="ghm_dihitung_dari">Dihitung dari</string>
+    <string name="ghm_label_telur">Telur</string>
+    <string name="ghm_label_media">Media</string>
+    <string name="ghm_label_pakan_fase_besar">Pakan fase besar</string>
+    <string name="ghm_nilai_gram">%1$s gram</string>
+    <string name="ghm_nilai_kg">%1$s kg</string>
+    <string name="ghm_catatan_perkiraan">Angka ini hanya perkiraan. Hasil nyata bisa berbeda, terutama kalau suhu dan kelembapan wadah berubah.</string>
+    <string name="ghm_tombol_kembali_ke_siklus">Kembali ke siklus</string>
 </resources>

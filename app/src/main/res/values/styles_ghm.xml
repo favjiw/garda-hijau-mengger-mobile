@@ -27,6 +27,16 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <!-- Angka hasil di layar "08 Perkiraan panen" (112sp, satu-satunya di desain) -->
+    <style name="Text.GHM.AngkaHero">
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textSize">112sp</item>
+        <item name="android:letterSpacing">-0.045</item>
+        <item name="android:textColor">@color/ghm_daun_900</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <!-- Angka/Sedang: "Hari ke-12", judul besar di header hijau -->
     <style name="Text.GHM.AngkaSedang">
         <item name="android:fontFamily">@font/bricolage_bold</item>
