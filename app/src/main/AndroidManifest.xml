@@ -35,10 +35,6 @@
             android:exported="false"
             android:theme="@style/Theme.GardaHijau" />
         <activity
-            android:name=".ui.chatbot.ChatbotActivity"
-            android:exported="false"
-            android:theme="@style/Theme.GardaHijau" />
-        <activity
             android:name=".ui.pencatatan_history.tambah_riwayat.TambahRiwayatActivity"
             android:exported="false"
             android:theme="@style/Theme.GardaHijau" />
@@ -61,6 +57,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

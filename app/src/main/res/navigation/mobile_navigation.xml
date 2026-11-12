@@ -33,11 +33,11 @@
         android:label="activity_tambah_siklus"
         tools:layout="@layout/activity_tambah_siklus" />
 
-    <activity
+    <fragment
         android:id="@+id/navitgation_chatbot"
-        android:name="com.codelabs.gardahijau.ui.chatbot.ChatbotActivity"
-        android:label="activity_chatbot"
-        tools:layout="@layout/activity_chatbot" />
+        android:name="com.codelabs.gardahijau.ui.chatbot.ChatbotFragment"
+        android:label="@string/title_chatbot"
+        tools:layout="@layout/fragment_chatbot" />
     <activity
         android:id="@+id/tambahRiwayatActivity"
         android:name="com.codelabs.gardahijau.ui.pencatatan_history.tambah_riwayat.TambahRiwayatActivity"
