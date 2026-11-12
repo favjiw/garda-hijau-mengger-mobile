@@ -7,6 +7,7 @@
     <string name="ghm_logo_wow">Logo Wise on Waste</string>
     <string name="ghm_logo_unikom">Logo Universitas Komputer Indonesia</string>
     <string name="ghm_memproses">Memproses…</string>
+    <string name="ghm_mode_demo">Mode demo: memakai data contoh, bukan server. Isi nama dan sandi apa saja.</string>
 
     <!-- Masuk -->
     <string name="ghm_masuk_subjudul">Catat sampah yang masuk dan pantau kandang maggot di RW-mu.</string>

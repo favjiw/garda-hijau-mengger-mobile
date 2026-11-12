@@ -18,9 +18,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Mode demo: true = semua request API dijawab data contoh (lihat model/remote/mock).
+        buildConfigField("boolean", "USE_MOCK_API", "false")
     }
 
     buildTypes {
+        debug {
+            // Server smartmaggot.my.id sedang mati -> build debug memakai data contoh.
+            // Ubah ke "false" kalau server sudah menyala.
+            buildConfigField("boolean", "USE_MOCK_API", "true")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -38,6 +46,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

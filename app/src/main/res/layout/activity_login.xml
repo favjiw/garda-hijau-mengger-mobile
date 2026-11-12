@@ -153,6 +153,19 @@
             android:gravity="center"
             android:textColor="@color/ghm_tinta_redup"
             tools:text="Belum punya akun? Daftar" />
+
+        <!-- Hanya tampil bila BuildConfig.USE_MOCK_API = true -->
+        <TextView
+            android:id="@+id/tvModeDemo"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/ghm_mode_demo"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

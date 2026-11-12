@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.codelabs.gardahijau.BuildConfig
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityLoginBinding
 import com.codelabs.gardahijau.model.local.data.UserPreferences
@@ -54,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
         binding.layoutHero.applySystemBarPadding(top = true)
         binding.layoutFooter.applySystemBarPadding(bottom = true, includeIme = true)
+        binding.tvModeDemo.visibility = if (BuildConfig.USE_MOCK_API) View.VISIBLE else View.GONE
 
         setTextToLogin()
         setupPasswordToggle()
