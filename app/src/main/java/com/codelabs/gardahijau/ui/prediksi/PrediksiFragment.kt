@@ -17,21 +17,20 @@ import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.DataItem
 import com.codelabs.gardahijau.ui.adapter.KartuSiklus
 import com.codelabs.gardahijau.ui.adapter.SiklusAdapter
-import com.codelabs.gardahijau.ui.adapter.TahapSiklus
 import com.codelabs.gardahijau.ui.prediksi.detail_siklus.DetailSiklusActivity
 import com.codelabs.gardahijau.ui.prediksi.tambah_siklus.TambahSiklusActivity
 import com.codelabs.gardahijau.ui.util.formatKg
+import com.codelabs.gardahijau.ui.util.hariSejak
 import com.codelabs.gardahijau.ui.util.parseServerDate
+import com.codelabs.gardahijau.ui.widget.tahapDariFase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class PrediksiFragment : Fragment() {
@@ -124,7 +123,7 @@ class PrediksiFragment : Fragment() {
         binding.rvPrediksiSiklus.visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
 
         // Tampilkan kartu dulu, lalu lengkapi tahap & perkiraan per siklus.
-        siklusAdapter.setItems(list.map { KartuSiklus(it, hariSejak(it.tanggalMulai), null, null, dimuat = false) })
+        siklusAdapter.setItems(list.map { KartuSiklus(it, parseServerDate(it.tanggalMulai)?.let(::hariSejak), null, null, dimuat = false) })
 
         muatKartuJob?.cancel()
         muatKartuJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -137,12 +136,7 @@ class PrediksiFragment : Fragment() {
         val tahap = when (val fase = viewModel.fetchFase(item.id)) {
             is ApiResponse.Success -> {
                 @Suppress("USELESS_ELVIS")
-                val jenis = (fase.data.data ?: emptyList()).map { it.jenis.uppercase() }
-                when {
-                    "PEMBESARAN" in jenis -> TahapSiklus.BESAR
-                    "PENETASAN" in jenis -> TahapSiklus.TETAS
-                    else -> TahapSiklus.TELUR
-                }
+                tahapDariFase((fase.data.data ?: emptyList()).map { it.jenis })
             }
             else -> null
         }
@@ -154,21 +148,7 @@ class PrediksiFragment : Fragment() {
             }
             else -> null
         }
-        return KartuSiklus(item, hariSejak(item.tanggalMulai), tahap, hasilKg, dimuat = true)
-    }
-
-    /** Selisih hari kalender (zona waktu HP) antara tanggal mulai dan hari ini. */
-    private fun hariSejak(tanggalMulai: String?): Int? {
-        val mulai = parseServerDate(tanggalMulai) ?: return null
-        fun awalHari(date: Date) = Calendar.getInstance().apply {
-            time = date
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.timeInMillis
-        val selisih = (awalHari(Date()) - awalHari(mulai)) / 86_400_000.0
-        return selisih.roundToInt().coerceAtLeast(0)
+        return KartuSiklus(item, parseServerDate(item.tanggalMulai)?.let(::hariSejak), tahap, hasilKg, dimuat = true)
     }
 
     /** Format tanggal yang dikirim ke DetailSiklusActivity (EXTRA_TANGGAL), jangan diubah dulu. */
@@ -202,6 +182,8 @@ class PrediksiFragment : Fragment() {
                 putExtra("EXTRA_MEDIA", dataItem.mediaTelur)
                 putExtra("EXTRA_CATATAN", dataItem.catatan)
                 putExtra("EXTRA_ID", dataItem.id)
+                // Tanggal mulai mentah (ISO, UTC) untuk "Hari ke-N" di Detail siklus.
+                putExtra("EXTRA_TANGGAL_MULAI", dataItem.tanggalMulai)
             }
             startActivity(intent)
         }

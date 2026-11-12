@@ -1,39 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Figma: Redesign v2 / "05 Detail siklus" -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/dimen_padding_16"
-    >
+    android:background="@color/ghm_kertas"
+    android:orientation="vertical"
+    tools:context=".ui.prediksi.detail_siklus.DetailSiklusActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
+    <!-- Bilah atas. Padding atas ditambah tinggi status bar di DetailSiklusActivity. -->
+    <LinearLayout
+        android:id="@+id/layoutBilahAtas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="Detail Siklus"
-        app:titleCentered="true"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"
-        app:titleTextColor="@color/black" />
+        android:gravity="center_vertical"
+        android:minHeight="64dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="20dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSiklus"
-        android:layout_width="0dp"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnKembali"
+            style="@style/Widget.GHM.Button.Bulat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/ghm_kembali"
+            app:icon="@drawable/ic_ghm_kembali"
+            app:iconSize="24dp" />
+
+        <TextView
+            android:id="@+id/tvJudul"
+            style="@style/Text.GHM.JudulBagian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:accessibilityHeading="true"
+            tools:text="Siklus 3" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dimen_margin_16"
-        android:layout_marginEnd="@dimen/dimen_margin_16"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
-        tools:listitem="@layout/item_card_detail_siklus" />
+        android:layout_weight="1"
+        android:fillViewport="true">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvHariKe"
+                style="@style/Text.GHM.AngkaSedang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:text="Hari ke-12"
+                tools:visibility="visible" />
+
+            <include
+                android:id="@+id/pita"
+                layout="@layout/view_ghm_pita_siklus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <!-- Langkah berikutnya: hanya bila fase besar belum dicatat -->
+            <LinearLayout
+                android:id="@+id/cardLangkah"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:backgroundTint="@color/ghm_terpal_100"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    style="@style/Text.GHM.Tebal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ghm_langkah_berikutnya"
+                    android:textColor="@color/ghm_daun_900" />
+
+                <TextView
+                    android:id="@+id/tvLangkah"
+                    style="@style/Text.GHM.Biasa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/ghm_langkah_catat_besar" />
+            </LinearLayout>
+
+            <!-- Perkiraan hasil panen: dari prediksiPanen di fase PANEN -->
+            <LinearLayout
+                android:id="@+id/cardPerkiraan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Text.GHM.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:text="@string/ghm_perkiraan_hasil_panen"
+                        android:textColor="@color/ghm_tinta_redup" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvPerkiraanKg"
+                            style="@style/Text.GHM.AngkaSedang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="10" />
+
+                        <TextView
+                            style="@style/Text.GHM.Tebal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/ghm_satuan_kg"
+                            android:textColor="@color/ghm_daun_900" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/Text.GHM.Tebal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ghm_rincian"
+                    android:textColor="@color/ghm_daun_700" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="2dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_ghm_chevron_kanan" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Text.GHM.JudulBagian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:accessibilityHeading="true"
+                android:text="@string/ghm_catatan_fase" />
+
+            <TextView
+                android:id="@+id/tvFaseKosong"
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ghm_belum_ada_fase"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSiklus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_card_detail_siklus" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Aksi bawah. Padding bawah ditambah tinggi navigation bar di DetailSiklusActivity. -->
+    <LinearLayout
+        android:id="@+id/layoutFooter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCatatFase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ghm_tombol_catat_fase_besar" />
+    </LinearLayout>
+
+</LinearLayout>

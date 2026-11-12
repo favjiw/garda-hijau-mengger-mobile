@@ -36,3 +36,16 @@ fun formatKg(value: Double?): String {
     }
     return format.format(value ?: 0.0)
 }
+
+/** Selisih hari kalender (zona waktu HP) dari [mulai] sampai hari ini; tidak pernah negatif. */
+fun hariSejak(mulai: Date): Int {
+    fun awalHari(date: Date) = java.util.Calendar.getInstance().apply {
+        time = date
+        set(java.util.Calendar.HOUR_OF_DAY, 0)
+        set(java.util.Calendar.MINUTE, 0)
+        set(java.util.Calendar.SECOND, 0)
+        set(java.util.Calendar.MILLISECOND, 0)
+    }.timeInMillis
+    val selisih = (awalHari(Date()) - awalHari(mulai)) / 86_400_000.0
+    return kotlin.math.round(selisih).toInt().coerceAtLeast(0)
+}

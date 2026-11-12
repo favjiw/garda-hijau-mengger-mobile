@@ -1,29 +1,18 @@
 package com.codelabs.gardahijau.ui.adapter
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.ColorRes
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ItemCardPrediksiSiklusBinding
-import com.codelabs.gardahijau.databinding.ViewGhmPitaSiklusBinding
 import com.codelabs.gardahijau.model.remote.response.prediksi.DataItem
 import com.codelabs.gardahijau.ui.util.LOCALE_ID
 import com.codelabs.gardahijau.ui.util.formatKg
 import com.codelabs.gardahijau.ui.util.parseServerDate
+import com.codelabs.gardahijau.ui.widget.TahapSiklus
+import com.codelabs.gardahijau.ui.widget.tampilkan
 import java.text.SimpleDateFormat
-
-/**
- * Tahap siklus yang bisa dibaca dari daftar fase.
- * Fase PANEN dibuat otomatis bersama PEMBESARAN (lihat TambahFaseViewModel), jadi tidak
- * menandakan larva siap panen. Karena itu tahap "Panen" di pita tidak pernah aktif.
- */
-enum class TahapSiklus { TELUR, TETAS, BESAR }
 
 data class KartuSiklus(
     val data: DataItem,
@@ -66,7 +55,7 @@ class SiklusAdapter(
                 binding.pita.root.visibility = View.GONE
             } else {
                 binding.pita.root.visibility = View.VISIBLE
-                tampilkanPita(binding.pita, item.tahap)
+                binding.pita.tampilkan(item.tahap)
             }
 
             val mulai = parseServerDate(item.data.tanggalMulai)
@@ -97,38 +86,6 @@ class SiklusAdapter(
             binding.root.setOnClickListener { onItemClick(item.data) }
         }
 
-        /** Ruas sebelum tahap sekarang: hijau. Tahap sekarang: kuning + label tebal. Sesudahnya: abu. */
-        private fun tampilkanPita(pita: ViewGhmPitaSiklusBinding, tahap: TahapSiklus) {
-            val ruas = listOf(
-                pita.ruasTelur to pita.labelTelur,
-                pita.ruasTetas to pita.labelTetas,
-                pita.ruasBesar to pita.labelBesar,
-                pita.ruasPanen to pita.labelPanen,
-            )
-            val aktif = tahap.ordinal
-            ruas.forEachIndexed { index, (batang, label) ->
-                when {
-                    index < aktif -> setRuas(batang, label, R.color.ghm_daun_700, R.color.ghm_tinta, tebal = false)
-                    index == aktif -> setRuas(batang, label, R.color.ghm_terpal_400, R.color.ghm_tinta, tebal = true)
-                    else -> setRuas(batang, label, R.color.ghm_garis, R.color.ghm_tinta_redup, tebal = false)
-                }
-            }
-            val namaTahap = ruas[aktif].second.text
-            pita.root.contentDescription =
-                pita.root.context.getString(R.string.ghm_tahap_sekarang, namaTahap)
-            pita.root.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            ruas.forEach { (_, label) -> label.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
-        }
-
-        private fun setRuas(batang: View, label: TextView, @ColorRes warnaBatang: Int, @ColorRes warnaLabel: Int, tebal: Boolean) {
-            val context = batang.context
-            batang.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, warnaBatang))
-            label.setTextColor(ContextCompat.getColor(context, warnaLabel))
-            label.typeface = ResourcesCompat.getFont(
-                context,
-                if (tebal) R.font.atkinson_bold else R.font.atkinson_regular
-            )
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
