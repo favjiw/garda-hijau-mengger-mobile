@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Style Garda Hijau v2.
+    Nama mengikuti text style & komponen di Figma (Angka/Besar, Judul/Layar, Teks/Biasa, dst.)
+    supaya mudah dicocokkan saat membaca desain lewat Figma MCP.
+-->
+<resources>
+
+    <!-- ===== Teks ===== -->
+
+    <style name="Text.GHM" parent="">
+        <item name="android:fontFamily">@font/atkinson_regular</item>
+        <item name="fontFamily">@font/atkinson_regular</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/ghm_tinta</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:includeFontPadding">true</item>
+    </style>
+
+    <!-- Angka/Besar: total kg, hasil panen -->
+    <style name="Text.GHM.AngkaBesar">
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textSize">56sp</item>
+        <item name="android:letterSpacing">-0.035</item>
+        <item name="android:textColor">@color/ghm_daun_900</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Angka hasil di layar "08 Perkiraan panen" (112sp, satu-satunya di desain) -->
+    <style name="Text.GHM.AngkaHero">
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textSize">112sp</item>
+        <item name="android:letterSpacing">-0.045</item>
+        <item name="android:textColor">@color/ghm_daun_900</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Angka/Sedang: "Hari ke-12", judul besar di header hijau -->
+    <style name="Text.GHM.AngkaSedang">
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:textColor">@color/ghm_daun_900</item>
+    </style>
+
+    <!-- Judul/Layar -->
+    <style name="Text.GHM.JudulLayar">
+        <item name="android:fontFamily">@font/bricolage_semibold</item>
+        <item name="fontFamily">@font/bricolage_semibold</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- Judul/Bagian -->
+    <style name="Text.GHM.JudulBagian">
+        <item name="android:fontFamily">@font/bricolage_semibold</item>
+        <item name="fontFamily">@font/bricolage_semibold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <!-- Teks/Tebal -->
+    <style name="Text.GHM.Tebal">
+        <item name="android:fontFamily">@font/atkinson_bold</item>
+        <item name="fontFamily">@font/atkinson_bold</item>
+    </style>
+
+    <!-- Teks/Biasa -->
+    <style name="Text.GHM.Biasa" />
+
+    <!-- Teks/Kecil (warna redup) -->
+    <style name="Text.GHM.Kecil">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/ghm_tinta_redup</item>
+    </style>
+
+    <!-- Teks/Label: label di atas isian -->
+    <style name="Text.GHM.Label">
+        <item name="android:fontFamily">@font/atkinson_medium</item>
+        <item name="fontFamily">@font/atkinson_medium</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <!-- Pesan galat di bawah isian -->
+    <style name="Text.GHM.Galat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/ghm_galat</item>
+    </style>
+
+    <style name="TextAppearance.GHM.Tombol" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/atkinson_bold</item>
+        <item name="fontFamily">@font/atkinson_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- ===== Tombol utama (komponen "Tombol utama") ===== -->
+
+    <style name="Widget.GHM.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="backgroundTint">@color/ghm_button_bg</item>
+        <item name="android:textColor">@color/ghm_button_text</item>
+        <item name="android:textAppearance">@style/TextAppearance.GHM.Tombol</item>
+        <item name="android:fontFamily">@font/atkinson_bold</item>
+        <item name="fontFamily">@font/atkinson_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <!-- Pilihan bertanda centang (RW, media telur). Pakai android:checkable="true". -->
+    <style name="Widget.GHM.Button.Pilihan" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="backgroundTint">@color/ghm_pilihan_bg</item>
+        <item name="strokeColor">@color/ghm_pilihan_stroke</item>
+        <item name="strokeWidth">1.5dp</item>
+        <item name="android:textColor">@color/ghm_pilihan_text</item>
+        <item name="android:fontFamily">@font/atkinson_bold</item>
+        <item name="fontFamily">@font/atkinson_bold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="icon">@drawable/ghm_pilihan_indikator</item>
+        <item name="iconGravity">end</item>
+        <item name="iconSize">22dp</item>
+        <item name="iconTint">@null</item>
+        <item name="android:checkable">true</item>
+    </style>
+
+    <!-- Tombol bulat berisi ikon saja (Kembali di "Bilah atas", Kurang/Tambah di kartu berat).
+         Ukuran & warna latar diatur di layout (48dp tunas_50 / 56dp tunas_100). -->
+    <style name="Widget.GHM.Button.Bulat" parent="Widget.Material3.Button.IconButton.Filled">
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="backgroundTint">@color/ghm_tunas_50</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@null</item>
+        <item name="rippleColor">@color/ghm_tunas_100</item>
+        <item name="elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <!-- Saran pertanyaan GardaBot (komponen "Saran"): garis hijau, teks tebal. -->
+    <style name="Widget.GHM.Button.Saran" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="cornerRadius">22dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="strokeColor">@color/ghm_daun_500</item>
+        <item name="strokeWidth">1.2dp</item>
+        <item name="rippleColor">@color/ghm_tunas_100</item>
+        <item name="android:textColor">@color/ghm_daun_700</item>
+        <item name="android:fontFamily">@font/atkinson_bold</item>
+        <item name="fontFamily">@font/atkinson_bold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textAlignment">viewStart</item>
+    </style>
+
+    <!-- ===== Isian (komponen "Isian") ===== -->
+
+    <style name="Widget.GHM.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="hintEnabled">false</item>
+        <item name="boxBackgroundColor">@color/ghm_putih</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusTopStart">14dp</item>
+        <item name="boxCornerRadiusTopEnd">14dp</item>
+        <item name="boxCornerRadiusBottomStart">14dp</item>
+        <item name="boxCornerRadiusBottomEnd">14dp</item>
+        <item name="boxStrokeColor">@color/ghm_isian_stroke</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1.5dp</item>
+        <item name="boxStrokeErrorColor">@color/ghm_galat</item>
+        <item name="endIconTint">@color/ghm_tinta_redup</item>
+        <item name="errorTextColor">@color/ghm_galat</item>
+        <item name="errorTextAppearance">@style/TextAppearance.GHM.Galat</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.GHM.TextInputEditText</item>
+    </style>
+
+    <style name="ThemeOverlay.GHM.TextInputEditText" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox">
+        <item name="editTextStyle">@style/Widget.GHM.TextInputEditText</item>
+    </style>
+
+    <style name="Widget.GHM.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:fontFamily">@font/atkinson_medium</item>
+        <item name="fontFamily">@font/atkinson_medium</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/ghm_tinta</item>
+        <item name="android:textColorHint">@color/ghm_tinta_redup</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="TextAppearance.GHM.Galat" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/atkinson_regular</item>
+        <item name="fontFamily">@font/atkinson_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/ghm_galat</item>
+    </style>
+
+    <style name="TextAppearance.GHM.Bantuan" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/atkinson_regular</item>
+        <item name="fontFamily">@font/atkinson_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/ghm_tinta_redup</item>
+    </style>
+
+    <!-- ===== Kartu ===== -->
+
+    <style name="Widget.GHM.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/ghm_putih</item>
+        <item name="cardCornerRadius">22dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="contentPadding">20dp</item>
+    </style>
+
+    <!-- ===== Navigasi bawah (komponen "Navigasi bawah") ===== -->
+
+    <style name="Widget.GHM.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@color/ghm_putih</item>
+        <item name="android:background">@color/ghm_putih</item>
+        <item name="elevation">0dp</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="itemIconTint">@color/ghm_nav_item</item>
+        <item name="itemTextColor">@color/ghm_nav_item</item>
+        <item name="itemRippleColor">@color/ghm_tunas_50</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.GHM.BottomNav.Indikator</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.GHM.Nav.Aktif</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.GHM.Nav</item>
+    </style>
+
+    <style name="Widget.GHM.BottomNav.Indikator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/ghm_tunas_100</item>
+        <item name="android:width">64dp</item>
+        <item name="android:height">34dp</item>
+    </style>
+
+    <style name="TextAppearance.GHM.Nav" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/atkinson_regular</item>
+        <item name="fontFamily">@font/atkinson_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.GHM.Nav.Aktif">
+        <item name="android:fontFamily">@font/atkinson_bold</item>
+        <item name="fontFamily">@font/atkinson_bold</item>
+    </style>
+
+</resources>

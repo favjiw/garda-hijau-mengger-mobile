@@ -33,3 +33,22 @@ URL diatur di `app/src/main/java/com/codelabs/gardahijau/model/remote/network/Ap
 ## Kredit
 
 Hasil rebranding dari aplikasi **WeGot** karya tim UNIKOM CodeLabs ([Haikalimanf/WeGot](https://github.com/Haikalimanf/WeGot), branch `dev`, commit `02ff078`), diunggah ulang dengan izin pembuatnya. Perubahan: nama aplikasi, package (`com.codelabs.wegot` → `com.codelabs.gardahijau`), tema, nama proyek, dan nama chatbot.
+
+## Desain (Redesign v2)
+
+Tampilan mengikuti file Figma **"Garda Hijau Mengger — Redesign v2"** (section di halaman *Mobile Design*).
+
+- Warna: `res/values/colors.xml` (awalan `ghm_`, sama dengan variabel Figma `GHM v2 / Warna`)
+- Teks & komponen: `res/values/styles_ghm.xml` (`Text.GHM.*`, `Widget.GHM.*`, nama mengikuti text style Figma)
+- Huruf: Bricolage Grotesque (judul, angka) dan Atkinson Hyperlegible Next (teks), di `res/font`. Lisensi SIL OFL 1.1, lihat folder `licenses/`.
+- Layar yang sudah memakai desain baru: Masuk, Daftar, Beranda Sampah, navigasi bawah.
+
+## Mode demo (tanpa server)
+
+Build **debug** memakai data contoh (`USE_MOCK_API = true` di `app/build.gradle.kts`), jadi aplikasi bisa dicoba walau server smartmaggot.my.id mati.
+
+- Masuk dengan nama pengguna dan kata sandi apa saja.
+- Data contoh: catatan sampah 10 hari terakhir, 3 siklus maggot, perkiraan panen, notifikasi, jawaban GardaBot.
+- Data yang ditambahkan lewat aplikasi tersimpan di memori sampai aplikasi ditutup.
+- Kode: `model/remote/mock/` (`MockApiInterceptor`, `MockApiStore`). Perkiraan panen di mode demo memakai rumus sederhana, bukan model ML.
+- Untuk memakai server asli di build debug, ubah `USE_MOCK_API` di blok `debug` menjadi `"false"` lalu sync. Build **release** selalu memakai server asli.

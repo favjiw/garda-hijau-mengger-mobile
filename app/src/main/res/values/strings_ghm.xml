@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teks antarmuka Garda Hijau v2. Bahasa sehari-hari, huruf kalimat (sentence case). -->
+<resources>
+    <!-- Umum -->
+    <string name="ghm_nama_aplikasi_dua_baris">Garda Hijau\nMengger</string>
+    <string name="ghm_logo_diktisaintek">Logo Diktisaintek Berdampak</string>
+    <string name="ghm_logo_wow">Logo Wise on Waste</string>
+    <string name="ghm_logo_unikom">Logo Universitas Komputer Indonesia</string>
+    <string name="ghm_memproses">Memproses…</string>
+    <string name="ghm_mode_demo">Mode demo: memakai data contoh, bukan server. Isi nama dan sandi apa saja.</string>
+
+    <!-- Masuk -->
+    <string name="ghm_masuk_subjudul">Catat sampah yang masuk dan pantau kandang maggot di RW-mu.</string>
+    <string name="ghm_masuk_judul">Masuk ke akunmu</string>
+    <string name="ghm_label_nama_pengguna">Nama pengguna</string>
+    <string name="ghm_hint_nama_pengguna">Contoh: pengelola.rw5</string>
+    <string name="ghm_label_kata_sandi">Kata sandi</string>
+    <string name="ghm_hint_kata_sandi">Masukkan kata sandi</string>
+    <string name="ghm_tampilkan_sandi">Tampilkan kata sandi</string>
+    <string name="ghm_sembunyikan_sandi">Sembunyikan kata sandi</string>
+    <string name="ghm_tombol_masuk">Masuk</string>
+    <string name="ghm_belum_punya_akun">Belum punya akun? Daftar</string>
+    <string name="ghm_tautan_daftar">Daftar</string>
+    <string name="ghm_galat_nama_kosong">Isi nama pengguna dulu</string>
+    <string name="ghm_galat_sandi_kosong">Isi kata sandi dulu</string>
+
+    <!-- Daftar -->
+    <string name="ghm_daftar_judul">Buat akun baru</string>
+    <string name="ghm_daftar_subjudul">Satu akun untuk tiap pengelola. Data sampah yang kamu catat akan masuk ke RW yang dipilih.</string>
+    <string name="ghm_hint_buat_kata_sandi">Buat kata sandi</string>
+    <string name="ghm_label_pilih_rw">Kamu mengelola RW berapa?</string>
+    <string name="ghm_rw_4">RW 4</string>
+    <string name="ghm_rw_5">RW 5</string>
+    <string name="ghm_galat_rw_kosong">Pilih RW yang kamu kelola</string>
+    <string name="ghm_tombol_daftar">Daftar</string>
+    <string name="ghm_sudah_punya_akun">Sudah punya akun? Masuk</string>
+    <string name="ghm_tautan_masuk">Masuk</string>
+    <string name="ghm_daftar_berhasil">Akun dibuat. Silakan masuk.</string>
+
+    <!-- Beranda sampah -->
+    <string name="ghm_sapaan">Halo, pengelola</string>
+    <string name="ghm_sampah_judul">Sampah minggu ini</string>
+    <string name="ghm_satuan_kg">kg</string>
+    <string name="ghm_rentang_7_hari">masuk dalam 7 hari terakhir, %1$s</string>
+    <string name="ghm_hari_terbanyak">%1$s paling banyak, %2$s kg.</string>
+    <string name="ghm_belum_ada_sampah_minggu_ini">Belum ada sampah tercatat dalam 7 hari terakhir.</string>
+    <string name="ghm_riwayat">Riwayat</string>
+    <string name="ghm_riwayat_kosong">Belum ada catatan. Ketuk Catat sampah hari ini untuk mulai.</string>
+    <string name="ghm_tombol_catat_sampah">Catat sampah hari ini</string>
+    <string name="ghm_notifikasi">Notifikasi</string>
+    <string name="ghm_keluar">Keluar dari akun</string>
+    <string name="ghm_riwayat_judul_item">%1$s kg masuk</string>
+    <string name="ghm_riwayat_pukul">Pukul %1$s</string>
+    <string name="ghm_riwayat_pukul_catatan">Pukul %1$s. %2$s</string>
+    <string name="ghm_grafik_deskripsi">Grafik sampah masuk 7 hari terakhir</string>
+    <string name="ghm_keluar_judul">Keluar dari akun?</string>
+    <string name="ghm_keluar_pesan">Kamu perlu masuk lagi untuk mencatat sampah.</string>
+    <string name="ghm_batal">Batal</string>
+    <string name="ghm_ya_keluar">Keluar</string>
+
+    <!-- Catat sampah -->
+    <string name="ghm_kembali">Kembali</string>
+    <string name="ghm_catat_judul">Catat sampah</string>
+    <string name="ghm_catat_subjudul">Isi setelah sampah selesai ditimbang.</string>
+    <string name="ghm_label_tanggal">Tanggal</string>
+    <string name="ghm_label_pukul">Pukul</string>
+    <string name="ghm_pilih_tanggal">Pilih tanggal</string>
+    <string name="ghm_pilih_pukul">Pilih pukul</string>
+    <string name="ghm_label_berat">Berat sampah</string>
+    <string name="ghm_hint_berat">0</string>
+    <string name="ghm_kurangi_berat">Kurangi 1 kg</string>
+    <string name="ghm_tambah_berat">Tambah 1 kg</string>
+    <string name="ghm_label_catatan_opsional">Catatan (boleh dikosongkan)</string>
+    <string name="ghm_hint_catatan">Misal: banyak sisa sayur dari pasar</string>
+    <string name="ghm_tombol_simpan_catatan">Simpan catatan</string>
+    <string name="ghm_galat_berat_kosong">Isi berat sampah, lebih dari 0 kg</string>
+    <string name="ghm_galat_simpan">Gagal menyimpan: %1$s</string>
+
+    <!-- Maggot: kandang -->
+    <string name="ghm_maggot_judul">Kandang maggot</string>
+    <string name="ghm_jumlah_siklus">%1$d siklus</string>
+    <string name="ghm_perkiraan_total">Perkiraan total panen</string>
+    <string name="ghm_perkiraan_dari_siklus">dari %1$d siklus yang sudah punya perkiraan</string>
+    <string name="ghm_perkiraan_total_kosong">Belum ada perkiraan. Catat fase besar di salah satu siklus untuk melihatnya.</string>
+    <string name="ghm_siklus_kosong">Belum ada siklus. Ketuk Mulai siklus baru untuk mulai.</string>
+    <string name="ghm_tombol_mulai_siklus">Mulai siklus baru</string>
+    <string name="ghm_siklus_ke">Siklus %1$d</string>
+    <string name="ghm_hari_ke">Hari ke-%1$d</string>
+    <string name="ghm_mulai_hari_ini">Mulai hari ini</string>
+    <string name="ghm_tahap_telur">Telur</string>
+    <string name="ghm_tahap_tetas">Tetas</string>
+    <string name="ghm_tahap_besar">Besar</string>
+    <string name="ghm_tahap_panen">Panen</string>
+    <string name="ghm_tahap_sekarang">Tahap sekarang: %1$s</string>
+    <string name="ghm_perkiraan_kg">Perkiraan %1$s kg</string>
+    <string name="ghm_belum_ada_perkiraan">Belum ada perkiraan</string>
+    <string name="ghm_catat_fase_besar_dulu">Catat fase besar untuk melihatnya</string>
+    <string name="ghm_mulai_tanggal">Mulai %1$s</string>
+    <string name="ghm_memuat">Memuat…</string>
+    <string name="ghm_galat_muat">Gagal memuat: %1$s</string>
+
+    <!-- Detail siklus -->
+    <string name="ghm_langkah_berikutnya">Langkah berikutnya</string>
+    <string name="ghm_langkah_catat_besar">Catat fase besar saat larva mulai diberi pakan. Setelah itu perkiraan hasil panen akan muncul.</string>
+    <string name="ghm_perkiraan_hasil_panen">Perkiraan hasil panen</string>
+    <string name="ghm_rincian">Rincian</string>
+    <string name="ghm_lihat_rincian_perkiraan">Lihat rincian perkiraan panen, %1$s kg</string>
+    <string name="ghm_catatan_fase">Catatan fase</string>
+    <string name="ghm_fase_telur_isi">%1$s gram telur di media %2$s.</string>
+    <string name="ghm_fase_pakan">Pakan %1$d kg.</string>
+    <string name="ghm_tombol_catat_fase_besar">Catat fase besar</string>
+    <string name="ghm_belum_ada_fase">Belum ada fase yang dicatat.</string>
+    <string name="ghm_galat_id_siklus">Siklus tidak ditemukan</string>
+
+    <!-- Mulai siklus -->
+    <string name="ghm_mulai_siklus_judul">Mulai siklus baru</string>
+    <string name="ghm_label_tanggal_mulai">Tanggal mulai</string>
+    <string name="ghm_label_jumlah_telur">Jumlah telur (gram)</string>
+    <string name="ghm_hint_jumlah_telur">Contoh: 40</string>
+    <string name="ghm_bantuan_jumlah_telur">Timbang telur sebelum dimasukkan ke media.</string>
+    <string name="ghm_label_media_telur">Media telur</string>
+    <string name="ghm_media_dedak">Dedak</string>
+    <string name="ghm_media_kotoran_ternak">Kotoran ternak</string>
+    <string name="ghm_media_limbah_organik">Limbah organik</string>
+    <string name="ghm_media_campuran">Campuran</string>
+    <string name="ghm_hint_catatan_siklus">Misal: wadah nomor 3</string>
+    <string name="ghm_tombol_mulai_siklus_simpan">Mulai siklus</string>
+    <string name="ghm_galat_jumlah_telur">Isi berat telur dalam gram, lebih dari 0</string>
+    <string name="ghm_galat_media_kosong">Pilih media telur</string>
+    <string name="ghm_siklus_tersimpan">Siklus baru dimulai</string>
+
+    <!-- Catat fase besar -->
+    <string name="ghm_catat_fase_besar_judul">Catat fase besar</string>
+    <string name="ghm_label_tanggal_fase_besar">Tanggal masuk fase besar</string>
+    <string name="ghm_label_jumlah_pakan">Jumlah pakan (kg)</string>
+    <string name="ghm_hint_jumlah_pakan">Contoh: 40</string>
+    <string name="ghm_bantuan_jumlah_pakan">Total pakan yang diberikan selama fase besar.</string>
+    <string name="ghm_label_keterangan_opsional">Keterangan (boleh dikosongkan)</string>
+    <string name="ghm_hint_keterangan_fase">Misal: pakan sisa sayur dari pasar</string>
+    <string name="ghm_info_perkiraan_muncul">Setelah disimpan, perkiraan hasil panen langsung muncul.</string>
+    <string name="ghm_tombol_simpan_lihat_perkiraan">Simpan dan lihat perkiraan</string>
+    <string name="ghm_galat_jumlah_pakan">Isi jumlah pakan dalam kg, lebih dari 0</string>
+    <string name="ghm_fase_tersimpan">Fase besar tersimpan</string>
+
+    <!-- Perkiraan panen -->
+    <string name="ghm_perkiraan_panen_judul">Perkiraan panen</string>
+    <string name="ghm_siklus_diperkirakan">Siklus %1$d diperkirakan menghasilkan</string>
+    <string name="ghm_perkiraan_diperkirakan">Diperkirakan menghasilkan</string>
+    <string name="ghm_satuan_kg_maggot">kg maggot</string>
+    <string name="ghm_dihitung_dari">Dihitung dari</string>
+    <string name="ghm_label_telur">Telur</string>
+    <string name="ghm_label_media">Media</string>
+    <string name="ghm_label_pakan_fase_besar">Pakan fase besar</string>
+    <string name="ghm_nilai_gram">%1$s gram</string>
+    <string name="ghm_nilai_kg">%1$s kg</string>
+    <string name="ghm_catatan_perkiraan">Angka ini hanya perkiraan. Hasil nyata bisa berbeda, terutama kalau suhu dan kelembapan wadah berubah.</string>
+    <string name="ghm_tombol_kembali_ke_siklus">Kembali ke siklus</string>
+
+    <!-- GardaBot -->
+    <string name="ghm_gardabot_judul">GardaBot</string>
+    <string name="ghm_gardabot_subjudul">Tanya soal budidaya maggot dan memilah sampah.</string>
+    <string name="ghm_gardabot_sapaan">Halo! Saya bisa bantu soal maggot BSF dan pemilahan sampah. Mau tanya apa?</string>
+    <string name="ghm_coba_tanyakan">Coba tanyakan</string>
+    <string name="ghm_saran_menetas">Berapa lama telur maggot menetas?</string>
+    <string name="ghm_saran_pakan">Pakan apa yang paling bagus?</string>
+    <string name="ghm_saran_dilarang">Sampah apa yang dilarang untuk maggot?</string>
+    <string name="ghm_hint_pertanyaan">Tulis pertanyaan</string>
+    <string name="ghm_kirim">Kirim pertanyaan</string>
+    <string name="ghm_gardabot_mengetik">GardaBot sedang menulis jawaban…</string>
+    <string name="ghm_gardabot_galat">Maaf, GardaBot belum bisa menjawab. Periksa internet lalu coba lagi.</string>
+
+    <!-- Notifikasi -->
+    <string name="ghm_hari_ini">Hari ini</string>
+    <string name="ghm_kemarin">Kemarin</string>
+    <string name="ghm_notifikasi_kosong">Belum ada notifikasi.</string>
+    <string name="ghm_belum_dibaca">Belum dibaca</string>
+</resources>

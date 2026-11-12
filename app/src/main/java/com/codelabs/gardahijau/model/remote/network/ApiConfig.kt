@@ -1,6 +1,8 @@
 package com.codelabs.gardahijau.model.remote.network
 
+import com.codelabs.gardahijau.BuildConfig
 import com.codelabs.gardahijau.model.local.data.UserPreferences
+import com.codelabs.gardahijau.model.remote.mock.MockApiInterceptor
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -28,10 +30,13 @@ class ApiConfig {
                 chain.proceed(request)
             }
 
-            val client = OkHttpClient.Builder()
+            val clientBuilder = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(authInterceptor)
-                .build()
+            if (BuildConfig.USE_MOCK_API) {
+                clientBuilder.addInterceptor(MockApiInterceptor())
+            }
+            val client = clientBuilder.build()
 
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://api.smartmaggot.my.id/")
@@ -46,10 +51,13 @@ class ApiConfig {
         fun getChatbotApiService(): ChatbotApiService {
             val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
-            val retrofit = Retrofit.Builder()
+            val builder = Retrofit.Builder()
                 .baseUrl("https://chatbot.smartmaggot.my.id/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            if (BuildConfig.USE_MOCK_API) {
+                builder.client(OkHttpClient.Builder().addInterceptor(MockApiInterceptor()).build())
+            }
+            val retrofit = builder.build()
 
             return retrofit.create(ChatbotApiService::class.java)
         }

@@ -1,37 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Figma: Redesign v2 / "08 Perkiraan panen" -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/dimen_padding_16"
+    android:background="@color/ghm_kertas"
+    android:orientation="vertical"
     tools:context=".ui.prediksi.hasil_prediksi.HasilPrediksiActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
+    <!-- Bilah atas. Padding atas ditambah tinggi status bar di HasilPrediksiActivity. -->
+    <LinearLayout
+        android:id="@+id/layoutBilahAtas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:title="Hasil Prediksi"
-        app:titleTextColor="@color/black"
-        app:titleCentered="true"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:gravity="center_vertical"
+        android:minHeight="64dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="20dp">
 
-    <include
-        android:id="@+id/cardHasilPanen"
-        layout="@layout/item_card_hasil_panen"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnKembali"
+            style="@style/Widget.GHM.Button.Bulat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/ghm_kembali"
+            app:icon="@drawable/ic_ghm_kembali"
+            app:iconSize="24dp" />
+
+        <TextView
+            style="@style/Text.GHM.JudulBagian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:accessibilityHeading="true"
+            android:text="@string/ghm_perkiraan_panen_judul" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp">
+
+            <!-- Hasil -->
+            <TextView
+                android:id="@+id/tvPredictionTitle"
+                style="@style/Text.GHM.Biasa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ghm_tinta_redup"
+                tools:text="Siklus 3 diperkirakan menghasilkan" />
+
+            <LinearLayout
+                android:id="@+id/layoutHasil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPredictionResult"
+                    style="@style/Text.GHM.AngkaHero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    tools:text="10" />
+
+                <TextView
+                    style="@style/Text.GHM.JudulLayar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/ghm_satuan_kg_maggot"
+                    android:textColor="@color/ghm_daun_900" />
+            </LinearLayout>
+
+            <!-- Penanda kuning (dekorasi) -->
+            <View
+                android:layout_width="72dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_ghm_ruas"
+                android:backgroundTint="@color/ghm_terpal_400"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/tvBelumAda"
+                style="@style/Text.GHM.Biasa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/ghm_belum_ada_perkiraan"
+                android:visibility="gone" />
+
+            <!-- Dihitung dari: data siklus + fase besar -->
+            <LinearLayout
+                android:id="@+id/cardDihitungDari"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    style="@style/Text.GHM.Tebal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/ghm_dihitung_dari" />
+
+                <LinearLayout
+                    android:id="@+id/barisTelur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp">
+
+                        <TextView
+                            style="@style/Text.GHM.Biasa"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/ghm_label_telur"
+                            android:textColor="@color/ghm_tinta_redup" />
+
+                        <TextView
+                            android:id="@+id/tvNilaiTelur"
+                            style="@style/Text.GHM.Tebal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="40 gram" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/ghm_garis" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/barisMedia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp">
+
+                        <TextView
+                            style="@style/Text.GHM.Biasa"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/ghm_label_media"
+                            android:textColor="@color/ghm_tinta_redup" />
+
+                        <TextView
+                            android:id="@+id/tvNilaiMedia"
+                            style="@style/Text.GHM.Tebal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="Dedak" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/ghm_garis" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/barisPakan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        style="@style/Text.GHM.Biasa"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/ghm_label_pakan_fase_besar"
+                        android:textColor="@color/ghm_tinta_redup" />
+
+                    <TextView
+                        android:id="@+id/tvNilaiPakan"
+                        style="@style/Text.GHM.Tebal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="40 kg" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/ghm_catatan_perkiraan" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Aksi bawah. Padding bawah ditambah tinggi navigation bar di HasilPrediksiActivity. -->
+    <LinearLayout
+        android:id="@+id/layoutFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginTop="31dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"/>
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="16dp">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnKembaliKeSiklus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ghm_tombol_kembali_ke_siklus" />
+    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -1,100 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!-- Figma: satu baris "Linimasa" (Catatan fase) di "05 Detail siklus" -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/circle_connector"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+    <!-- Rel: lingkaran centang + garis ke fase berikutnya -->
+    <LinearLayout
         android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/timeline_circle_connector"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <View
-        android:id="@+id/line_connector"
-        android:layout_width="4dp"
-        android:layout_height="0dp"
-        android:background="#69A283"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/circle_connector"
-        app:layout_constraintStart_toStartOf="@id/circle_connector"
-        app:layout_constraintTop_toBottomOf="@id/circle_connector" />
+        <FrameLayout
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_ghm_titik_fase">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_siklus"
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_ghm_centang" />
+        </FrameLayout>
+
+        <View
+            android:id="@+id/line_connector"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/ghm_daun_500" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="@color/gray_light"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/circle_connector"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_padding_16">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvTitle"
+                style="@style/Text.GHM.Tebal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/tvDate"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Judul Siklus" />
+                android:layout_weight="1"
+                tools:text="Telur" />
 
             <TextView
                 android:id="@+id/tvDate"
+                style="@style/Text.GHM.Kecil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvTitle"
-                tools:text="23 Oktober 2025" />
+                android:layout_marginStart="8dp"
+                tools:text="1 Nov 2026" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvDesc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/gray_dark"
-                android:textSize="14sp"
-                android:layout_marginEnd="60dp"
-                app:layout_constraintEnd_toStartOf="@+id/arrow_icon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                tools:text="Deskripsi nya" />
-
-            <ImageView
-                android:id="@+id/arrow_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/rounded_rectangle_bg"
-                android:src="@drawable/ic_arrow_right"
-                android:visibility="gone"
-                android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDate"
-                tools:ignore="ContentDescription"
-                tools:visibility="visible" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvDesc"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            tools:text="40 gram telur di media dedak." />
+    </LinearLayout>
+</LinearLayout>

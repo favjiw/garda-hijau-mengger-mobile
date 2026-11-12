@@ -18,4 +18,19 @@
     <color name="green_dark">#3B653D</color>
     <color name="yellow_light">#F0EBCE</color>
 
+    <!-- Garda Hijau v2 (redesign). Sumber: Figma "GHM v2 / Warna" -->
+    <color name="ghm_daun_900">#FF123A25</color>
+    <color name="ghm_daun_700">#FF1E5B3A</color>
+    <color name="ghm_daun_500">#FF3E8A5E</color>
+    <color name="ghm_tunas_100">#FFDCEBD9</color>
+    <color name="ghm_tunas_50">#FFECF3EA</color>
+    <color name="ghm_kertas">#FFF4F6F1</color>
+    <color name="ghm_putih">#FFFFFFFF</color>
+    <color name="ghm_tinta">#FF1C2A20</color>
+    <color name="ghm_tinta_redup">#FF5A6A5E</color>
+    <color name="ghm_garis">#FFD3DCD1</color>
+    <color name="ghm_terpal_400">#FFF2B705</color>
+    <color name="ghm_terpal_100">#FFFCEFC2</color>
+    <color name="ghm_galat">#FFB3261E</color>
+
 </resources>

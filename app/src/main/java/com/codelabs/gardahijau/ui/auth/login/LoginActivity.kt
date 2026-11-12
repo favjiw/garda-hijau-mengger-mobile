@@ -9,20 +9,25 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
 import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.Toast
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.codelabs.gardahijau.BuildConfig
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityLoginBinding
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.ui.MainActivity
 import com.codelabs.gardahijau.ui.auth.register.RegisterActivity
+import com.codelabs.gardahijau.ui.util.applySystemBarPadding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -40,10 +45,17 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // Kepala hijau di belakang status bar -> ikon status bar putih.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
+        )
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+        binding.layoutHero.applySystemBarPadding(top = true)
+        binding.layoutFooter.applySystemBarPadding(bottom = true, includeIme = true)
+        binding.tvModeDemo.visibility = if (BuildConfig.USE_MOCK_API) View.VISIBLE else View.GONE
 
         setTextToLogin()
         setupPasswordToggle()
@@ -66,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
     private fun observeViewModel() {
         loginViewModel.isLoading.observe(this) { isLoading ->
             binding.btnMasuk.isEnabled = !isLoading
-            binding.btnMasuk.text = if (isLoading) "Loading..." else "Masuk"
+            binding.btnMasuk.text = getString(if (isLoading) R.string.ghm_memproses else R.string.ghm_tombol_masuk)
         }
 
         loginViewModel.loginResult.observe(this) { result ->
@@ -98,8 +110,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setTextToLogin() {
-        val fullText = "Belum Punya Akun? Daftar"
-        val target = "Daftar"
+        val fullText = getString(R.string.ghm_belum_punya_akun)
+        val target = getString(R.string.ghm_tautan_daftar)
         val start = fullText.indexOf(target)
         val end = start + target.length
 
@@ -112,13 +124,14 @@ class LoginActivity : AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.color = Color.parseColor("#1E88E5")
+                ds.color = ContextCompat.getColor(this@LoginActivity, R.color.ghm_daun_700)
                 ds.isUnderlineText = false
             }
         }
 
         if (start >= 0) {
             spannable.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(StyleSpan(android.graphics.Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.tvAlreadyAccount.text = spannable
             binding.tvAlreadyAccount.movementMethod = LinkMovementMethod.getInstance()
             binding.tvAlreadyAccount.highlightColor = Color.TRANSPARENT
@@ -132,11 +145,11 @@ class LoginActivity : AppCompatActivity() {
             if (isPasswordVisible) {
                 binding.inputPassword.transformationMethod = null
                 binding.edtPassword.setEndIconDrawable(R.drawable.ic_eye_visibility)
-                binding.edtPassword.endIconContentDescription = "Hide password"
+                binding.edtPassword.endIconContentDescription = getString(R.string.ghm_sembunyikan_sandi)
             } else {
                 binding.inputPassword.transformationMethod = PasswordTransformationMethod.getInstance()
                 binding.edtPassword.setEndIconDrawable(R.drawable.ic_eye_visibility_off)
-                binding.edtPassword.endIconContentDescription = "Show password"
+                binding.edtPassword.endIconContentDescription = getString(R.string.ghm_tampilkan_sandi)
             }
             binding.inputPassword.setSelection(binding.inputPassword.text?.length ?: 0)
         }
@@ -145,11 +158,11 @@ class LoginActivity : AppCompatActivity() {
     private fun validateInput(username: String, password: String): Boolean {
         return when {
             username.isEmpty() -> {
-                binding.edtUsername.error = "Username tidak boleh kosong"
+                binding.edtUsername.error = getString(R.string.ghm_galat_nama_kosong)
                 false
             }
             password.isEmpty() -> {
-                binding.edtPassword.error = "Password tidak boleh kosong"
+                binding.edtPassword.error = getString(R.string.ghm_galat_sandi_kosong)
                 false
             }
             else -> true

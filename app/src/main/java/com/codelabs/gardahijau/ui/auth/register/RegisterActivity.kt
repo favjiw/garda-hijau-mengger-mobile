@@ -9,17 +9,20 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
 import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButton
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityRegisterBinding
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.ui.auth.login.LoginActivity
+import com.codelabs.gardahijau.ui.util.applySystemBarPadding
 import com.codelabs.gardahijau.utils.enumClass.RwNumber
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,12 +36,18 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // Kepala hijau di belakang status bar -> ikon status bar putih.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
+        )
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+        binding.layoutHero.applySystemBarPadding(top = true)
+        binding.layoutFooter.applySystemBarPadding(bottom = true, includeIme = true)
 
-        setupRwDropdown()
+        setupRwChoice()
         setupPasswordToggle()
         setTextToLogin()
         setupClickListeners()
@@ -52,37 +61,41 @@ class RegisterActivity : AppCompatActivity() {
             if (isPasswordVisible) {
                 binding.inputPassword.transformationMethod = null
                 binding.edtPassword.setEndIconDrawable(R.drawable.ic_eye_visibility)
-                binding.edtPassword.endIconContentDescription = "Hide password"
+                binding.edtPassword.endIconContentDescription = getString(R.string.ghm_sembunyikan_sandi)
             } else {
                 binding.inputPassword.transformationMethod = PasswordTransformationMethod.getInstance()
                 binding.edtPassword.setEndIconDrawable(R.drawable.ic_eye_visibility_off)
-                binding.edtPassword.endIconContentDescription = "Show password"
+                binding.edtPassword.endIconContentDescription = getString(R.string.ghm_tampilkan_sandi)
             }
             binding.inputPassword.setSelection(binding.inputPassword.text?.length ?: 0)
         }
     }
 
-    private fun setupRwDropdown() {
-        val rwField = binding.inputNomorRW as AutoCompleteTextView
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, RwNumber.labels())
-        rwField.setAdapter(adapter)
-
-        rwField.setOnItemClickListener { _, _, position, _ ->
-            val label = adapter.getItem(position) ?: ""
-            selectedRwValue = RwNumber.fromLabel(label)?.value ?: RwNumber.fromInput(label)?.value.orEmpty()
+    /** Dua tombol pilihan RW (Figma: "Kamu mengelola RW berapa?"). Hanya satu yang aktif. */
+    private fun setupRwChoice() {
+        val options: Map<MaterialButton, RwNumber> = mapOf(
+            binding.btnRw4 to RwNumber.RW_4,
+            binding.btnRw5 to RwNumber.RW_5,
+        )
+        options.forEach { (button, rw) ->
+            button.setOnClickListener {
+                options.keys.forEach { it.isChecked = it == button }
+                selectedRwValue = rw.value
+                binding.tvRwError.visibility = View.GONE
+            }
         }
     }
 
     private fun observeViewModel() {
         loginViewModel.isLoading.observe(this) { isLoading ->
             binding.btnDaftar.isEnabled = !isLoading
-            binding.btnDaftar.text = if (isLoading) "Loading..." else "Daftar"
+            binding.btnDaftar.text = getString(if (isLoading) R.string.ghm_memproses else R.string.ghm_tombol_daftar)
         }
 
         loginViewModel.registerResult.observe(this) { result ->
             when (result) {
                 is ApiResponse.Success -> {
-                    Toast.makeText(this, "Daftar berhasil", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.ghm_daftar_berhasil, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }
@@ -98,21 +111,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnDaftar.setOnClickListener {
             val username = binding.inputUsername.text.toString().trim()
             val password = binding.inputPassword.text.toString().trim()
-            val rwInput = binding.inputNomorRW.text.toString().trim()
-
-            val rwValue = when {
-                selectedRwValue.isNotEmpty() -> selectedRwValue
-                RwNumber.fromInput(rwInput) != null -> RwNumber.fromInput(rwInput)!!.value
-                else -> {
-                    val digits = rwInput.replace(Regex("\\D+"), "")
-                    if (digits.isNotEmpty()) {
-                        val num = digits.toIntOrNull() ?: 0
-                        if (num in 1..9) "RW0$num" else "RW$num"
-                    } else {
-                        ""
-                    }
-                }
-            }
+            val rwValue = selectedRwValue
 
             if (validateInput(username, password, rwValue)) {
                 loginViewModel.register(username, password, rwValue)
@@ -121,8 +120,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setTextToLogin() {
-        val fullText = "Sudah Punya Akun? Masuk"
-        val target = "Masuk"
+        val fullText = getString(R.string.ghm_sudah_punya_akun)
+        val target = getString(R.string.ghm_tautan_masuk)
         val start = fullText.indexOf(target)
         val end = start + target.length
 
@@ -135,13 +134,14 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.color = Color.parseColor("#1E88E5")
+                ds.color = ContextCompat.getColor(this@RegisterActivity, R.color.ghm_daun_700)
                 ds.isUnderlineText = false
             }
         }
 
         if (start >= 0) {
             spannable.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(StyleSpan(android.graphics.Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.tvAlreadyAccount.text = spannable
             binding.tvAlreadyAccount.movementMethod = LinkMovementMethod.getInstance()
             binding.tvAlreadyAccount.highlightColor = Color.TRANSPARENT
@@ -151,15 +151,15 @@ class RegisterActivity : AppCompatActivity() {
     private fun validateInput(username: String, password: String, rw : String): Boolean {
         return when {
             username.isEmpty() -> {
-                binding.edtUsername.error = "Username tidak boleh kosong"
+                binding.edtUsername.error = getString(R.string.ghm_galat_nama_kosong)
                 false
             }
             password.isEmpty() -> {
-                binding.edtPassword.error = "Password tidak boleh kosong"
+                binding.edtPassword.error = getString(R.string.ghm_galat_sandi_kosong)
                 false
             }
             rw.isEmpty() -> {
-                binding.edtRukunWarga.error = "RW tidak boleh kosong"
+                binding.tvRwError.visibility = View.VISIBLE
                 false
             }
             else -> true
