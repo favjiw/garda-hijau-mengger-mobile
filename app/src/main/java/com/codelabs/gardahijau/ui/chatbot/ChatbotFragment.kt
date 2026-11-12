@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -73,19 +70,17 @@ class ChatbotFragment : Fragment() {
     }
 
     /**
-     * Kotak tulis pesan naik di atas keyboard. Bagian keyboard yang sudah tertutup
-     * navigasi bawah (dan navigation bar) tidak dihitung dua kali.
+     * Keyboard ditangani MainActivity (navigasi bawah disembunyikan, isi tab menyempit).
+     * Di sini: saat area chat menyempit, gulir ke pesan terakhir supaya tetap terlihat.
      */
     private fun setupKeyboardInset() {
-        val paddingAwal = binding.chatContainer.paddingBottom
-        ViewCompat.setOnApplyWindowInsetsListener(binding.chatContainer) { container, insets ->
-            val ime = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-            val root = binding.root
-            val lokasi = IntArray(2)
-            root.getLocationInWindow(lokasi)
-            val jarakKeBawahLayar = root.rootView.height - (lokasi[1] + root.height)
-            container.updatePadding(bottom = paddingAwal + maxOf(0, ime - jarakKeBawahLayar))
-            insets
+        binding.scrollChat.addOnLayoutChangeListener { scroll, _, top, _, bottom, _, oldTop, _, oldBottom ->
+            if (bottom - top < oldBottom - oldTop) {
+                scroll.post {
+                    val isi = binding.scrollChat.getChildAt(0) ?: return@post
+                    binding.scrollChat.scrollTo(0, isi.height)
+                }
+            }
         }
     }
 

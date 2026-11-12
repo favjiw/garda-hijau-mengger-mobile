@@ -8,6 +8,10 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -16,7 +20,6 @@ import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityMainBinding
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.ui.auth.login.LoginActivity
-import com.codelabs.gardahijau.ui.util.applySystemBarPadding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -48,12 +51,29 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Konten mulai di bawah status bar; BottomNavigationView mengurus inset bawahnya sendiri.
-        binding.container.applySystemBarPadding(top = true)
+        setupInsets()
 
         supportActionBar?.hide()
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         binding.navView.setupWithNavController(navController)
         }
+    }
+
+    /**
+     * Konten mulai di bawah status bar. Saat keyboard terbuka (mis. di tab GardaBot), navigasi bawah
+     * disembunyikan dan isi tab menyempit setinggi keyboard, supaya kotak tulis tidak tertutup.
+     * Saat keyboard tertutup, BottomNavigationView mengurus inset navigation bar sendiri.
+     */
+    private fun setupInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.container) { container, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val keyboardTerbuka = insets.isVisible(WindowInsetsCompat.Type.ime())
+            val tinggiKeyboard = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            container.updatePadding(top = bars.top, bottom = if (keyboardTerbuka) tinggiKeyboard else 0)
+            binding.navView.isVisible = !keyboardTerbuka
+            binding.navDivider.isVisible = !keyboardTerbuka
+            insets
+        }
+        ViewCompat.requestApplyInsets(binding.container)
     }
 }

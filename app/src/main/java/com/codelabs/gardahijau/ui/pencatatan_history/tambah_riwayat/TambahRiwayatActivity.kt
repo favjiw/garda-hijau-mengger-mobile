@@ -121,8 +121,20 @@ class TambahRiwayatActivity : AppCompatActivity() {
     private fun setupBerat() {
         binding.btnKurang.setOnClickListener { ubahBerat(-1) }
         binding.btnTambah.setOnClickListener { ubahBerat(1) }
-        binding.inputTotalSampah.doAfterTextChanged {
+        binding.inputTotalSampah.doAfterTextChanged { teks ->
             binding.tvGalatBerat.visibility = View.GONE
+            val isi = teks?.toString().orEmpty()
+            // "055" -> "55" (nol di depan tidak berarti), tapi "0,5" tetap.
+            val tanpaNolDepan = isi.replaceFirst(Regex("""^0+(?=\d)"""), "")
+            if (tanpaNolDepan != isi) {
+                binding.inputTotalSampah.setText(tanpaNolDepan)
+                binding.inputTotalSampah.setSelection(tanpaNolDepan.length)
+                return@doAfterTextChanged
+            }
+            // Angka panjang memakai ukuran Angka/Sedang supaya tidak menabrak tombol - dan +.
+            binding.inputTotalSampah.setTextAppearance(
+                if (isi.length > 4) R.style.Text_GHM_AngkaSedang else R.style.Text_GHM_AngkaBesar
+            )
         }
     }
 

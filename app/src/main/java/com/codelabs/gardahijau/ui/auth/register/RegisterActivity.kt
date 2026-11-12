@@ -45,7 +45,8 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
         binding.layoutHero.applySystemBarPadding(top = true)
-        binding.layoutFooter.applySystemBarPadding(bottom = true, includeIme = true)
+        // Padding bawah di root: layar menyempit saat keyboard muncul, lalu isian yang aktif digulir ke atas keyboard.
+        binding.main.applySystemBarPadding(bottom = true, includeIme = true)
 
         setupRwChoice()
         setupPasswordToggle()

@@ -9,163 +9,170 @@
     android:background="@color/ghm_kertas"
     tools:context=".ui.auth.login.LoginActivity">
 
-    <!-- Kepala hijau. Padding atas ditambah tinggi status bar di LoginActivity. -->
-    <LinearLayout
-        android:id="@+id/layoutHero"
+    <!-- Semua isi bisa digulir (kepala, isian, tombol), supaya isian tidak tertutup keyboard.
+         Tinggi navigation bar & keyboard dipasang sebagai padding bawah root di Activity. -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollIsi"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_ghm_hero"
-        android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="32dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/view_ghm_logo_mitra" />
-
-        <TextView
-            style="@style/Text.GHM.AngkaSedang"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:lineSpacingMultiplier="0.95"
-            android:text="@string/ghm_nama_aplikasi_dua_baris"
-            android:textColor="@color/ghm_putih"
-            android:textSize="42sp" />
-
-        <TextView
-            style="@style/Text.GHM.Biasa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/ghm_masuk_subjudul"
-            android:textColor="@color/ghm_tunas_100" />
-    </LinearLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@id/layoutFooter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutHero">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingTop="28dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="24dp">
+            android:orientation="vertical">
 
-            <TextView
-                style="@style/Text.GHM.JudulBagian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="@string/ghm_masuk_judul" />
-
-            <TextView
-                style="@style/Text.GHM.Label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/inputUsername"
-                android:text="@string/ghm_label_nama_pengguna" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edtUsername"
-                style="@style/Widget.GHM.TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputUsername"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="username"
-                    android:hint="@string/ghm_hint_nama_pengguna"
-                    android:imeOptions="actionNext"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                style="@style/Text.GHM.Label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:labelFor="@id/inputPassword"
-                android:text="@string/ghm_label_kata_sandi" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/edtPassword"
-                style="@style/Widget.GHM.TextInputLayout"
+            <LinearLayout
+                android:id="@+id/layoutHero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconContentDescription="@string/ghm_tampilkan_sandi"
-                app:endIconDrawable="@drawable/ic_eye_visibility_off"
-                app:endIconMode="custom">
+                android:background="@drawable/bg_ghm_hero"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="32dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputPassword"
+                <include layout="@layout/view_ghm_logo_mitra" />
+
+                <TextView
+                    style="@style/Text.GHM.AngkaSedang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:lineSpacingMultiplier="0.95"
+                    android:text="@string/ghm_nama_aplikasi_dua_baris"
+                    android:textColor="@color/ghm_putih"
+                    android:textSize="42sp" />
+
+                <TextView
+                    style="@style/Text.GHM.Biasa"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="password"
-                    android:hint="@string/ghm_hint_kata_sandi"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="16dp"
+                    android:text="@string/ghm_masuk_subjudul"
+                    android:textColor="@color/ghm_tunas_100" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="28dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="24dp">
+
+                <TextView
+                    style="@style/Text.GHM.JudulBagian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/ghm_masuk_judul" />
+
+                <TextView
+                    style="@style/Text.GHM.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/inputUsername"
+                    android:text="@string/ghm_label_nama_pengguna" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edtUsername"
+                    style="@style/Widget.GHM.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="username"
+                        android:hint="@string/ghm_hint_nama_pengguna"
+                        android:imeOptions="actionNext"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    style="@style/Text.GHM.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:labelFor="@id/inputPassword"
+                    android:text="@string/ghm_label_kata_sandi" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edtPassword"
+                    style="@style/Widget.GHM.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIconContentDescription="@string/ghm_tampilkan_sandi"
+                    app:endIconDrawable="@drawable/ic_eye_visibility_off"
+                    app:endIconMode="custom">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="password"
+                        android:hint="@string/ghm_hint_kata_sandi"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Mendorong tombol ke bawah layar saat isi masih pendek -->
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/layoutFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMasuk"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ghm_tombol_masuk" />
+
+                <TextView
+                    android:id="@+id/tvAlreadyAccount"
+                    style="@style/Text.GHM.Biasa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:minHeight="48dp"
+                    android:gravity="center"
+                    android:textColor="@color/ghm_tinta_redup"
+                    tools:text="Belum punya akun? Daftar" />
+
+                <!-- Hanya tampil bila BuildConfig.USE_MOCK_API = true -->
+                <TextView
+                    android:id="@+id/tvModeDemo"
+                    style="@style/Text.GHM.Kecil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/ghm_mode_demo"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <!-- Aksi bawah. Padding bawah ditambah tinggi navigation bar / keyboard di LoginActivity. -->
-    <LinearLayout
-        android:id="@+id/layoutFooter"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnMasuk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ghm_tombol_masuk" />
-
-        <TextView
-            android:id="@+id/tvAlreadyAccount"
-            style="@style/Text.GHM.Biasa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="48dp"
-            android:gravity="center"
-            android:textColor="@color/ghm_tinta_redup"
-            tools:text="Belum punya akun? Daftar" />
-
-        <!-- Hanya tampil bila BuildConfig.USE_MOCK_API = true -->
-        <TextView
-            android:id="@+id/tvModeDemo"
-            style="@style/Text.GHM.Kecil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:text="@string/ghm_mode_demo"
-            android:textSize="14sp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

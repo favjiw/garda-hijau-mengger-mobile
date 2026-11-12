@@ -24,10 +24,12 @@
             android:theme="@style/Theme.GardaHijau" />
         <activity
             android:name=".ui.auth.register.RegisterActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:theme="@style/Theme.GardaHijau" />
         <activity
             android:name=".ui.auth.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:theme="@style/Theme.GardaHijau"/>
         <activity
@@ -36,6 +38,7 @@
             android:theme="@style/Theme.GardaHijau" />
         <activity
             android:name=".ui.pencatatan_history.tambah_riwayat.TambahRiwayatActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:theme="@style/Theme.GardaHijau" />
         <activity
@@ -44,10 +47,12 @@
             android:theme="@style/Theme.GardaHijau" />
         <activity
             android:name=".ui.prediksi.tambah_fase.TambahFaseActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:theme="@style/Theme.GardaHijau" />
         <activity
             android:name=".ui.prediksi.tambah_siklus.TambahSiklusActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:theme="@style/Theme.GardaHijau" />
         <activity
