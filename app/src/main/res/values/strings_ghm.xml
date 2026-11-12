@@ -128,4 +128,17 @@
     <string name="ghm_galat_jumlah_telur">Isi berat telur dalam gram, lebih dari 0</string>
     <string name="ghm_galat_media_kosong">Pilih media telur</string>
     <string name="ghm_siklus_tersimpan">Siklus baru dimulai</string>
+
+    <!-- Catat fase besar -->
+    <string name="ghm_catat_fase_besar_judul">Catat fase besar</string>
+    <string name="ghm_label_tanggal_fase_besar">Tanggal masuk fase besar</string>
+    <string name="ghm_label_jumlah_pakan">Jumlah pakan (kg)</string>
+    <string name="ghm_hint_jumlah_pakan">Contoh: 40</string>
+    <string name="ghm_bantuan_jumlah_pakan">Total pakan yang diberikan selama fase besar.</string>
+    <string name="ghm_label_keterangan_opsional">Keterangan (boleh dikosongkan)</string>
+    <string name="ghm_hint_keterangan_fase">Misal: pakan sisa sayur dari pasar</string>
+    <string name="ghm_info_perkiraan_muncul">Setelah disimpan, perkiraan hasil panen langsung muncul.</string>
+    <string name="ghm_tombol_simpan_lihat_perkiraan">Simpan dan lihat perkiraan</string>
+    <string name="ghm_galat_jumlah_pakan">Isi jumlah pakan dalam kg, lebih dari 0</string>
+    <string name="ghm_fase_tersimpan">Fase besar tersimpan</string>
 </resources>

@@ -202,6 +202,8 @@ class DetailSiklusActivity : AppCompatActivity() {
         intent.putExtra("JUMLAH_TELUR", this.intent.getStringExtra("EXTRA_JUMLAH")?.toIntOrNull() ?: 0)
         intent.putExtra("MEDIA_TELUR", this.intent.getStringExtra("EXTRA_MEDIA") ?: "")
         intent.putExtra("MODE", "ADD")
+        // Untuk "Hari ke-N" di form fase besar.
+        intent.putExtra("TANGGAL_MULAI", this.intent.getStringExtra("EXTRA_TANGGAL_MULAI"))
         startActivity(intent)
     }
 
