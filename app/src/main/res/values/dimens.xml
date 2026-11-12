@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--margin-->
+    <dimen name="dimen_margin">14dp</dimen>
+    <dimen name="dimen_margin_small">8dp</dimen>
+    <dimen name="dimen_margin_medium">24dp</dimen>
+    <dimen name="dimen_margin_large">32dp</dimen>
+    <dimen name="dimen_height_bottom_navigation">56dp</dimen>
+    <dimen name="dimen_space_text">4dp</dimen>
+    <dimen name="dimen_margin_20">20dp</dimen>
+    <dimen name="dimen_margin_24">24dp</dimen>
+    <dimen name="dimen_margin_12">12dp</dimen>
+    <dimen name="dimen_margin_6">6dp</dimen>
+    <dimen name="dimen_margin_0">0dp</dimen>
+    <dimen name="dimen_margin_pin_space">8dp</dimen>
+
+    <dimen name="dimen_radius">5dp</dimen>
+    <dimen name="dimen_radius_pin_edittext">8dp</dimen>
+
+    <!--padding-->
+    <dimen name="dimen_padding_14">14dp</dimen>
+    <dimen name="dimen_padding_vertical_edittext">13dp</dimen>
+    <dimen name="dimen_padding_horizontal_edittext">16dp</dimen>
+
+    <dimen name="dimen_fontsize_edittext">14sp</dimen>
+    <dimen name="dimen_fontsize_edittext_label">14sp</dimen>
+    <dimen name="dimen_fontsize_edittext_error">10sp</dimen>
+    <dimen name="dimen_padding_16">16dp</dimen>
+    <dimen name="dimen_padding_10">10dp</dimen>
+    <dimen name="dimen_margin_16">16dp</dimen>
+    <dimen name="dimen_padding_12">12dp</dimen>
+    <dimen name="dimen_padding_48">48dp</dimen>
+    <dimen name="dimen_margin_8">8dp</dimen>
+    <dimen name="dimen_margin_2">2dp</dimen>
+
+</resources>

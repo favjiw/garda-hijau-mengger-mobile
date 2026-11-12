@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen_padding_16"
+    tools:context=".ui.notifications.NotificationsActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Notifikasi"
+        app:titleTextColor="@color/black"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@android:color/white"
+        app:cardElevation="0dp" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/buttonStatusCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_marginTop="16dp"
+            android:background="#F5F5F5"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <Button
+                android:id="@+id/btnSemua"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Semua"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:backgroundTint="#5DAA80"
+                app:cornerRadius="8dp"
+                android:elevation="0dp"
+                android:textStyle="normal"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnBelum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:text="Belum"
+                android:elevation="0dp"
+                android:textColor="#9DAABF"
+                android:stateListAnimator="@null"
+                android:textStyle="normal"
+                app:backgroundTint="#F5F5F5"
+                app:cornerRadius="8dp" />
+
+
+            <Button
+                android:id="@+id/btnDibaca"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dibaca"
+                android:textAllCaps="false"
+                android:textColor="#9DAABF"
+                android:elevation="0dp"
+                app:backgroundTint="#F5F5F5"
+                app:cornerRadius="8dp"
+                android:stateListAnimator="@null"
+                android:textStyle="normal"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerNotifications"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonStatusCard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_notification" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

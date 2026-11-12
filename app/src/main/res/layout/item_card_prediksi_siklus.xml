@@ -1,0 +1,100 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="217dp"
+    android:layout_marginBottom="12sp"
+    app:cardCornerRadius="8dp"
+    android:elevation="4dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivGradient1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:contentDescription="gradient decoration"
+            android:src="@drawable/img_gradient_prediksi_siklus_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivGradient2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="gradient decoration"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_gradient_prediksi_siklus_2"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="20dp"
+            android:text="Siklus 1"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSeeDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="See Detail"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
+            android:layout_marginEnd="26dp"
+            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appCompatTextView4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEstimasiPanen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Prediksi Hasil Panen"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvResultPrediksiTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25 kg"
+            android:textColor="@color/green"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tvEstimasiTanggal"
+            app:layout_constraintEnd_toEndOf="@+id/tvEstimasiPanen"
+            app:layout_constraintStart_toStartOf="@+id/tvEstimasiPanen"
+            app:layout_constraintTop_toBottomOf="@+id/tvEstimasiPanen" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEstimasiTanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estimasi Tanggal Panen : 24 Oktober 2025"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvResultPrediksiTotal"
+            app:layout_constraintStart_toStartOf="@+id/tvResultPrediksiTotal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

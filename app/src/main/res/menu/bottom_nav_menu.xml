@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_pencatatan_history"
+        android:icon="@drawable/ic_pencatatan_history_selector"
+        android:title="@string/title_pencatatan_history" />
+
+    <item
+        android:id="@+id/navitgation_chatbot"
+        android:icon="@drawable/ic_chatbot"
+        android:title="@string/title_chatbot" />
+
+    <item
+        android:id="@+id/navigation_prediksi"
+        android:icon="@drawable/ic_prediksi_selector"
+        android:title="@string/title_prediksi" />
+
+</menu>

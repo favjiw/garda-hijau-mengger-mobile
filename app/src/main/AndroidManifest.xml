@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App.Starting">
+        <activity
+            android:name=".ui.pencatatan_history.detail_pencatatan_history.HistoryDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau"/>
+        <activity
+            android:name=".ui.notifications.NotificationDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.auth.register.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.auth.login.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.GardaHijau"/>
+        <activity
+            android:name=".ui.prediksi.hasil_prediksi.HasilPrediksiActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.chatbot.ChatbotActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.pencatatan_history.tambah_riwayat.TambahRiwayatActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.prediksi.detail_siklus.DetailSiklusActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.prediksi.tambah_fase.TambahFaseActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.prediksi.tambah_siklus.TambahSiklusActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.notifications.NotificationsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GardaHijau" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

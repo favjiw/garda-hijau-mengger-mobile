@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen_padding_16"
+    tools:context=".ui.pencatatan_history.PencatatanHistoryFragment">
+
+    <TextView
+        android:id="@+id/txt_selamat_pagi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selamat pagi!"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/img_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_circle_notification"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCek"
+        app:layout_constraintEnd_toStartOf="@+id/img_logout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Notification"
+            android:src="@drawable/ic_notification_actived" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/img_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_circle_notification"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="logout"
+            android:src="@drawable/ic_logout" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvCek"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Mari Lihat riwayat pencacahan sampah organik!"
+        android:textColor="@color/dark_green"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/img_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_selamat_pagi" />
+
+
+    <com.db.williamchart.view.LineChartView
+        android:id="@+id/lineChartView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/dimen_padding_16"
+        app:chart_axis="xy"
+        app:chart_labelsColor="@color/black"
+        app:chart_labelsSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCek" />
+
+    <TextView
+        android:id="@+id/tvRiwayatPencacahan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Riwayat Pencacahan"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/dimen_padding_16"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineChartView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_prediksi_siklus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingBottom="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvRiwayatPencacahan"
+        tools:listitem="@layout/item_card_history_pencacahan" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_prediksi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/green"
+        android:contentDescription="Add Prediksi"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCek"
+        app:layout_constraintVertical_bias="0.928"
+        app:tint="@android:color/white" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:layout_marginBottom="12sp"
+    android:layout_marginStart="1dp"
+    android:layout_marginEnd="1dp"
+    app:cardCornerRadius="8dp"
+    android:elevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="8dp"
+            android:text="23 Oktober 2025"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvJumlahVolumeSampah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Jumlah Volume Sampah : 100kg"
+            android:textColor="@color/dark_green"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/appCompatTextView4"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHasilPencacahan"
+            android:layout_width="0dp"
+            android:layout_height="21dp"
+            android:text="Hasil Pencacahan : 100kg"
+            android:textColor="@color/dark_green"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/img_notification"
+            app:layout_constraintStart_toStartOf="@+id/tvJumlahVolumeSampah"
+            app:layout_constraintTop_toBottomOf="@+id/tvJumlahVolumeSampah" />
+
+        <FrameLayout
+            android:id="@+id/img_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_circle_notification"
+            android:padding="8dp"
+            android:layout_marginBottom="@dimen/dimen_margin_8"
+            android:layout_marginEnd="@dimen/dimen_margin_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Notification"
+                android:src="@drawable/ic_arrow_right" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:layout_marginBottom="@dimen/dimen_height_bottom_navigation"
+    tools:context=".ui.prediksi.PrediksiFragment">
+
+    <TextView
+        android:id="@+id/txt_selamat_pagi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selamat pagi!"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/img_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/bg_circle_notification"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCek"
+        app:layout_constraintEnd_toStartOf="@+id/img_logout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Notification"
+            android:src="@drawable/ic_notification_actived" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/img_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_circle_notification"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="logout"
+            android:src="@drawable/ic_logout" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvCek"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Mari cek riwayat prediksi!"
+        android:textColor="@color/dark_green"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_selamat_pagi" />
+
+    <include
+        android:id="@+id/include_prediksi_dashboard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        layout="@layout/item_card_dashboard_prediksi"
+        app:layout_constraintTop_toBottomOf="@+id/tvCek"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvKondisi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Kondisi wadah "
+        android:textColor="@color/dark_green"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include_prediksi_dashboard" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_prediksi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/green"
+        android:contentDescription="Add Prediksi"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCek"
+        app:layout_constraintVertical_bias="1.0"
+        app:tint="@android:color/white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_prediksi_siklus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvKondisi"
+        tools:listitem="@layout/item_card_prediksi_siklus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_pencatatan_history">
+
+    <fragment
+        android:id="@+id/navigation_pencatatan_history"
+        android:name="com.codelabs.gardahijau.ui.pencatatan_history.PencatatanHistoryFragment"
+        android:label="@string/title_pencatatan_history"
+        tools:layout="@layout/fragment_pencatatan_history"
+    >
+        <action
+            android:id="@+id/action_navigation_pencatatan_history_to_tambahRiwayatActivity"
+            app:destination="@id/tambahRiwayatActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_prediksi"
+        android:name="com.codelabs.gardahijau.ui.prediksi.PrediksiFragment"
+        android:label="@string/title_prediksi"
+        tools:layout="@layout/fragment_prediksi"
+    >
+        <action
+            android:id="@+id/action_navigation_prediksi_to_navigation_tambah_siklus"
+            app:destination="@id/navigation_tambah_siklus" />
+    </fragment>
+
+    <activity
+        android:id="@+id/navigation_tambah_siklus"
+        android:name="com.codelabs.gardahijau.ui.prediksi.tambah_siklus.TambahSiklusActivity"
+        android:label="activity_tambah_siklus"
+        tools:layout="@layout/activity_tambah_siklus" />
+
+    <activity
+        android:id="@+id/navitgation_chatbot"
+        android:name="com.codelabs.gardahijau.ui.chatbot.ChatbotActivity"
+        android:label="activity_chatbot"
+        tools:layout="@layout/activity_chatbot" />
+    <activity
+        android:id="@+id/tambahRiwayatActivity"
+        android:name="com.codelabs.gardahijau.ui.pencatatan_history.tambah_riwayat.TambahRiwayatActivity"
+        android:label="activity_tambah_riwayat"
+        tools:layout="@layout/activity_tambah_riwayat" />
+
+
+</navigation>
