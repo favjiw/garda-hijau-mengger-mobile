@@ -111,4 +111,21 @@
     <string name="ghm_tombol_catat_fase_besar">Catat fase besar</string>
     <string name="ghm_belum_ada_fase">Belum ada fase yang dicatat.</string>
     <string name="ghm_galat_id_siklus">Siklus tidak ditemukan</string>
+
+    <!-- Mulai siklus -->
+    <string name="ghm_mulai_siklus_judul">Mulai siklus baru</string>
+    <string name="ghm_label_tanggal_mulai">Tanggal mulai</string>
+    <string name="ghm_label_jumlah_telur">Jumlah telur (gram)</string>
+    <string name="ghm_hint_jumlah_telur">Contoh: 40</string>
+    <string name="ghm_bantuan_jumlah_telur">Timbang telur sebelum dimasukkan ke media.</string>
+    <string name="ghm_label_media_telur">Media telur</string>
+    <string name="ghm_media_dedak">Dedak</string>
+    <string name="ghm_media_kotoran_ternak">Kotoran ternak</string>
+    <string name="ghm_media_limbah_organik">Limbah organik</string>
+    <string name="ghm_media_campuran">Campuran</string>
+    <string name="ghm_hint_catatan_siklus">Misal: wadah nomor 3</string>
+    <string name="ghm_tombol_mulai_siklus_simpan">Mulai siklus</string>
+    <string name="ghm_galat_jumlah_telur">Isi berat telur dalam gram, lebih dari 0</string>
+    <string name="ghm_galat_media_kosong">Pilih media telur</string>
+    <string name="ghm_siklus_tersimpan">Siklus baru dimulai</string>
 </resources>

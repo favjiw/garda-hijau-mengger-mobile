@@ -11,9 +11,10 @@ val LOCALE_ID: Locale = Locale("id", "ID")
 private val SERVER_PATTERNS = listOf(
     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     "yyyy-MM-dd'T'HH:mm:ss'Z'",
+    "yyyy-MM-dd", // tanggalMulai siklus dikirim tanpa jam (TambahSiklusActivity)
 )
 
-/** Tanggal dari API berakhiran 'Z' (UTC). Hasilnya ditampilkan dalam zona waktu HP. */
+/** Tanggal dari API (UTC, berakhiran 'Z', atau hanya tanggal). Hasilnya ditampilkan dalam zona waktu HP. */
 fun parseServerDate(value: String?): Date? {
     if (value.isNullOrBlank()) return null
     for (pattern in SERVER_PATTERNS) {
