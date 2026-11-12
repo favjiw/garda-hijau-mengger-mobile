@@ -168,7 +168,7 @@ class NotificationsActivity : AppCompatActivity() {
                 b.notificationUnread.contentDescription =
                     if (item.isRead) null else getString(R.string.ghm_belum_dibaca)
 
-                val (ikon, latar) = ikonUntuk(item.type)
+                val (ikon, latar) = ikonUntuk(item)
                 b.notificationIcon.setImageResource(ikon)
                 b.notificationIcon.imageTintList = ColorStateList.valueOf(warna(
                     if (latar == R.color.ghm_terpal_100) R.color.ghm_daun_900 else R.color.ghm_daun_700
@@ -192,11 +192,21 @@ class NotificationsActivity : AppCompatActivity() {
         }
     }
 
-    /** Ikon & warna kotak dari field `type` (panen, prediksi, pencacahan). */
-    private fun ikonUntuk(type: String?): Pair<Int, Int> = when (type?.lowercase()) {
-        "panen" -> R.drawable.ic_ghm_maggot to R.color.ghm_terpal_100
-        "prediksi" -> R.drawable.ic_ghm_grafik to R.color.ghm_tunas_100
-        else -> R.drawable.ic_ghm_sampah to R.color.ghm_tunas_100
+    /**
+     * Ikon & warna kotak notifikasi. Server mengirim `type` = info / success / warning, jadi jenis
+     * isinya ditebak dari judul (contoh judul server: "Siklus Baru Dibuat", "Fase PEMBESARAN
+     * Ditambahkan", "Prediksi Panen Berhasil", "Pencacahan Baru"). Peringatan memakai kotak kuning.
+     */
+    private fun ikonUntuk(item: NotificationItem): Pair<Int, Int> {
+        val judul = item.title.orEmpty().lowercase()
+        val jenis = item.type.orEmpty().lowercase()
+        val ikon = when {
+            jenis == "prediksi" || "prediksi" in judul || "perkiraan" in judul -> R.drawable.ic_ghm_grafik
+            jenis == "panen" || "siklus" in judul || "fase" in judul || "panen" in judul || "maggot" in judul -> R.drawable.ic_ghm_maggot
+            else -> R.drawable.ic_ghm_sampah
+        }
+        val latar = if (jenis == "warning" || jenis == "panen") R.color.ghm_terpal_100 else R.color.ghm_tunas_100
+        return ikon to latar
     }
 
     private fun warna(@ColorRes id: Int) = ContextCompat.getColor(this, id)

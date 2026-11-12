@@ -5,6 +5,7 @@ import com.codelabs.gardahijau.BuildConfig
 import com.codelabs.gardahijau.model.local.data.UserPreferences
 import com.codelabs.gardahijau.model.remote.mock.MockApiInterceptor
 import okhttp3.OkHttpClient
+import okhttp3.internal.platform.Platform
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,16 +19,20 @@ class ApiConfig {
     companion object {
         fun getMainApiService(context: Context, userPreferences: UserPreferences): MainApiService {
             val clientBuilder = OkHttpClient.Builder()
-                // Prediksi panen (fase PANEN) dan chatbot bisa butuh sampai ±15 detik.
+                // Server menunggu layanan AI sampai 15 detik (prediksi) dan 60 detik (chatbot),
+                // lihat ML_TIMEOUT_MS & CHATBOT_TIMEOUT_MS di BE-BEM. Aplikasi harus menunggu lebih lama.
                 .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(75, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
-                .callTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(90, TimeUnit.SECONDS)
                 .addInterceptor(AuthInterceptor(context.applicationContext, userPreferences))
 
             if (BuildConfig.DEBUG) {
                 // Log hanya di build debug; header token & body login tidak ikut tercatat di release.
-                val logging = HttpLoggingInterceptor().apply {
+                val logging = HttpLoggingInterceptor { pesan ->
+                    // Token di balasan login dan kata sandi di body login tidak boleh tercatat.
+                    Platform.get().log(sensorLog(pesan))
+                }.apply {
                     level = HttpLoggingInterceptor.Level.BODY
                     redactHeader("Authorization")
                 }
@@ -45,5 +50,11 @@ class ApiConfig {
 
             return retrofit.create(MainApiService::class.java)
         }
+
+        private val POLA_RAHASIA = Regex("""("token"|"password")\s*:\s*"[^"]*"""")
+
+        /** Ganti nilai "token" dan "password" di log dengan ***. */
+        fun sensorLog(pesan: String): String =
+            POLA_RAHASIA.replace(pesan) { "${it.groupValues[1]}:\"***\"" }
     }
 }
