@@ -1,31 +1,61 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.GardaHijau" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryVariant">@color/green</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+    <!--
+        Tema aplikasi Garda Hijau v2.
+        Warna, huruf, dan style komponen mengikuti Figma "Garda Hijau Mengger — Redesign v2".
+        Aplikasi sengaja selalu memakai mode terang (tidak ada values-night).
+    -->
+    <style name="Theme.GardaHijau" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/ghm_daun_700</item>
+        <item name="colorOnPrimary">@color/ghm_putih</item>
+        <item name="colorPrimaryContainer">@color/ghm_tunas_100</item>
+        <item name="colorOnPrimaryContainer">@color/ghm_daun_900</item>
+        <item name="colorSecondary">@color/ghm_daun_500</item>
+        <item name="colorOnSecondary">@color/ghm_putih</item>
+        <item name="colorSecondaryContainer">@color/ghm_tunas_100</item>
+        <item name="colorOnSecondaryContainer">@color/ghm_daun_900</item>
+        <item name="colorTertiary">@color/ghm_terpal_400</item>
+        <item name="colorOnTertiary">@color/ghm_daun_900</item>
+        <item name="colorTertiaryContainer">@color/ghm_terpal_100</item>
+        <item name="colorOnTertiaryContainer">@color/ghm_daun_900</item>
+        <item name="colorSurface">@color/ghm_putih</item>
+        <item name="colorOnSurface">@color/ghm_tinta</item>
+        <item name="colorOnSurfaceVariant">@color/ghm_tinta_redup</item>
+        <item name="colorSurfaceContainer">@color/ghm_putih</item>
+        <item name="colorOutline">@color/ghm_garis</item>
+        <item name="colorOutlineVariant">@color/ghm_garis</item>
+        <item name="colorError">@color/ghm_galat</item>
+        <item name="android:colorBackground">@color/ghm_kertas</item>
+        <item name="android:windowBackground">@color/ghm_kertas</item>
+
+        <!-- Huruf dasar untuk semua teks -->
+        <item name="android:fontFamily">@font/atkinson_regular</item>
+        <item name="fontFamily">@font/atkinson_regular</item>
+        <item name="android:textColor">@color/ghm_tinta</item>
+
+        <!-- Bilah sistem: latar terang, ikon gelap -->
+        <item name="android:statusBarColor">@color/ghm_kertas</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/ghm_putih</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+
+        <!-- Style bawaan komponen -->
+        <item name="materialButtonStyle">@style/Widget.GHM.Button</item>
+        <item name="bottomNavigationStyle">@style/Widget.GHM.BottomNav</item>
+        <item name="materialCardViewStyle">@style/Widget.GHM.Card</item>
     </style>
 
-
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenBackground">@color/ghm_daun_700</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
         <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.GardaHijau</item>
     </style>
 
-
     <style name="ToolbarTitleStyle" parent="@style/TextAppearance.Material3.TitleLarge">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/bricolage_semibold</item>
+        <item name="android:textColor">@color/ghm_tinta</item>
     </style>
 
 </resources>

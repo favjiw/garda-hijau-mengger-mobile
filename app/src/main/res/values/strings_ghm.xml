@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teks antarmuka Garda Hijau v2. Bahasa sehari-hari, huruf kalimat (sentence case). -->
+<resources>
+    <!-- Umum -->
+    <string name="ghm_nama_aplikasi_dua_baris">Garda Hijau\nMengger</string>
+    <string name="ghm_logo_diktisaintek">Logo Diktisaintek Berdampak</string>
+    <string name="ghm_logo_wow">Logo Wise on Waste</string>
+    <string name="ghm_logo_unikom">Logo Universitas Komputer Indonesia</string>
+    <string name="ghm_memproses">Memproses…</string>
+
+    <!-- Masuk -->
+    <string name="ghm_masuk_subjudul">Catat sampah yang masuk dan pantau kandang maggot di RW-mu.</string>
+    <string name="ghm_masuk_judul">Masuk ke akunmu</string>
+    <string name="ghm_label_nama_pengguna">Nama pengguna</string>
+    <string name="ghm_hint_nama_pengguna">Contoh: pengelola.rw5</string>
+    <string name="ghm_label_kata_sandi">Kata sandi</string>
+    <string name="ghm_hint_kata_sandi">Masukkan kata sandi</string>
+    <string name="ghm_tampilkan_sandi">Tampilkan kata sandi</string>
+    <string name="ghm_sembunyikan_sandi">Sembunyikan kata sandi</string>
+    <string name="ghm_tombol_masuk">Masuk</string>
+    <string name="ghm_belum_punya_akun">Belum punya akun? Daftar</string>
+    <string name="ghm_tautan_daftar">Daftar</string>
+    <string name="ghm_galat_nama_kosong">Isi nama pengguna dulu</string>
+    <string name="ghm_galat_sandi_kosong">Isi kata sandi dulu</string>
+
+    <!-- Daftar -->
+    <string name="ghm_daftar_judul">Buat akun baru</string>
+    <string name="ghm_daftar_subjudul">Satu akun untuk tiap pengelola. Data sampah yang kamu catat akan masuk ke RW yang dipilih.</string>
+    <string name="ghm_hint_buat_kata_sandi">Buat kata sandi</string>
+    <string name="ghm_label_pilih_rw">Kamu mengelola RW berapa?</string>
+    <string name="ghm_rw_4">RW 4</string>
+    <string name="ghm_rw_5">RW 5</string>
+    <string name="ghm_galat_rw_kosong">Pilih RW yang kamu kelola</string>
+    <string name="ghm_tombol_daftar">Daftar</string>
+    <string name="ghm_sudah_punya_akun">Sudah punya akun? Masuk</string>
+    <string name="ghm_tautan_masuk">Masuk</string>
+    <string name="ghm_daftar_berhasil">Akun dibuat. Silakan masuk.</string>
+
+    <!-- Beranda sampah -->
+    <string name="ghm_sapaan">Halo, pengelola</string>
+    <string name="ghm_sampah_judul">Sampah minggu ini</string>
+    <string name="ghm_satuan_kg">kg</string>
+    <string name="ghm_rentang_7_hari">masuk dalam 7 hari terakhir, %1$s</string>
+    <string name="ghm_hari_terbanyak">%1$s paling banyak, %2$s kg.</string>
+    <string name="ghm_belum_ada_sampah_minggu_ini">Belum ada sampah tercatat dalam 7 hari terakhir.</string>
+    <string name="ghm_riwayat">Riwayat</string>
+    <string name="ghm_riwayat_kosong">Belum ada catatan. Ketuk Catat sampah hari ini untuk mulai.</string>
+    <string name="ghm_tombol_catat_sampah">Catat sampah hari ini</string>
+    <string name="ghm_notifikasi">Notifikasi</string>
+    <string name="ghm_keluar">Keluar dari akun</string>
+    <string name="ghm_riwayat_judul_item">%1$s kg masuk</string>
+    <string name="ghm_riwayat_pukul">Pukul %1$s</string>
+    <string name="ghm_riwayat_pukul_catatan">Pukul %1$s. %2$s</string>
+    <string name="ghm_grafik_deskripsi">Grafik sampah masuk 7 hari terakhir</string>
+    <string name="ghm_keluar_judul">Keluar dari akun?</string>
+    <string name="ghm_keluar_pesan">Kamu perlu masuk lagi untuk mencatat sampah.</string>
+    <string name="ghm_batal">Batal</string>
+    <string name="ghm_ya_keluar">Keluar</string>
+</resources>

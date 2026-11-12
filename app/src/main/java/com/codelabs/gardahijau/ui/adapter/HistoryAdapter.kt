@@ -3,14 +3,21 @@ package com.codelabs.gardahijau.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ItemCardHistoryPencacahanBinding
 import com.codelabs.gardahijau.model.remote.response.hitoryPencacahan.DataItem
+import com.codelabs.gardahijau.ui.util.LOCALE_ID
+import com.codelabs.gardahijau.ui.util.formatKg
+import com.codelabs.gardahijau.ui.util.parseServerDate
 import java.text.SimpleDateFormat
-import java.util.*
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
     private val items = mutableListOf<DataItem>()
     private var onItemClickListener: ((DataItem) -> Unit)? = null
+
+    private val dayFormat = SimpleDateFormat("d", LOCALE_ID)
+    private val monthFormat = SimpleDateFormat("MMM", LOCALE_ID)
+    private val timeFormat = SimpleDateFormat("HH.mm", LOCALE_ID)
 
     fun setItems(newItems: List<DataItem>) {
         items.clear()
@@ -26,19 +33,21 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: DataItem) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+            val context = binding.root.context
+            val date = parseServerDate(item.tanggalWaktu)
 
-            val formattedDate = try {
-                val date = inputFormat.parse(item.tanggalWaktu)
-                outputFormat.format(date ?: Date())
-            } catch (e: Exception) {
-                item.tanggalWaktu
+            binding.tvTanggalHari.text = date?.let { dayFormat.format(it) } ?: "-"
+            binding.tvTanggalBulan.text = date?.let { monthFormat.format(it) } ?: ""
+            binding.tvJumlahVolumeSampah.text =
+                context.getString(R.string.ghm_riwayat_judul_item, formatKg(item.totalSampah))
+
+            val time = date?.let { timeFormat.format(it) }
+            val note = item.catatan?.trim().orEmpty()
+            binding.tvHasilPencacahan.text = when {
+                time == null -> note
+                note.isEmpty() -> context.getString(R.string.ghm_riwayat_pukul, time)
+                else -> context.getString(R.string.ghm_riwayat_pukul_catatan, time, note)
             }
-
-            binding.appCompatTextView4.text = formattedDate
-            binding.tvJumlahVolumeSampah.text = "Jumlah Volume Sampah : ${item.totalSampah} Kg"
-            binding.tvHasilPencacahan.text = "Catatan : ${item.catatan}"
 
             binding.root.setOnClickListener {
                 onItemClickListener?.invoke(item)
