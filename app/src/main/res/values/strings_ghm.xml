@@ -174,4 +174,11 @@
     <string name="ghm_kemarin">Kemarin</string>
     <string name="ghm_notifikasi_kosong">Belum ada notifikasi.</string>
     <string name="ghm_belum_dibaca">Belum dibaca</string>
+
+    <!-- Detail catatan sampah & detail notifikasi -->
+    <string name="ghm_detail_catatan_judul">Detail catatan sampah</string>
+    <string name="ghm_label_catatan">Catatan</string>
+    <string name="ghm_tidak_ada_catatan">Tidak ada catatan.</string>
+    <string name="ghm_dicatat_pada">Dicatat %1$s</string>
+    <string name="ghm_detail_notifikasi_judul">Detail notifikasi</string>
 </resources>

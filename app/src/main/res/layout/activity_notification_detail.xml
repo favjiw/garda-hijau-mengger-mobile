@@ -1,38 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Detail satu notifikasi (dibuka dari layar Notifikasi). Memakai komponen Redesign v2. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/dimen_padding_16">
+    android:background="@color/ghm_kertas"
+    android:orientation="vertical"
+    tools:context=".ui.notifications.NotificationDetailActivity">
 
+    <!-- Bilah atas. Padding atas ditambah tinggi status bar di NotificationDetailActivity. -->
     <LinearLayout
+        android:id="@+id/layoutBilahAtas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:minHeight="64dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnKembali"
+            style="@style/Widget.GHM.Button.Bulat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/ghm_kembali"
+            app:icon="@drawable/ic_ghm_kembali"
+            app:iconSize="24dp" />
 
         <TextView
-            android:id="@+id/tvTitle"
+            style="@style/Text.GHM.JudulBagian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingBottom="8dp"/>
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2025-11-19"
-            android:textColor="#888888"
-            android:paddingBottom="16dp"/>
-
-        <TextView
-            android:id="@+id/tvMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Message detail here"
-            android:textSize="16sp"/>
-
+            android:layout_marginStart="12dp"
+            android:accessibilityHeading="true"
+            android:text="@string/ghm_detail_notifikasi_judul" />
     </LinearLayout>
 
-</ScrollView>
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollIsi"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_ghm_kartu"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/Text.GHM.JudulBagian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Siklus siap dipanen" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="12 November 2026, 07.00" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/Text.GHM.Biasa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:text="Larva siklus pertama sudah berumur 22 hari." />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
