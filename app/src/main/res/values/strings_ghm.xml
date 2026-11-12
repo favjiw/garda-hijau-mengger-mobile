@@ -168,4 +168,10 @@
     <string name="ghm_kirim">Kirim pertanyaan</string>
     <string name="ghm_gardabot_mengetik">GardaBot sedang menulis jawaban…</string>
     <string name="ghm_gardabot_galat">Maaf, GardaBot belum bisa menjawab. Periksa internet lalu coba lagi.</string>
+
+    <!-- Notifikasi -->
+    <string name="ghm_hari_ini">Hari ini</string>
+    <string name="ghm_kemarin">Kemarin</string>
+    <string name="ghm_notifikasi_kosong">Belum ada notifikasi.</string>
+    <string name="ghm_belum_dibaca">Belum dibaca</string>
 </resources>
