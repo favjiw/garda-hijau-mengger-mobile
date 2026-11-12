@@ -16,3 +16,8 @@ local.properties
 
 # IDE
 .idea/
+
+# Kunci tanda tangan release (rahasia, jangan di-commit)
+keystore.properties
+*.jks
+*.keystore

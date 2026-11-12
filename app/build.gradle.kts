@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -14,8 +16,8 @@ android {
         applicationId = "com.codelabs.gardahijau"
         minSdk = 24
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -24,6 +26,23 @@ android {
 
         // Mode demo: true = semua request API dijawab data contoh (lihat model/remote/mock).
         buildConfigField("boolean", "USE_MOCK_API", "false")
+    }
+
+    // Kunci tanda tangan APK release. Dibaca dari keystore.properties di root proyek
+    // (TIDAK di-commit, lihat .gitignore). Tanpa file itu, assembleRelease menghasilkan APK unsigned.
+    val keystoreFile = rootProject.file("keystore.properties")
+    val keystoreProps = Properties().apply {
+        if (keystoreFile.exists()) keystoreFile.inputStream().use { load(it) }
+    }
+    signingConfigs {
+        if (keystoreFile.exists()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
@@ -39,6 +58,7 @@ android {
             buildConfigField("boolean", "USE_MOCK_API", "true")
         }
         release {
+            if (keystoreFile.exists()) signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
