@@ -75,4 +75,27 @@
     <string name="ghm_tombol_simpan_catatan">Simpan catatan</string>
     <string name="ghm_galat_berat_kosong">Isi berat sampah, lebih dari 0 kg</string>
     <string name="ghm_galat_simpan">Gagal menyimpan: %1$s</string>
+
+    <!-- Maggot: kandang -->
+    <string name="ghm_maggot_judul">Kandang maggot</string>
+    <string name="ghm_jumlah_siklus">%1$d siklus</string>
+    <string name="ghm_perkiraan_total">Perkiraan total panen</string>
+    <string name="ghm_perkiraan_dari_siklus">dari %1$d siklus yang sudah punya perkiraan</string>
+    <string name="ghm_perkiraan_total_kosong">Belum ada perkiraan. Catat fase besar di salah satu siklus untuk melihatnya.</string>
+    <string name="ghm_siklus_kosong">Belum ada siklus. Ketuk Mulai siklus baru untuk mulai.</string>
+    <string name="ghm_tombol_mulai_siklus">Mulai siklus baru</string>
+    <string name="ghm_siklus_ke">Siklus %1$d</string>
+    <string name="ghm_hari_ke">Hari ke-%1$d</string>
+    <string name="ghm_mulai_hari_ini">Mulai hari ini</string>
+    <string name="ghm_tahap_telur">Telur</string>
+    <string name="ghm_tahap_tetas">Tetas</string>
+    <string name="ghm_tahap_besar">Besar</string>
+    <string name="ghm_tahap_panen">Panen</string>
+    <string name="ghm_tahap_sekarang">Tahap sekarang: %1$s</string>
+    <string name="ghm_perkiraan_kg">Perkiraan %1$s kg</string>
+    <string name="ghm_belum_ada_perkiraan">Belum ada perkiraan</string>
+    <string name="ghm_catat_fase_besar_dulu">Catat fase besar untuk melihatnya</string>
+    <string name="ghm_mulai_tanggal">Mulai %1$s</string>
+    <string name="ghm_memuat">Memuat…</string>
+    <string name="ghm_galat_muat">Gagal memuat: %1$s</string>
 </resources>

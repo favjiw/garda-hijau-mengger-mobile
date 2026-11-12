@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma: komponen "Pita siklus" (Telur, Tetas, Besar, Panen).
+     Warna batang & tebal label diatur di kode (lihat SiklusAdapter.tampilkanPita). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/ruasTelur"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_ghm_ruas" />
+
+        <TextView
+            android:id="@+id/labelTelur"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ghm_tahap_telur" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/ruasTetas"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_ghm_ruas" />
+
+        <TextView
+            android:id="@+id/labelTetas"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ghm_tahap_tetas" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/ruasBesar"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_ghm_ruas" />
+
+        <TextView
+            android:id="@+id/labelBesar"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ghm_tahap_besar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/ruasPanen"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_ghm_ruas" />
+
+        <TextView
+            android:id="@+id/labelPanen"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ghm_tahap_panen"
+            tools:ignore="TextContrastCheck" />
+    </LinearLayout>
+</LinearLayout>

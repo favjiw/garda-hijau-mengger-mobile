@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
+import com.codelabs.gardahijau.model.remote.response.prediksi.GetFaseResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetHasilPanenDashboardResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetHasilPanenSiklusResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.GetSiklusResponse
@@ -30,6 +31,11 @@ class PrediksiViewModel @Inject constructor(
 
     suspend fun fetchHasilPanenSiklus(siklusId: Int): ApiResponse<GetHasilPanenSiklusResponse> {
         return repository.getHasilPanenSiklus(siklusId)
+    }
+
+    /** Daftar fase satu siklus, untuk menentukan tahap di pita siklus. */
+    suspend fun fetchFase(siklusId: Int): ApiResponse<GetFaseResponse> {
+        return repository.getFase(siklusId)
     }
 
     private val _hasilDashboard = MutableLiveData<ApiResponse<GetHasilPanenDashboardResponse>>()

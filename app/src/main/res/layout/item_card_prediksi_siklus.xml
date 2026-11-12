@@ -1,100 +1,90 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma: komponen "Kartu siklus" di "04 Maggot — kandang" -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="217dp"
-    android:layout_marginBottom="12sp"
-    app:cardCornerRadius="8dp"
-    android:elevation="4dp">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="22dp">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivGradient1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:contentDescription="gradient decoration"
-            android:src="@drawable/img_gradient_prediksi_siklus_1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivGradient2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="gradient decoration"
-            android:scaleType="fitXY"
-            android:src="@drawable/img_gradient_prediksi_siklus_2"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/appCompatTextView4"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="20dp"
-            android:text="Siklus 1"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSeeDetail"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvJudulSiklus"
+                style="@style/Text.GHM.JudulBagian"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Siklus 3" />
+
+            <TextView
+                android:id="@+id/tvHariKe"
+                style="@style/Text.GHM.Tebal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ghm_chip"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="6dp"
+                android:textColor="@color/ghm_daun_700"
+                tools:text="Hari ke-12" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/pita"
+            layout="@layout/view_ghm_pita_siklus"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="See Detail"
-            android:textColor="@color/blue"
-            android:textSize="18sp"
-            android:layout_marginEnd="26dp"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appCompatTextView4" />
+            android:layout_marginTop="14dp" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvEstimasiPanen"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Prediksi Hasil Panen"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
+            android:layout_marginTop="14dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvResultPrediksiTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25 kg"
-            android:textColor="@color/green"
-            android:textSize="60sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tvEstimasiTanggal"
-            app:layout_constraintEnd_toEndOf="@+id/tvEstimasiPanen"
-            app:layout_constraintStart_toStartOf="@+id/tvEstimasiPanen"
-            app:layout_constraintTop_toBottomOf="@+id/tvEstimasiPanen" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvEstimasiTanggal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estimasi Tanggal Panen : 24 Oktober 2025"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tvResultPrediksiTotal"
-            app:layout_constraintStart_toStartOf="@+id/tvResultPrediksiTotal" />
+                <TextView
+                    android:id="@+id/tvPerkiraan"
+                    style="@style/Text.GHM.Tebal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Perkiraan 10 kg" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvKeterangan"
+                    style="@style/Text.GHM.Kecil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    tools:text="Mulai 31 Okt 2026" />
+            </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_ghm_chevron_kanan" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
