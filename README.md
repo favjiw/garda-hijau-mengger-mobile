@@ -2,7 +2,7 @@
 
 Aplikasi Android untuk pengelola sampah dan peternak maggot BSF (*Black Soldier Fly*) di Kelurahan Mengger. Dengan aplikasi ini pengelola bisa mencatat sampah organik yang masuk, memantau siklus maggot dari telur sampai panen, melihat perkiraan hasil panen, dan bertanya ke asisten GardaBot.
 
-Dibuat untuk program **BEM Mahasiswa Berdampak 2026 — Sinergi Garda Hijau Mengger**. Backend: `https://gardahijau.codelabspace.or.id` ([dokumentasi API](https://gardahijau.codelabspace.or.id/api-docs)).
+Dibuat untuk program **BEM Mahasiswa Berdampak 2026 — Sinergi Garda Hijau Mengger**. Backend: `https://gardahijaukemdiktisaintek.digital` ([dokumentasi API](https://gardahijaukemdiktisaintek.digital/api-docs)).
 
 > **Status:** dalam pengembangan. Build debug memakai server asli; build `demo` memakai [data contoh](#mode-demo) tanpa server.
 
@@ -85,7 +85,7 @@ Build **debug** dan **release** selalu memakai server asli.
 
 | Pengaturan | Lokasi | Keterangan |
 |---|---|---|
-| `BASE_URL` | `app/build.gradle.kts` (`defaultConfig`) | `https://gardahijau.codelabspace.or.id/` untuk semua fitur, termasuk GardaBot. |
+| `BASE_URL` | `app/build.gradle.kts` (`defaultConfig`) | `https://gardahijaukemdiktisaintek.digital/` untuk semua fitur, termasuk GardaBot. |
 | `USE_MOCK_API` | `app/build.gradle.kts` | `true` hanya di build type `demo`. |
 
 Tidak ada kunci API atau rahasia yang perlu diisi.

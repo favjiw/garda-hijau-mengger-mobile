@@ -29,7 +29,7 @@ import java.net.SocketTimeoutException
 
 /**
  * Memastikan model aplikasi bisa membaca contoh JSON dari dokumentasi API
- * (https://gardahijau.codelabspace.or.id/api-docs) dan pesan galat sesuai status code.
+ * (https://gardahijaukemdiktisaintek.digital/api-docs) dan pesan galat sesuai status code.
  */
 class ApiKontrakTest {
 

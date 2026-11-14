@@ -16,13 +16,13 @@ android {
         applicationId = "com.codelabs.gardahijau"
         minSdk = 24
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.1.0"
+        versionCode = 4
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Server API Garda Hijau. Dokumentasi: https://gardahijau.codelabspace.or.id/api-docs
-        buildConfigField("String", "BASE_URL", "\"https://gardahijau.codelabspace.or.id/\"")
+        // Server API Garda Hijau. Dokumentasi: https://gardahijaukemdiktisaintek.digital/api-docs
+        buildConfigField("String", "BASE_URL", "\"https://gardahijaukemdiktisaintek.digital/\"")
 
         // Mode demo: true = semua request API dijawab data contoh (lihat model/remote/mock).
         buildConfigField("boolean", "USE_MOCK_API", "false")

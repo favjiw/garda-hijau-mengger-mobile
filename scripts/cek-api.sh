@@ -6,7 +6,7 @@
 # Jalankan dari folder proyek:  bash scripts/cek-api.sh
 
 set -u
-BASE="${BASE_URL:-https://gardahijau.codelabspace.or.id}"
+BASE="${BASE_URL:-https://gardahijaukemdiktisaintek.digital}"
 OUT="build/cek-api"
 mkdir -p "$OUT"
 
