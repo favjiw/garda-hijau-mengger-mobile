@@ -5,7 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codelabs.gardahijau.model.local.antrean.AntreanSampah
+import com.codelabs.gardahijau.model.local.antrean.JenisAntrean
+import com.codelabs.gardahijau.model.local.antrean.KlasifikasiAntrean
 import com.codelabs.gardahijau.model.remote.response.hitoryPencacahan.AddHistoryPencacahanResponse
+import com.codelabs.gardahijau.repository.AntreanRepository
 import com.codelabs.gardahijau.repository.HistoryPencacahanRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TambahRiwayatViewModel @Inject constructor(
-    private val historyPencacahanRepository: HistoryPencacahanRepository
+    private val historyPencacahanRepository: HistoryPencacahanRepository,
+    private val antreanRepository: AntreanRepository,
 ) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -25,6 +30,10 @@ class TambahRiwayatViewModel @Inject constructor(
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
+    /** true = catatan disimpan di HP dan akan dikirim otomatis (tidak ada internet). */
+    private val _diantrekan = MutableLiveData<Boolean>()
+    val diantrekan: LiveData<Boolean> = _diantrekan
+
     fun addHistoryPencacahan(tanggalWaktu: String, totalSampah: Double, catatan: String) {
         _isLoading.value = true
         viewModelScope.launch {
@@ -33,12 +42,19 @@ class TambahRiwayatViewModel @Inject constructor(
                     tanggalWaktu, totalSampah, catatan
                 )
                 _addHistoryResult.value = response
-                _isLoading.value = false
             } catch (e: Exception) {
-                _errorMessage.value = e.pesanGalat()
-                _isLoading.value = false
+                if (KlasifikasiAntrean.aksi(e) == KlasifikasiAntrean.Aksi.ULANGI) {
+                    // Tidak ada internet: simpan di HP, kirim otomatis saat online.
+                    antreanRepository.antrekan(
+                        JenisAntrean.SAMPAH,
+                        AntreanSampah(tanggalWaktu, totalSampah, catatan),
+                    )
+                    _diantrekan.value = true
+                } else {
+                    _errorMessage.value = e.pesanGalat()
+                }
             }
+            _isLoading.value = false
         }
     }
-
 }

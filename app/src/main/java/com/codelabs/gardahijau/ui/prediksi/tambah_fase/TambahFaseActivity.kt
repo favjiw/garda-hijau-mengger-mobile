@@ -172,6 +172,11 @@ class TambahFaseActivity : AppCompatActivity() {
                     selesaiMemuat()
                     Toast.makeText(this, getString(R.string.ghm_galat_simpan, status.pesan), Toast.LENGTH_LONG).show()
                 }
+                is StatusFaseBesar.TersimpanDiHp -> {
+                    Toast.makeText(this, R.string.ghm_tersimpan_di_hp, Toast.LENGTH_LONG).show()
+                    setResult(RESULT_OK)
+                    finish()
+                }
             }
         }
     }

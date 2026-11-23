@@ -228,6 +228,12 @@
     <string name="ghm_dicatat_pada">Dicatat %1$s</string>
     <string name="ghm_detail_notifikasi_judul">Detail notifikasi</string>
 
+    <!-- Antrean offline -->
+    <string name="ghm_tersimpan_di_hp">Tersimpan di HP. Akan dikirim otomatis saat ada internet.</string>
+    <plurals name="ghm_antrean_menunggu">
+        <item quantity="other">%1$d catatan menunggu dikirim</item>
+    </plurals>
+
     <!-- Server & pesan galat (lihat PesanGalat.kt) -->
     <string name="ghm_galat_jaringan">Tidak bisa terhubung ke server. Periksa internet lalu coba lagi.</string>
     <string name="ghm_galat_waktu_habis">Server terlalu lama menjawab. Coba lagi.</string>

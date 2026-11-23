@@ -36,7 +36,7 @@ class PrediksiRepository @Inject constructor(
             remoteDataSource.addSiklus(tanggalMulai, jumlahTelur, mediaTelur, catatan)
         } catch (e: Exception) {
             Log.e(TAG, "addSiklus gagal", e)
-            return ApiResponse.Error(e.pesanGalat())
+            return ApiResponse.Error(e.pesanGalat(), e)
         }
         val siklusId = siklus.data?.id ?: return ApiResponse.Success(siklus)
 
@@ -124,7 +124,7 @@ class PrediksiRepository @Inject constructor(
         ApiResponse.Success(blok())
     } catch (e: Exception) {
         Log.e(TAG, "$nama gagal", e)
-        ApiResponse.Error(e.pesanGalat())
+        ApiResponse.Error(e.pesanGalat(), e)
     }
 
     companion object {

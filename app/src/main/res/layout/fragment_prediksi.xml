@@ -44,6 +44,20 @@
                 android:accessibilityHeading="true"
                 android:text="@string/ghm_maggot_judul" />
 
+            <!-- Penanda antrean offline -->
+            <TextView
+                android:id="@+id/tvAntrean"
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:padding="12dp"
+                android:textColor="@color/ghm_daun_900"
+                android:visibility="gone"
+                tools:text="1 catatan menunggu dikirim"
+                tools:visibility="visible" />
+
             <!-- Kartu hijau: perkiraan total panen (GET prediksi/total) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPerkiraan"

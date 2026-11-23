@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.FragmentPencatatanHistoryBinding
 import com.codelabs.gardahijau.model.local.data.UserPreferences
+import com.codelabs.gardahijau.repository.AntreanRepository
 import com.codelabs.gardahijau.repository.LogoutRepository
 import javax.inject.Inject
 import com.codelabs.gardahijau.model.remote.network.ApiResponse
@@ -53,6 +54,12 @@ class PencatatanHistoryFragment : Fragment() {
 
     @Inject
     lateinit var userPreferences: UserPreferences
+
+    @Inject
+    lateinit var antreanRepository: AntreanRepository
+
+    /** Jumlah antrean pada pemuatan sebelumnya; dipakai mendeteksi data baru terkirim. */
+    private var jumlahAntreanSebelumnya = 0
 
     private val historyAdapter = HistoryAdapter()
     private val loginViewModel: LoginViewModel by viewModels()
@@ -86,6 +93,7 @@ class PencatatanHistoryFragment : Fragment() {
         setupClickListeners()
         setupChipRentang()
         setupObservers()
+        amatiAntrean()
         viewModel.getHistoryPencacahan()
     }
 
@@ -251,6 +259,17 @@ class PencatatanHistoryFragment : Fragment() {
         pilihAkhir.show()
     }
 
+    /** Penanda "menunggu dikirim": muncul bila ada input yang belum tersinkron. */
+    private fun amatiAntrean() {
+        antreanRepository.jumlahMenunggu.observe(viewLifecycleOwner) { jumlah ->
+            binding.tvAntrean.visibility = if (jumlah > 0) View.VISIBLE else View.GONE
+            binding.tvAntrean.text = resources.getQuantityString(R.plurals.ghm_antrean_menunggu, jumlah, jumlah)
+            // Antrean berkurang = ada data yang baru terkirim: muat ulang riwayat.
+            if (jumlah < jumlahAntreanSebelumnya) viewModel.getHistoryPencacahan()
+            jumlahAntreanSebelumnya = jumlah
+        }
+    }
+
     /** Apakah dua tanggal jatuh di hari kalender yang sama (zona waktu HP). */
     private fun samaHari(a: Date, b: Date): Boolean {
         val ca = Calendar.getInstance().apply { time = a }
@@ -317,6 +336,8 @@ class PencatatanHistoryFragment : Fragment() {
                             // Kalau server gagal dihubungi, token tetap dihapus supaya pengguna tetap keluar.
                             logoutRepository.logout()
                             userPreferences.clear()
+                            // Antrean offline ikut dikosongkan supaya tidak terkirim atas nama akun lain.
+                            antreanRepository.bersihkan()
                         } catch (e: Exception) {
                         } finally {
                             loadingDialog.dismiss()

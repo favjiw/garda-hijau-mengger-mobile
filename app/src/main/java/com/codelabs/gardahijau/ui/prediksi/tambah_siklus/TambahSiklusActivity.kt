@@ -146,6 +146,15 @@ class TambahSiklusActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // Tidak ada internet: siklus disimpan di HP dan dikirim otomatis.
+        viewModel.diantrekan.observe(this) { diantrekan ->
+            if (diantrekan == true) {
+                Toast.makeText(this, R.string.ghm_tersimpan_di_hp, Toast.LENGTH_LONG).show()
+                setResult(RESULT_OK)
+                finish()
+            }
+        }
     }
 
     companion object {

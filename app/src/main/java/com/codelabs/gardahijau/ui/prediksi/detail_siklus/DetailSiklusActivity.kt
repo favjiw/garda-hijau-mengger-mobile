@@ -70,6 +70,19 @@ class DetailSiklusActivity : AppCompatActivity() {
         }
         observeFaseData()
         observePerkiraan()
+        observeAntrean()
+    }
+
+    /** Tidak ada internet: perhitungan perkiraan disimpan di HP dan dikirim otomatis. */
+    private fun observeAntrean() {
+        viewModel.diantrekan.observe(this) { diantrekan ->
+            if (diantrekan == true) {
+                menghitung = false
+                binding.btnCatatFase.isEnabled = true
+                binding.btnCatatFase.setText(R.string.ghm_tombol_hitung_perkiraan)
+                Toast.makeText(this, R.string.ghm_tersimpan_di_hp, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     /** Dimuat ulang setiap kembali ke layar ini (mis. setelah mencatat fase besar). */

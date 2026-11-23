@@ -21,6 +21,7 @@ import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.DataItem
 import com.codelabs.gardahijau.ui.adapter.KartuSiklus
 import com.codelabs.gardahijau.ui.adapter.SiklusAdapter
+import com.codelabs.gardahijau.repository.AntreanRepository
 import com.codelabs.gardahijau.ui.pengingat.PengingatSiklus
 import com.codelabs.gardahijau.ui.prediksi.detail_siklus.DetailSiklusActivity
 import com.codelabs.gardahijau.ui.prediksi.tambah_siklus.TambahSiklusActivity
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PrediksiFragment : Fragment() {
@@ -45,6 +47,12 @@ class PrediksiFragment : Fragment() {
     private val viewModel: PrediksiViewModel by viewModels()
     private lateinit var siklusAdapter: SiklusAdapter
     private var muatKartuJob: Job? = null
+
+    @Inject
+    lateinit var antreanRepository: AntreanRepository
+
+    /** Jumlah antrean pada pemuatan sebelumnya; dipakai mendeteksi data baru terkirim. */
+    private var jumlahAntreanSebelumnya = 0
 
     private val tambahSiklusLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -70,7 +78,22 @@ class PrediksiFragment : Fragment() {
         observeDashboardTotal()
         observeSiklusData()
         setupClickListeners()
+        amatiAntrean()
         mintaIzinNotifikasi()
+    }
+
+    /** Penanda "menunggu dikirim": muncul bila ada input yang belum tersinkron. */
+    private fun amatiAntrean() {
+        antreanRepository.jumlahMenunggu.observe(viewLifecycleOwner) { jumlah ->
+            binding.tvAntrean.visibility = if (jumlah > 0) View.VISIBLE else View.GONE
+            binding.tvAntrean.text = resources.getQuantityString(R.plurals.ghm_antrean_menunggu, jumlah, jumlah)
+            // Antrean berkurang = ada data yang baru terkirim: muat ulang daftar siklus.
+            if (jumlah < jumlahAntreanSebelumnya) {
+                viewModel.getSiklus()
+                viewModel.getHasilPanenDashboard()
+            }
+            jumlahAntreanSebelumnya = jumlah
+        }
     }
 
     /** Minta izin notifikasi sekali saat layar maggot dibuka (untuk pengingat fase & pakan). */

@@ -106,6 +106,20 @@
                 </FrameLayout>
             </LinearLayout>
 
+            <!-- Penanda antrean offline -->
+            <TextView
+                android:id="@+id/tvAntrean"
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:padding="12dp"
+                android:textColor="@color/ghm_daun_900"
+                android:visibility="gone"
+                tools:text="1 catatan menunggu dikirim"
+                tools:visibility="visible" />
+
             <!-- Pilihan rentang rekapan -->
             <HorizontalScrollView
                 android:layout_width="match_parent"

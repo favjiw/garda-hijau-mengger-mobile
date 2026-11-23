@@ -164,6 +164,15 @@ class TambahRiwayatActivity : AppCompatActivity() {
             finish()
         }
 
+        // Tidak ada internet: catatan disimpan di HP dan dikirim otomatis.
+        viewModel.diantrekan.observe(this) { diantrekan ->
+            if (diantrekan == true) {
+                Toast.makeText(this, R.string.ghm_tersimpan_di_hp, Toast.LENGTH_LONG).show()
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+        }
+
         viewModel.errorMessage.observe(this) { error ->
             Toast.makeText(this, getString(R.string.ghm_galat_simpan, error), Toast.LENGTH_SHORT).show()
         }
