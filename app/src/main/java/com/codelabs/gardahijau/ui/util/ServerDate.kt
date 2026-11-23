@@ -39,7 +39,10 @@ fun formatKg(value: Double?): String {
 }
 
 /** Selisih hari kalender (zona waktu HP) dari [mulai] sampai hari ini; tidak pernah negatif. */
-fun hariSejak(mulai: Date): Int {
+fun hariSejak(mulai: Date): Int = hariSejak(mulai, Date())
+
+/** Selisih hari kalender (zona waktu HP) dari [mulai] sampai [sampai]; tidak pernah negatif. */
+fun hariSejak(mulai: Date, sampai: Date): Int {
     fun awalHari(date: Date) = java.util.Calendar.getInstance().apply {
         time = date
         set(java.util.Calendar.HOUR_OF_DAY, 0)
@@ -47,6 +50,6 @@ fun hariSejak(mulai: Date): Int {
         set(java.util.Calendar.SECOND, 0)
         set(java.util.Calendar.MILLISECOND, 0)
     }.timeInMillis
-    val selisih = (awalHari(Date()) - awalHari(mulai)) / 86_400_000.0
+    val selisih = (awalHari(sampai) - awalHari(mulai)) / 86_400_000.0
     return kotlin.math.round(selisih).toInt().coerceAtLeast(0)
 }

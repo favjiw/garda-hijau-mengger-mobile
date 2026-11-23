@@ -10,34 +10,19 @@ import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ViewGhmPitaSiklusBinding
 
 /**
- * Tahap siklus yang bisa dibaca dari daftar fase.
- * Fase PANEN dibuat otomatis bersama PEMBESARAN (lihat TambahFaseViewModel), jadi tidak
- * menandakan larva siap panen. Karena itu tahap "Panen" di pita tidak pernah aktif.
+ * Mewarnai komponen "Pita siklus" (view_ghm_pita_siklus.xml) dengan 5 fase SOP.
+ * Ruas sebelum fase sekarang: hijau. Fase sekarang: kuning + label tebal. Sesudahnya: abu.
+ * [fase] null berarti siklus sudah lewat hari ke-41: semua ruas hijau (selesai).
  */
-enum class TahapSiklus { TELUR, TETAS, BESAR }
-
-/** Tahap dari kolom `jenis` semua fase satu siklus. */
-fun tahapDariFase(jenisFase: List<String>): TahapSiklus {
-    val jenis = jenisFase.map { it.uppercase() }
-    return when {
-        "PEMBESARAN" in jenis -> TahapSiklus.BESAR
-        "PENETASAN" in jenis -> TahapSiklus.TETAS
-        else -> TahapSiklus.TELUR
-    }
-}
-
-/**
- * Mewarnai komponen "Pita siklus" (view_ghm_pita_siklus.xml).
- * Ruas sebelum tahap sekarang: hijau. Tahap sekarang: kuning + label tebal. Sesudahnya: abu.
- */
-fun ViewGhmPitaSiklusBinding.tampilkan(tahap: TahapSiklus) {
+fun ViewGhmPitaSiklusBinding.tampilkan(fase: FaseSop?) {
     val ruas = listOf(
         ruasTelur to labelTelur,
-        ruasTetas to labelTetas,
         ruasBesar to labelBesar,
-        ruasPanen to labelPanen,
+        ruasPrepupa to labelPrepupa,
+        ruasPupa to labelPupa,
+        ruasLalat to labelLalat,
     )
-    val aktif = tahap.ordinal
+    val aktif = fase?.ordinal ?: ruas.size
     ruas.forEachIndexed { index, (batang, label) ->
         when {
             index < aktif -> setRuas(batang, label, R.color.ghm_daun_700, R.color.ghm_tinta, tebal = false)
@@ -46,7 +31,11 @@ fun ViewGhmPitaSiklusBinding.tampilkan(tahap: TahapSiklus) {
         }
         label.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
-    root.contentDescription = root.context.getString(R.string.ghm_tahap_sekarang, ruas[aktif].second.text)
+    root.contentDescription = if (fase == null) {
+        root.context.getString(R.string.ghm_sop_selesai)
+    } else {
+        root.context.getString(R.string.ghm_tahap_sekarang, root.context.getString(fase.namaRes))
+    }
     root.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
 }
 

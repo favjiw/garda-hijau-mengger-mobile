@@ -1,6 +1,5 @@
 package com.codelabs.gardahijau.ui.prediksi.tambah_siklus
 
-import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -27,7 +26,7 @@ class TambahSiklusActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTambahSiklusBinding
     private val viewModel: TambahSiklusViewModel by viewModels()
 
-    /** Tanggal mulai yang dipilih. Awalnya: hari ini. */
+    /** Tanggal mulai = hari ini (otomatis). Fase berpindah sendiri sesuai umur siklus. */
     private val tanggalDipilih: Calendar = Calendar.getInstance()
     /** Teks media persis seperti dari server (dikirim apa adanya ke POST /api/siklus). */
     private var mediaDipilih: String? = null
@@ -44,13 +43,9 @@ class TambahSiklusActivity : AppCompatActivity() {
         binding.layoutBilahAtas.applySystemBarPadding(top = true)
         binding.layoutFooter.applySystemBarPadding(bottom = true, includeIme = true)
 
-        savedInstanceState?.let { state ->
-            state.getLong(KEY_TANGGAL, -1L).takeIf { it > 0 }?.let { tanggalDipilih.timeInMillis = it }
-            mediaDipilih = state.getString(KEY_MEDIA)
-        }
+        savedInstanceState?.getString(KEY_MEDIA)?.let { mediaDipilih = it }
 
         binding.btnKembali.setOnClickListener { finish() }
-        setupDatePicker()
         setupPilihanMedia()
         setupSaveButton()
         observeAddSiklus()
@@ -59,25 +54,7 @@ class TambahSiklusActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putLong(KEY_TANGGAL, tanggalDipilih.timeInMillis)
         mediaDipilih?.let { outState.putString(KEY_MEDIA, it) }
-    }
-
-    private fun setupDatePicker() {
-        val pilihTanggal = View.OnClickListener {
-            DatePickerDialog(
-                this,
-                { _, year, month, day ->
-                    tanggalDipilih.set(year, month, day)
-                    tampilkanTanggal()
-                },
-                tanggalDipilih.get(Calendar.YEAR),
-                tanggalDipilih.get(Calendar.MONTH),
-                tanggalDipilih.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-        binding.inputTanggal.setOnClickListener(pilihTanggal)
-        binding.edtTanggal.setEndIconOnClickListener(pilihTanggal)
     }
 
     private fun tampilkanTanggal() {
@@ -172,7 +149,6 @@ class TambahSiklusActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KEY_TANGGAL = "tanggal_dipilih"
         private const val KEY_MEDIA = "media_dipilih"
     }
 }

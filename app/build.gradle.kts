@@ -124,4 +124,7 @@ dependencies {
     // data store
     implementation(libs.datastore.preferences)
 
+    // Pengingat lokal (pindah fase & pakan) berbasis WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+
 }

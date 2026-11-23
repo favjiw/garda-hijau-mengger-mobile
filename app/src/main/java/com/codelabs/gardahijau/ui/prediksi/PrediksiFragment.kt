@@ -1,12 +1,16 @@
 package com.codelabs.gardahijau.ui.prediksi
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,12 +21,13 @@ import com.codelabs.gardahijau.model.remote.network.ApiResponse
 import com.codelabs.gardahijau.model.remote.response.prediksi.DataItem
 import com.codelabs.gardahijau.ui.adapter.KartuSiklus
 import com.codelabs.gardahijau.ui.adapter.SiklusAdapter
+import com.codelabs.gardahijau.ui.pengingat.PengingatSiklus
 import com.codelabs.gardahijau.ui.prediksi.detail_siklus.DetailSiklusActivity
 import com.codelabs.gardahijau.ui.prediksi.tambah_siklus.TambahSiklusActivity
 import com.codelabs.gardahijau.ui.util.formatKg
 import com.codelabs.gardahijau.ui.util.hariSejak
 import com.codelabs.gardahijau.ui.util.parseServerDate
-import com.codelabs.gardahijau.ui.widget.tahapDariFase
+import com.codelabs.gardahijau.ui.widget.FaseSop
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -45,6 +50,11 @@ class PrediksiFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) { /* data dimuat ulang di onResume */ }
 
+    /** Izin notifikasi (Android 13+) untuk pengingat siklus. */
+    private val izinNotifikasiLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +70,17 @@ class PrediksiFragment : Fragment() {
         observeDashboardTotal()
         observeSiklusData()
         setupClickListeners()
+        mintaIzinNotifikasi()
+    }
+
+    /** Minta izin notifikasi sekali saat layar maggot dibuka (untuk pengingat fase & pakan). */
+    private fun mintaIzinNotifikasi() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val sudah = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.POST_NOTIFICATIONS,
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!sudah) izinNotifikasiLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
     /** Muat ulang setiap kembali ke layar ini, supaya fase / siklus baru langsung terlihat. */
@@ -122,8 +143,14 @@ class PrediksiFragment : Fragment() {
         binding.tvSiklusKosong.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
         binding.rvPrediksiSiklus.visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
 
-        // Tampilkan kartu dulu, lalu lengkapi tahap & perkiraan per siklus.
-        siklusAdapter.setItems(list.map { KartuSiklus(it, parseServerDate(it.tanggalMulai)?.let(::hariSejak), null, null, dimuat = false) })
+        // Pengingat lokal (pindah fase & pakan) dijadwalkan ulang dari daftar siklus terbaru.
+        list.forEach { item -> PengingatSiklus.jadwalkan(requireContext(), item.id, item.tanggalMulai) }
+
+        // Tampilkan kartu dulu, lalu lengkapi fase & perkiraan per siklus.
+        siklusAdapter.setItems(list.map { item ->
+            val hariKe = parseServerDate(item.tanggalMulai)?.let(::hariSejak)
+            KartuSiklus(item, hariKe, hariKe?.let { FaseSop.dariHari(it) }, null, dimuat = false)
+        })
 
         muatKartuJob?.cancel()
         muatKartuJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -133,13 +160,7 @@ class PrediksiFragment : Fragment() {
     }
 
     private suspend fun muatKartu(item: DataItem): KartuSiklus {
-        val tahap = when (val fase = viewModel.fetchFase(item.id)) {
-            is ApiResponse.Success -> {
-                @Suppress("USELESS_ELVIS")
-                tahapDariFase((fase.data.data ?: emptyList()).map { it.jenis })
-            }
-            else -> null
-        }
+        val hariKe = parseServerDate(item.tanggalMulai)?.let(::hariSejak)
         val hasilKg = when (val hasil = viewModel.fetchHasilPanenSiklus(item.id)) {
             is ApiResponse.Success -> {
                 @Suppress("USELESS_ELVIS")
@@ -148,7 +169,7 @@ class PrediksiFragment : Fragment() {
             }
             else -> null
         }
-        return KartuSiklus(item, parseServerDate(item.tanggalMulai)?.let(::hariSejak), tahap, hasilKg, dimuat = true)
+        return KartuSiklus(item, hariKe, hariKe?.let { FaseSop.dariHari(it) }, hasilKg, dimuat = true)
     }
 
     /** Format tanggal yang dikirim ke DetailSiklusActivity (EXTRA_TANGGAL), jangan diubah dulu. */

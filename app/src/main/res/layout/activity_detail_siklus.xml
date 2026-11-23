@@ -73,6 +73,58 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
+            <!-- Fase sekarang + panduan tindakan dari SOP -->
+            <LinearLayout
+                android:id="@+id/cardFase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    style="@style/Text.GHM.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:text="@string/ghm_sop_fase_sekarang"
+                    android:textColor="@color/ghm_tinta_redup" />
+
+                <TextView
+                    android:id="@+id/tvFaseNama"
+                    style="@style/Text.GHM.JudulBagian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    tools:text="Pembesaran Larva" />
+
+                <TextView
+                    android:id="@+id/tvFaseUmur"
+                    style="@style/Text.GHM.Kecil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    tools:text="Hari 13–20" />
+
+                <TextView
+                    style="@style/Text.GHM.Tebal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/ghm_sop_panduan_judul" />
+
+                <TextView
+                    android:id="@+id/tvFasePanduan"
+                    style="@style/Text.GHM.Biasa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    tools:text="Larva usia 13 hari dibagi menjadi beberapa baki dan diberi pakan rutin." />
+            </LinearLayout>
+
             <!-- Langkah berikutnya: hanya bila fase besar belum dicatat -->
             <LinearLayout
                 android:id="@+id/cardLangkah"
@@ -177,7 +229,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:accessibilityHeading="true"
-                android:text="@string/ghm_catatan_fase" />
+                android:text="@string/ghm_jadwal_fase" />
 
             <TextView
                 android:id="@+id/tvFaseKosong"

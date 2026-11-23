@@ -102,13 +102,48 @@
     <string name="ghm_tahap_tetas">Tetas</string>
     <string name="ghm_tahap_besar">Besar</string>
     <string name="ghm_tahap_panen">Panen</string>
-    <string name="ghm_tahap_sekarang">Tahap sekarang: %1$s</string>
+    <string name="ghm_tahap_sekarang">Fase sekarang: %1$s</string>
     <string name="ghm_perkiraan_kg">Perkiraan %1$s kg</string>
     <string name="ghm_belum_ada_perkiraan">Belum ada perkiraan</string>
     <string name="ghm_catat_fase_besar_dulu">Catat fase besar untuk melihatnya</string>
     <string name="ghm_mulai_tanggal">Mulai %1$s</string>
     <string name="ghm_memuat">Memuat…</string>
     <string name="ghm_galat_muat">Gagal memuat: %1$s</string>
+
+    <!-- Siklus SOP: fase berpindah otomatis dari umur (SOP hal. 5-6) -->
+    <string name="ghm_sop_fase_telur">Telur–Larva Awal</string>
+    <string name="ghm_sop_fase_pembesaran">Pembesaran Larva</string>
+    <string name="ghm_sop_fase_prepupa">Prepupa</string>
+    <string name="ghm_sop_fase_pupa">Pupa</string>
+    <string name="ghm_sop_fase_lalat">Lalat BSF</string>
+    <string name="ghm_sop_pita_telur">Telur</string>
+    <string name="ghm_sop_pita_besar">Besar</string>
+    <string name="ghm_sop_pita_prepupa">Prepupa</string>
+    <string name="ghm_sop_pita_pupa">Pupa</string>
+    <string name="ghm_sop_pita_lalat">Lalat</string>
+    <string name="ghm_sop_umur">Hari %1$d–%2$d</string>
+    <string name="ghm_sop_fase_sekarang">Fase sekarang</string>
+    <string name="ghm_sop_panduan_judul">Yang harus dilakukan</string>
+    <string name="ghm_sop_selesai">Siklus sudah lewat hari ke-41. Siap panen dan mulai siklus baru.</string>
+    <string name="ghm_sop_panduan_telur">Perawatan telur, pengecekan perkembangan larva, dan pemberian pakan awal.\nBaki disimpan di rak telur penetasan.\nTotal pakan sampai hari ke-12 sekitar 6 kg.</string>
+    <string name="ghm_sop_panduan_pembesaran">Larva usia 13 hari dibagi menjadi beberapa baki dan diberi pakan rutin.\nPakan 1–1,5 kg per baki per hari.\nBaki dipindahkan ke rak pembesaran dan reduksi.\nTarget reduksi 200 kg: 30–40 baki aktif setiap hari.\nTarget 80–100 gram telur dalam 1 minggu.\nCatat pemberian pakan dan kondisi media.</string>
+    <string name="ghm_sop_panduan_prepupa">Tidak diberi pakan.\nPastikan lingkungan kering dan aman.\nPastikan tidak ada kasgot.\nBaki dipindahkan ke rak prepupa dan pupa.</string>
+    <string name="ghm_sop_panduan_pupa">Tidak diberi pakan.\nPastikan tidak ada kasgot.\nPupa yang sudah sempurna dipindahkan ke insektarium.</string>
+    <string name="ghm_sop_panduan_lalat">Tidak diberi pakan, hanya diberi minum dengan penyemprotan.\nFokus menjaga kandang, kelembapan, dan tempat peletakan telur.\nPerawatan insektarium dan persiapan produksi telur.</string>
+    <string name="ghm_sop_status_selesai">Selesai</string>
+    <string name="ghm_sop_status_sekarang">Sedang berjalan</string>
+    <string name="ghm_sop_status_belum">Belum sampai</string>
+    <string name="ghm_jadwal_fase">Jadwal fase</string>
+    <string name="ghm_sop_pakan_tercatat">Pakan %1$s kg tercatat.</string>
+    <string name="ghm_bantuan_tanggal_mulai">Terisi otomatis (hari ini). Fase berpindah otomatis sesuai umur siklus.</string>
+
+    <!-- Pengingat lokal (WorkManager) -->
+    <string name="ghm_kanal_pengingat">Pengingat siklus</string>
+    <string name="ghm_kanal_pengingat_deskripsi">Pengingat pindah fase dan pemberian pakan maggot.</string>
+    <string name="ghm_pengingat_fase_judul">Siklus %1$d masuk fase %2$s</string>
+    <string name="ghm_pengingat_fase_isi">Hari ke-%1$d. Buka aplikasi untuk melihat panduan fase ini.</string>
+    <string name="ghm_pengingat_pakan_judul">Waktunya memberi pakan</string>
+    <string name="ghm_pengingat_pakan_isi">Siklus %1$d hari ke-%2$d: beri pakan 1–1,5 kg per baki, lalu catat di aplikasi.</string>
 
     <!-- Detail siklus -->
     <string name="ghm_langkah_berikutnya">Langkah berikutnya</string>

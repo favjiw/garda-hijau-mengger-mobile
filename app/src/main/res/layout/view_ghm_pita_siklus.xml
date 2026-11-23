@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma: komponen "Pita siklus" (Telur, Tetas, Besar, Panen).
-     Warna batang & tebal label diatur di kode (lihat SiklusAdapter.tampilkanPita). -->
+<!-- Figma: komponen "Pita siklus" (5 fase SOP: Telur, Besar, Prepupa, Pupa, Lalat).
+     Warna batang & tebal label diatur di kode (lihat PitaSiklus.kt). -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,29 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/ghm_tahap_telur" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <View
-            android:id="@+id/ruasTetas"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/bg_ghm_ruas" />
-
-        <TextView
-            android:id="@+id/labelTetas"
-            style="@style/Text.GHM.Kecil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/ghm_tahap_tetas" />
+            android:text="@string/ghm_sop_pita_telur"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -70,7 +49,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/ghm_tahap_besar" />
+            android:text="@string/ghm_sop_pita_besar"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -81,18 +61,65 @@
         android:orientation="vertical">
 
         <View
-            android:id="@+id/ruasPanen"
+            android:id="@+id/ruasPrepupa"
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:background="@drawable/bg_ghm_ruas" />
 
         <TextView
-            android:id="@+id/labelPanen"
+            android:id="@+id/labelPrepupa"
             style="@style/Text.GHM.Kecil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/ghm_tahap_panen"
+            android:text="@string/ghm_sop_pita_prepupa"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/ruasPupa"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_ghm_ruas" />
+
+        <TextView
+            android:id="@+id/labelPupa"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ghm_sop_pita_pupa"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/ruasLalat"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_ghm_ruas" />
+
+        <TextView
+            android:id="@+id/labelLalat"
+            style="@style/Text.GHM.Kecil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ghm_sop_pita_lalat"
+            android:textSize="12sp"
             tools:ignore="TextContrastCheck" />
     </LinearLayout>
 </LinearLayout>

@@ -17,7 +17,7 @@ import com.codelabs.gardahijau.ui.util.LOCALE_ID
 import com.codelabs.gardahijau.ui.util.applySystemBarPadding
 import com.codelabs.gardahijau.ui.util.hariSejak
 import com.codelabs.gardahijau.ui.util.parseServerDate
-import com.codelabs.gardahijau.ui.widget.TahapSiklus
+import com.codelabs.gardahijau.ui.widget.faseSopDari
 import com.codelabs.gardahijau.ui.widget.tampilkan
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -62,12 +62,13 @@ class TambahFaseActivity : AppCompatActivity() {
         outState.putLong(KEY_TANGGAL, tanggalDipilih.timeInMillis)
     }
 
-    /** Kartu di atas: siklus mana, hari ke berapa, dan pita di tahap Besar (yang sedang dicatat). */
+    /** Kartu di atas: siklus mana, hari ke berapa, dan pita fase SOP saat ini. */
     private fun tampilkanKartuSiklus() {
         val siklusId = intent.getIntExtra("SIKLUS_ID", -1)
         binding.tvJudulSiklus.text = getString(R.string.ghm_siklus_ke, siklusId)
-        parseServerDate(intent.getStringExtra("TANGGAL_MULAI"))?.let { mulai ->
-            val hari = hariSejak(mulai)
+        val mulai = parseServerDate(intent.getStringExtra("TANGGAL_MULAI"))
+        mulai?.let {
+            val hari = hariSejak(it)
             binding.tvHariKe.visibility = View.VISIBLE
             binding.tvHariKe.text = if (hari <= 0) {
                 getString(R.string.ghm_mulai_hari_ini)
@@ -75,7 +76,7 @@ class TambahFaseActivity : AppCompatActivity() {
                 getString(R.string.ghm_hari_ke, hari)
             }
         }
-        binding.pita.tampilkan(TahapSiklus.BESAR)
+        binding.pita.tampilkan(faseSopDari(mulai))
     }
 
     private fun setupDatePicker() {

@@ -10,7 +10,7 @@ import com.codelabs.gardahijau.model.remote.response.prediksi.DataItem
 import com.codelabs.gardahijau.ui.util.LOCALE_ID
 import com.codelabs.gardahijau.ui.util.formatKg
 import com.codelabs.gardahijau.ui.util.parseServerDate
-import com.codelabs.gardahijau.ui.widget.TahapSiklus
+import com.codelabs.gardahijau.ui.widget.FaseSop
 import com.codelabs.gardahijau.ui.widget.tampilkan
 import java.text.SimpleDateFormat
 
@@ -18,8 +18,8 @@ data class KartuSiklus(
     val data: DataItem,
     /** Selisih hari kalender sejak tanggalMulai; null bila tanggal tidak terbaca. */
     val hariKe: Int?,
-    /** null bila fase belum dimuat / gagal dimuat: pita disembunyikan. */
-    val tahap: TahapSiklus?,
+    /** Fase SOP dari umur siklus; null bila tanggal tidak terbaca atau siklus sudah selesai. */
+    val fase: FaseSop?,
     /** Hasil dari GET prediksi/siklus/{id}; null bila belum ada. */
     val hasilKg: Double?,
     val dimuat: Boolean,
@@ -51,11 +51,11 @@ class SiklusAdapter(
                 else -> context.getString(R.string.ghm_hari_ke, item.hariKe)
             }
 
-            if (item.tahap == null) {
+            if (item.hariKe == null) {
                 binding.pita.root.visibility = View.GONE
             } else {
                 binding.pita.root.visibility = View.VISIBLE
-                binding.pita.tampilkan(item.tahap)
+                binding.pita.tampilkan(item.fase)
             }
 
             val mulai = parseServerDate(item.data.tanggalMulai)
@@ -71,7 +71,7 @@ class SiklusAdapter(
                     binding.tvPerkiraan.text = context.getString(R.string.ghm_perkiraan_kg, formatKg(item.hasilKg))
                     binding.tvKeterangan.text = keteranganMulai
                 }
-                item.tahap == TahapSiklus.TELUR || item.tahap == TahapSiklus.TETAS -> {
+                item.fase == FaseSop.TELUR_LARVA -> {
                     binding.tvPerkiraan.text = context.getString(R.string.ghm_belum_ada_perkiraan)
                     binding.tvKeterangan.text = context.getString(R.string.ghm_catat_fase_besar_dulu)
                 }

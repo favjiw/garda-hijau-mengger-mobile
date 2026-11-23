@@ -23,9 +23,10 @@ import com.codelabs.gardahijau.ui.util.applySystemBarPadding
 import com.codelabs.gardahijau.ui.util.formatKg
 import com.codelabs.gardahijau.ui.util.hariSejak
 import com.codelabs.gardahijau.ui.util.parseServerDate
-import com.codelabs.gardahijau.ui.widget.TahapSiklus
-import com.codelabs.gardahijau.ui.widget.tahapDariFase
+import com.codelabs.gardahijau.ui.widget.FaseSop
+import com.codelabs.gardahijau.ui.widget.faseSopDari
 import com.codelabs.gardahijau.ui.widget.tampilkan
+import com.codelabs.gardahijau.ui.widget.tanggalFase
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -106,20 +107,38 @@ class DetailSiklusActivity : AppCompatActivity() {
     }
 
     private fun tampilkanFase(faseList: List<DataGetFase>) {
-        val tahap = tahapDariFase(faseList.map { it.jenis })
+        val mulai = tanggalMulai()
+        val fase = faseSopDari(mulai)
         binding.pita.root.visibility = View.VISIBLE
-        binding.pita.tampilkan(tahap)
+        binding.pita.tampilkan(fase)
+        tampilkanKartuFase(fase)
 
         val pembesaran = faseList.find { it.jenis.uppercase() == "PEMBESARAN" }
         val panen = faseList.find { it.jenis.uppercase() == "PANEN" }
         // jumlahMakanan dari server dalam gram. Fase PANEN pasti menyimpannya; PEMBESARAN belum tentu.
         val pakanGram = (panen?.jumlahMakanan ?: pembesaran?.jumlahMakanan)?.takeIf { it > 0 }
         tampilkanPerkiraan(panen, pakanGram?.div(1000.0))
-        tampilkanLangkahBerikutnya(tahap, panen, pakanGram)
+        tampilkanLangkahBerikutnya(fase, pembesaran, panen, pakanGram)
 
-        val baris = susunLinimasa(faseList)
+        val baris = susunJadwal(faseList, mulai, fase)
         detailSiklusAdapter.setItems(baris)
         binding.tvFaseKosong.visibility = if (baris.isEmpty()) View.VISIBLE else View.GONE
+    }
+
+    /** Kartu "Fase sekarang": nama fase, rentang umur, dan panduan tindakan dari SOP. */
+    private fun tampilkanKartuFase(fase: FaseSop?) {
+        binding.cardFase.visibility = View.VISIBLE
+        if (fase == null) {
+            binding.tvFaseNama.text = getString(R.string.ghm_sop_selesai)
+            binding.tvFaseUmur.visibility = View.GONE
+            binding.tvFasePanduan.visibility = View.GONE
+            return
+        }
+        binding.tvFaseNama.text = getString(fase.namaRes)
+        binding.tvFaseUmur.visibility = View.VISIBLE
+        binding.tvFaseUmur.text = getString(R.string.ghm_sop_umur, fase.hariAwal, fase.hariAkhir)
+        binding.tvFasePanduan.visibility = View.VISIBLE
+        binding.tvFasePanduan.text = getString(fase.panduanRes)
     }
 
     /** Kartu "Perkiraan hasil panen" dari prediksiPanen di fase PANEN (dibuat otomatis). */
@@ -151,73 +170,60 @@ class DetailSiklusActivity : AppCompatActivity() {
     }
 
     /**
-     * Linimasa: Telur (data siklus), Tetas (fase PENETASAN), Besar (fase PEMBESARAN).
-     * Fase PANEN tidak ditampilkan karena dibuat otomatis; isinya ada di kartu perkiraan.
+     * Jadwal 5 fase SOP dihitung dari tanggal mulai (hari ke-0, 13, 21, 28, 35).
+     * Tanggal fase Pembesaran memakai tanggal yang benar-benar dicatat bila ada.
      */
-    private fun susunLinimasa(faseList: List<DataGetFase>): List<BarisFase> {
-        val tanggalFormat = SimpleDateFormat("d MMM yyyy", LOCALE_ID)
-        fun tanggal(value: String?) = parseServerDate(value)?.let { tanggalFormat.format(it) }.orEmpty()
+    private fun susunJadwal(faseList: List<DataGetFase>, mulai: Date?, faseSekarang: FaseSop?): List<BarisFase> {
+        if (mulai == null) return emptyList()
+        val format = SimpleDateFormat("d MMM yyyy", LOCALE_ID)
+        val pembesaran = faseList.find { it.jenis.uppercase() == "PEMBESARAN" }
+        val pakanGram = (faseList.find { it.jenis.uppercase() == "PANEN" }?.jumlahMakanan
+            ?: pembesaran?.jumlahMakanan)?.takeIf { it > 0 }
 
-        val baris = mutableListOf<BarisFase>()
-
-        val jumlah = intent.getStringExtra("EXTRA_JUMLAH").orEmpty()
-        val media = intent.getStringExtra("EXTRA_MEDIA").orEmpty()
-        val catatan = intent.getStringExtra("EXTRA_CATATAN").orEmpty()
-        val mulai = tanggalMulai()
-        if (mulai != null || jumlah.isNotBlank()) {
-            val isi = listOfNotNull(
-                if (jumlah.isNotBlank() && media.isNotBlank()) {
-                    getString(R.string.ghm_fase_telur_isi, jumlah, media.lowercase(LOCALE_ID))
-                } else null,
-                catatan.takeIf { it.isNotBlank() },
-            ).joinToString(" ")
-            baris += BarisFase(
-                judul = getString(R.string.ghm_tahap_telur),
-                tanggal = mulai?.let { tanggalFormat.format(it) }.orEmpty(),
-                keterangan = isi,
+        return FaseSop.entries.map { fase ->
+            val status = when {
+                faseSekarang == null || fase.ordinal < faseSekarang.ordinal ->
+                    getString(R.string.ghm_sop_status_selesai)
+                fase == faseSekarang -> getString(R.string.ghm_sop_status_sekarang)
+                else -> getString(R.string.ghm_sop_status_belum)
+            }
+            val tanggal = if (fase == FaseSop.PEMBESARAN && pembesaran?.tanggal != null) {
+                parseServerDate(pembesaran.tanggal)?.let { format.format(it) }
+                    ?: format.format(tanggalFase(mulai, fase))
+            } else {
+                format.format(tanggalFase(mulai, fase))
+            }
+            val keterangan = if (fase == FaseSop.PEMBESARAN && pakanGram != null) {
+                listOf(status, getString(R.string.ghm_sop_pakan_tercatat, formatKg(pakanGram / 1000.0)))
+                    .joinToString(" · ")
+            } else {
+                status
+            }
+            BarisFase(
+                judul = getString(fase.namaRes),
+                tanggal = tanggal,
+                keterangan = keterangan,
             )
         }
-
-        faseList.find { it.jenis.uppercase() == "PENETASAN" }?.let { fase ->
-            baris += BarisFase(
-                judul = getString(R.string.ghm_tahap_tetas),
-                tanggal = tanggal(fase.tanggal),
-                keterangan = fase.keterangan.orEmpty(),
-            )
-        }
-
-        val pakanPanen = faseList.find { it.jenis.uppercase() == "PANEN" }?.jumlahMakanan
-        faseList.find { it.jenis.uppercase() == "PEMBESARAN" }?.let { fase ->
-            val isi = listOfNotNull(
-                (fase.jumlahMakanan ?: pakanPanen)?.takeIf { it > 0 }?.let { getString(R.string.ghm_fase_pakan, formatKg(it / 1000.0)) },
-                fase.keterangan?.takeIf { it.isNotBlank() },
-            ).joinToString(" ")
-            baris += BarisFase(
-                judul = getString(R.string.ghm_tahap_besar),
-                tanggal = tanggal(fase.tanggal),
-                keterangan = isi,
-            )
-        }
-        return baris
     }
 
     /**
      * Kartu kuning + tombol bawah:
-     * - Fase besar belum dicatat -> "Catat fase besar".
+     * - Fase besar belum dicatat dan siklus sudah masuk hari ke-13 -> "Catat fase besar".
      * - Fase besar sudah ada tapi perkiraan belum ada (mis. layanan AI sempat tidak tersedia)
      *   -> "Hitung perkiraan panen" (kirim fase PANEN lagi memakai data pakan fase besar).
+     * - Perkiraan sudah ada / belum waktunya -> kartu disembunyikan.
      */
-    private fun tampilkanLangkahBerikutnya(tahap: TahapSiklus, panen: DataGetFase?, pakanGram: Double?) {
+    private fun tampilkanLangkahBerikutnya(
+        fase: FaseSop?,
+        pembesaran: DataGetFase?,
+        panen: DataGetFase?,
+        pakanGram: Double?,
+    ) {
         val telurGram = intent.getStringExtra("EXTRA_JUMLAH")?.toIntOrNull() ?: 0
         when {
-            tahap != TahapSiklus.BESAR -> {
-                binding.cardLangkah.visibility = View.VISIBLE
-                binding.tvLangkah.setText(R.string.ghm_langkah_catat_besar)
-                binding.layoutFooter.visibility = View.VISIBLE
-                binding.btnCatatFase.setText(R.string.ghm_tombol_catat_fase_besar)
-                binding.btnCatatFase.setOnClickListener { bukaTambahFaseBesar() }
-            }
-            panen == null && telurGram >= 1 -> {
+            panen?.prediksiPanen != null -> sembunyikanLangkah()
+            pembesaran != null && telurGram >= 1 -> {
                 binding.cardLangkah.visibility = View.VISIBLE
                 binding.tvLangkah.setText(R.string.ghm_langkah_hitung_perkiraan)
                 binding.layoutFooter.visibility = View.VISIBLE
@@ -233,11 +239,20 @@ class DetailSiklusActivity : AppCompatActivity() {
                     }
                 }
             }
-            else -> {
-                binding.cardLangkah.visibility = View.GONE
-                binding.layoutFooter.visibility = View.GONE
+            pembesaran == null && fase != null && fase.ordinal >= FaseSop.PEMBESARAN.ordinal -> {
+                binding.cardLangkah.visibility = View.VISIBLE
+                binding.tvLangkah.setText(R.string.ghm_langkah_catat_besar)
+                binding.layoutFooter.visibility = View.VISIBLE
+                binding.btnCatatFase.setText(R.string.ghm_tombol_catat_fase_besar)
+                binding.btnCatatFase.setOnClickListener { bukaTambahFaseBesar() }
             }
+            else -> sembunyikanLangkah()
         }
+    }
+
+    private fun sembunyikanLangkah() {
+        binding.cardLangkah.visibility = View.GONE
+        binding.layoutFooter.visibility = View.GONE
     }
 
     private var menghitung = false
