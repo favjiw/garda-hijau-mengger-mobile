@@ -144,6 +144,20 @@
         <item name="android:checkable">true</item>
     </style>
 
+    <!-- Chip pilihan rentang rekapan (7 hari / 30 hari / bulan ini / kustom). -->
+    <style name="Widget.GHM.Chip.Rentang" parent="Widget.Material3.Chip.Filter">
+        <item name="android:fontFamily">@font/atkinson_medium</item>
+        <item name="fontFamily">@font/atkinson_medium</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/ghm_pilihan_text</item>
+        <item name="chipBackgroundColor">@color/ghm_pilihan_bg</item>
+        <item name="chipStrokeColor">@color/ghm_pilihan_stroke</item>
+        <item name="chipStrokeWidth">1.5dp</item>
+        <item name="chipMinHeight">40dp</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="android:checkable">true</item>
+    </style>
+
     <!-- Tombol bulat berisi ikon saja (Kembali di "Bilah atas", Kurang/Tambah di kartu berat).
          Ukuran & warna latar diatur di layout (48dp tunas_50 / 56dp tunas_100). -->
     <style name="Widget.GHM.Button.Bulat" parent="Widget.Material3.Button.IconButton.Filled">

@@ -1,6 +1,7 @@
 package com.codelabs.gardahijau.ui.pencatatan_history
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Rect
@@ -39,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 
 @AndroidEntryPoint
 class PencatatanHistoryFragment : Fragment() {
@@ -55,6 +57,9 @@ class PencatatanHistoryFragment : Fragment() {
     private val historyAdapter = HistoryAdapter()
     private val loginViewModel: LoginViewModel by viewModels()
     private val viewModel: PencatatanHistoryViewModel by viewModels()
+
+    /** Semua catatan dari server; rekapan difilter di sisi klien sesuai rentang terpilih. */
+    private var semuaItem: List<DataItem> = emptyList()
 
     private val addHistoryLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -79,6 +84,7 @@ class PencatatanHistoryFragment : Fragment() {
         setupLogout()
         observeLogout()
         setupClickListeners()
+        setupChipRentang()
         setupObservers()
         viewModel.getHistoryPencacahan()
     }
@@ -87,10 +93,16 @@ class PencatatanHistoryFragment : Fragment() {
         viewModel.historyData.observe(viewLifecycleOwner) { response ->
             @Suppress("USELESS_ELVIS")
             val items: List<DataItem> = response.data ?: emptyList() // Gson bisa mengisi null
+            semuaItem = items
             historyAdapter.setItems(items)
             binding.tvRiwayatKosong.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
             binding.rvPrediksiSiklus.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
-            bindWeeklySummary(items)
+            renderRekapan()
+        }
+
+        viewModel.rentang.observe(viewLifecycleOwner) { rentang ->
+            terapkanChip(rentang)
+            renderRekapan()
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
@@ -103,43 +115,148 @@ class PencatatanHistoryFragment : Fragment() {
     }
 
     /**
-     * Mengisi kartu "Sampah minggu ini": total 7 hari terakhir (termasuk hari ini),
-     * grafik batang per hari, dan hari dengan sampah terbanyak.
+     * Mengisi kartu rekapan: total sesuai rentang yang dipilih (7 hari / 30 hari / bulan ini /
+     * kustom), grafik batang per hari (atau per minggu bila rentangnya panjang), dan hari
+     * dengan sampah terbanyak.
      */
-    private fun bindWeeklySummary(items: List<DataItem>) {
-        val dayKey = SimpleDateFormat("yyyyMMdd", LOCALE_ID)
-        val dayLabel = SimpleDateFormat("EEE", LOCALE_ID)
-        val dayFull = SimpleDateFormat("EEEE", LOCALE_ID)
+    private fun renderRekapan() {
+        val rentang = viewModel.rentang.value ?: return
+        val (awal, akhir) = rentang.batas()
+        val dalamRentang = semuaItem.filter { item ->
+            val tanggal = parseServerDate(item.tanggalWaktu)
+            tanggal != null && !tanggal.before(awal) && !tanggal.after(akhir)
+        }
 
+        val dayKey = SimpleDateFormat("yyyyMMdd", LOCALE_ID)
         val totalsByDay = HashMap<String, Double>()
-        items.forEach { item ->
-            val date = parseServerDate(item.tanggalWaktu) ?: return@forEach
-            val key = dayKey.format(date)
+        dalamRentang.forEach { item ->
+            val tanggal = parseServerDate(item.tanggalWaktu) ?: return@forEach
+            val key = dayKey.format(tanggal)
             totalsByDay[key] = (totalsByDay[key] ?: 0.0) + (item.totalSampah ?: 0.0)
         }
 
-        val days = (6 downTo 0).map { offset ->
-            Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -offset) }.time
+        // Semua hari dalam rentang, inklusif.
+        val hari = mutableListOf<Date>()
+        val kursor = Calendar.getInstance().apply { time = awal }
+        val batasAkhir = Calendar.getInstance().apply { time = akhir }
+        while (!kursor.after(batasAkhir)) {
+            hari += kursor.time
+            kursor.add(Calendar.DAY_OF_YEAR, 1)
         }
-        val bars = days.map { date ->
-            WeeklyBarChartView.Bar(
-                label = dayLabel.format(date).removeSuffix("."),
-                value = totalsByDay[dayKey.format(date)] ?: 0.0,
-            )
-        }
-        binding.chartMingguan.setData(bars, highlight = bars.lastIndex)
 
-        val total = bars.sumOf { it.value }
-        binding.tvTotalMinggu.text = formatKg(total)
-        binding.tvRentangMinggu.text = getString(R.string.ghm_rentang_7_hari, formatRange(days.first(), days.last()))
-
-        val busiest = bars.indices.maxByOrNull { bars[it].value }
-        binding.tvInsight.text = if (busiest == null || bars[busiest].value <= 0) {
-            getString(R.string.ghm_belum_ada_sampah_minggu_ini)
+        val bars: List<WeeklyBarChartView.Bar>
+        val highlight: Int
+        if (hari.size <= 31) {
+            bars = hari.map { tanggal ->
+                WeeklyBarChartView.Bar(
+                    label = if (hari.size <= 7) {
+                        SimpleDateFormat("EEE", LOCALE_ID).format(tanggal).removeSuffix(".")
+                    } else {
+                        SimpleDateFormat("d", LOCALE_ID).format(tanggal)
+                    },
+                    value = totalsByDay[dayKey.format(tanggal)] ?: 0.0,
+                )
+            }
+            highlight = if (samaHari(hari.last(), Date())) bars.lastIndex else -1
         } else {
-            val name = dayFull.format(days[busiest]).replaceFirstChar { it.titlecase(LOCALE_ID) }
-            getString(R.string.ghm_hari_terbanyak, name, formatKg(bars[busiest].value))
+            // Rentang panjang: gabung per minggu (7 hari) supaya batang tetap terbaca.
+            bars = hari.chunked(7).map { minggu ->
+                WeeklyBarChartView.Bar(
+                    label = SimpleDateFormat("d/M", LOCALE_ID).format(minggu.first()),
+                    value = minggu.sumOf { totalsByDay[dayKey.format(it)] ?: 0.0 },
+                )
+            }
+            highlight = -1
         }
+        binding.chartMingguan.setData(bars, highlight)
+
+        binding.tvTotalMinggu.text = formatKg(bars.sumOf { it.value })
+        binding.tvRentangMinggu.text = getString(
+            R.string.ghm_rentang_rekap,
+            formatRange(awal, akhir),
+            dalamRentang.size,
+        )
+
+        val hariTerbanyak = hari.maxByOrNull { totalsByDay[dayKey.format(it)] ?: 0.0 }
+        val nilaiTerbanyak = hariTerbanyak?.let { totalsByDay[dayKey.format(it)] ?: 0.0 } ?: 0.0
+        binding.tvInsight.text = if (nilaiTerbanyak <= 0) {
+            getString(R.string.ghm_belum_ada_sampah_rentang)
+        } else {
+            val nama = SimpleDateFormat("EEEE, d MMM", LOCALE_ID)
+                .format(hariTerbanyak!!)
+                .replaceFirstChar { it.titlecase(LOCALE_ID) }
+            getString(R.string.ghm_hari_terbanyak, nama, formatKg(nilaiTerbanyak))
+        }
+    }
+
+    /** Tombol pilihan rentang rekapan (7 hari / 30 hari / bulan ini / kustom). */
+    private fun setupChipRentang() {
+        binding.chip7Hari.setOnClickListener {
+            viewModel.setRentang(RentangRekapan(RentangRekapan.Jenis.TUJUH_HARI))
+        }
+        binding.chip30Hari.setOnClickListener {
+            viewModel.setRentang(RentangRekapan(RentangRekapan.Jenis.TIGA_PULUH_HARI))
+        }
+        binding.chipBulanIni.setOnClickListener {
+            viewModel.setRentang(RentangRekapan(RentangRekapan.Jenis.BULAN_INI))
+        }
+        binding.chipKustom.setOnClickListener { tanyaRentangKustom() }
+    }
+
+    /** Menandai chip yang sesuai dengan rentang aktif. */
+    private fun terapkanChip(rentang: RentangRekapan) {
+        val aktif = when (rentang.jenis) {
+            RentangRekapan.Jenis.TUJUH_HARI -> binding.chip7Hari
+            RentangRekapan.Jenis.TIGA_PULUH_HARI -> binding.chip30Hari
+            RentangRekapan.Jenis.BULAN_INI -> binding.chipBulanIni
+            RentangRekapan.Jenis.KUSTOM -> binding.chipKustom
+        }
+        listOf(binding.chip7Hari, binding.chip30Hari, binding.chipBulanIni, binding.chipKustom).forEach {
+            it.isChecked = it == aktif
+        }
+    }
+
+    /** "Kustom": pilih tanggal awal lalu tanggal akhir (dua langkah). */
+    private fun tanyaRentangKustom() {
+        val hariIni = Calendar.getInstance()
+        val pilihAwal = DatePickerDialog(
+            requireContext(),
+            { _, tahun, bulan, tanggal ->
+                val dari = Calendar.getInstance().apply { set(tahun, bulan, tanggal) }.time
+                pilihTanggalAkhir(dari)
+            },
+            hariIni.get(Calendar.YEAR),
+            hariIni.get(Calendar.MONTH),
+            hariIni.get(Calendar.DAY_OF_MONTH),
+        )
+        pilihAwal.setTitle(getString(R.string.ghm_pilih_tanggal_awal))
+        pilihAwal.setOnCancelListener { viewModel.rentang.value?.let(::terapkanChip) }
+        pilihAwal.show()
+    }
+
+    private fun pilihTanggalAkhir(dari: Date) {
+        val mulai = Calendar.getInstance().apply { time = dari }
+        val pilihAkhir = DatePickerDialog(
+            requireContext(),
+            { _, tahun, bulan, tanggal ->
+                val sampai = Calendar.getInstance().apply { set(tahun, bulan, tanggal) }.time
+                viewModel.setRentang(RentangRekapan(RentangRekapan.Jenis.KUSTOM, dari, sampai))
+            },
+            mulai.get(Calendar.YEAR),
+            mulai.get(Calendar.MONTH),
+            mulai.get(Calendar.DAY_OF_MONTH),
+        )
+        pilihAkhir.setTitle(getString(R.string.ghm_pilih_tanggal_akhir))
+        pilihAkhir.setOnCancelListener { viewModel.rentang.value?.let(::terapkanChip) }
+        pilihAkhir.show()
+    }
+
+    /** Apakah dua tanggal jatuh di hari kalender yang sama (zona waktu HP). */
+    private fun samaHari(a: Date, b: Date): Boolean {
+        val ca = Calendar.getInstance().apply { time = a }
+        val cb = Calendar.getInstance().apply { time = b }
+        return ca.get(Calendar.YEAR) == cb.get(Calendar.YEAR) &&
+            ca.get(Calendar.DAY_OF_YEAR) == cb.get(Calendar.DAY_OF_YEAR)
     }
 
     /** "6–12 November" bila bulannya sama, "28 Okt – 3 Nov" bila berbeda. */

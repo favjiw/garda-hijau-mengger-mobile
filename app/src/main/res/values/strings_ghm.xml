@@ -42,11 +42,19 @@
 
     <!-- Beranda sampah -->
     <string name="ghm_sapaan">Halo, pengelola</string>
-    <string name="ghm_sampah_judul">Sampah minggu ini</string>
+    <string name="ghm_sampah_judul">Rekapan sampah</string>
     <string name="ghm_satuan_kg">kg</string>
     <string name="ghm_rentang_7_hari">masuk dalam 7 hari terakhir, %1$s</string>
     <string name="ghm_hari_terbanyak">%1$s paling banyak, %2$s kg.</string>
     <string name="ghm_belum_ada_sampah_minggu_ini">Belum ada sampah tercatat dalam 7 hari terakhir.</string>
+    <string name="ghm_filter_7_hari">7 hari</string>
+    <string name="ghm_filter_30_hari">30 hari</string>
+    <string name="ghm_filter_bulan_ini">Bulan ini</string>
+    <string name="ghm_filter_kustom">Kustom</string>
+    <string name="ghm_rentang_rekap">%1$s · %2$d catatan</string>
+    <string name="ghm_belum_ada_sampah_rentang">Belum ada sampah tercatat di rentang ini.</string>
+    <string name="ghm_pilih_tanggal_awal">Pilih tanggal awal</string>
+    <string name="ghm_pilih_tanggal_akhir">Pilih tanggal akhir</string>
     <string name="ghm_riwayat">Riwayat</string>
     <string name="ghm_riwayat_kosong">Belum ada catatan. Ketuk Catat sampah hari ini untuk mulai.</string>
     <string name="ghm_tombol_catat_sampah">Catat sampah hari ini</string>
@@ -55,7 +63,7 @@
     <string name="ghm_riwayat_judul_item">%1$s kg masuk</string>
     <string name="ghm_riwayat_pukul">Pukul %1$s</string>
     <string name="ghm_riwayat_pukul_catatan">Pukul %1$s. %2$s</string>
-    <string name="ghm_grafik_deskripsi">Grafik sampah masuk 7 hari terakhir</string>
+    <string name="ghm_grafik_deskripsi">Grafik sampah masuk</string>
     <string name="ghm_keluar_judul">Keluar dari akun?</string>
     <string name="ghm_keluar_pesan">Kamu perlu masuk lagi untuk mencatat sampah.</string>
     <string name="ghm_batal">Batal</string>

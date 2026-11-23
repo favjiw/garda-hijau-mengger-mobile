@@ -106,7 +106,53 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <!-- Kartu ringkasan minggu ini -->
+            <!-- Pilihan rentang rekapan -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGrupRentang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingHorizontal="8dp"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip7Hari"
+                        style="@style/Widget.GHM.Chip.Rentang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ghm_filter_7_hari" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip30Hari"
+                        style="@style/Widget.GHM.Chip.Rentang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ghm_filter_30_hari" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipBulanIni"
+                        style="@style/Widget.GHM.Chip.Rentang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ghm_filter_bulan_ini" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipKustom"
+                        style="@style/Widget.GHM.Chip.Rentang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ghm_filter_kustom" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
+            <!-- Kartu rekapan -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

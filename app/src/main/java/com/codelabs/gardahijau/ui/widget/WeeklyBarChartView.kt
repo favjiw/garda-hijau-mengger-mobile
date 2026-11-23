@@ -15,9 +15,9 @@ import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.ui.util.formatKg
 
 /**
- * Grafik batang 7 hari di beranda Sampah (Figma: "Grafik 7 hari").
- * Batang biasa berwarna tunas, batang [highlightIndex] (hari ini) berwarna kuning terpal.
- * Angka ditampilkan di atas batang hari ini dan batang tertinggi.
+ * Grafik batang rekapan sampah di beranda Sampah (7–31 batang; rentang panjang digabung
+ * per minggu di pemanggil). Batang biasa berwarna tunas, batang [highlightIndex] (hari ini)
+ * berwarna kuning terpal. Angka ditampilkan di atas batang hari ini dan batang tertinggi.
  */
 class WeeklyBarChartView @JvmOverloads constructor(
     context: Context,
@@ -77,7 +77,11 @@ class WeeklyBarChartView @JvmOverloads constructor(
         super.onDraw(canvas)
         if (bars.isEmpty()) return
 
-        val gap = dp(10f)
+        val gap = when {
+            bars.size > 20 -> dp(3f)
+            bars.size > 12 -> dp(5f)
+            else -> dp(10f)
+        }
         val valueArea = dp(24f)
         val labelArea = dp(28f)
         val chartTop = paddingTop + valueArea
@@ -88,6 +92,8 @@ class WeeklyBarChartView @JvmOverloads constructor(
 
         val max = bars.maxOf { it.value }.takeIf { it > 0 } ?: 1.0
         val maxIndex = bars.indices.maxByOrNull { bars[it].value } ?: -1
+        // Rentang panjang: label ditampilkan berselang-seling supaya tidak bertumpuk.
+        val langkahLabel = if (bars.size <= 8) 1 else kotlin.math.ceil(bars.size / 6f).toInt()
 
         bars.forEachIndexed { index, bar ->
             val left = paddingLeft + index * (barWidth + gap)
@@ -120,7 +126,11 @@ class WeeklyBarChartView @JvmOverloads constructor(
             }
 
             val textPaint = if (isHighlight) labelStrongPaint else labelPaint
-            canvas.drawText(bar.label, centerX, height - paddingBottom - dp(6f), textPaint)
+            val tampilkanLabel = bars.size <= 8 || isHighlight || index == 0 ||
+                index == bars.lastIndex || index % langkahLabel == 0
+            if (tampilkanLabel) {
+                canvas.drawText(bar.label, centerX, height - paddingBottom - dp(6f), textPaint)
+            }
         }
     }
 

@@ -25,6 +25,14 @@ class PencatatanHistoryViewModel @Inject constructor(
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
+    /** Rentang rekapan yang dipilih pengguna (default: 7 hari terakhir). */
+    private val _rentang = MutableLiveData(RentangRekapan(RentangRekapan.Jenis.TUJUH_HARI))
+    val rentang: LiveData<RentangRekapan> = _rentang
+
+    fun setRentang(rentang: RentangRekapan) {
+        _rentang.value = rentang
+    }
+
     fun getHistoryPencacahan() {
         _isLoading.value = true
         viewModelScope.launch {
