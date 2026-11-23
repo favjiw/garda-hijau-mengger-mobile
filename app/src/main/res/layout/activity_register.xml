@@ -122,10 +122,46 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/ghm_label_pilih_rw" />
 
-                <!-- Pilihan RW. Hanya satu yang bisa aktif; diatur di RegisterActivity.setupRwChoice(). -->
+                <!-- Pilihan RW 1-5. Hanya satu yang bisa aktif; diatur di RegisterActivity.setupRwChoice(). -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRw1"
+                        style="@style/Widget.GHM.Button.Pilihan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/ghm_rw_1" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRw2"
+                        style="@style/Widget.GHM.Button.Pilihan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/ghm_rw_2" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRw3"
+                        style="@style/Widget.GHM.Button.Pilihan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/ghm_rw_3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:baselineAligned="false"
                     android:orientation="horizontal">
 

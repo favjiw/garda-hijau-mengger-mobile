@@ -25,7 +25,7 @@ Dibuat untuk program **BEM Mahasiswa Berdampak 2026 — Sinergi Garda Hijau Meng
 
 | Tab / layar | Yang bisa dilakukan |
 |---|---|
-| **Masuk & Daftar** | Satu akun per pengelola, terhubung ke RW yang dikelola (RW 4 atau RW 5). |
+| **Masuk & Daftar** | Satu akun per pengelola, terhubung ke RW yang dikelola (RW 1–5). |
 | **Sampah** | Ringkasan sampah 7 hari terakhir dengan grafik batang, riwayat catatan, dan form *Catat sampah* (tanggal, pukul, berat, catatan). |
 | **Maggot** | Daftar siklus dengan "Hari ke-N" dan pita tahap (Telur → Tetas → Besar → Panen), total perkiraan panen, form *Mulai siklus* dan *Catat fase besar*. |
 | **Detail siklus & Perkiraan panen** | Linimasa fase per siklus dan perkiraan hasil panen (kg) beserta data yang dipakai untuk menghitungnya. Perkiraan dihitung di server. |

@@ -29,6 +29,9 @@
     <string name="ghm_daftar_subjudul">Satu akun untuk tiap pengelola. Data sampah yang kamu catat akan masuk ke RW yang dipilih.</string>
     <string name="ghm_hint_buat_kata_sandi">Buat kata sandi</string>
     <string name="ghm_label_pilih_rw">Kamu mengelola RW berapa?</string>
+    <string name="ghm_rw_1">RW 1</string>
+    <string name="ghm_rw_2">RW 2</string>
+    <string name="ghm_rw_3">RW 3</string>
     <string name="ghm_rw_4">RW 4</string>
     <string name="ghm_rw_5">RW 5</string>
     <string name="ghm_galat_rw_kosong">Pilih RW yang kamu kelola</string>

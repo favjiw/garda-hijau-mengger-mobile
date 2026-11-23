@@ -72,9 +72,12 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    /** Dua tombol pilihan RW (Figma: "Kamu mengelola RW berapa?"). Hanya satu yang aktif. */
+    /** Lima tombol pilihan RW 1-5 (Figma: "Kamu mengelola RW berapa?"). Hanya satu yang aktif. */
     private fun setupRwChoice() {
         val options: Map<MaterialButton, RwNumber> = mapOf(
+            binding.btnRw1 to RwNumber.RW_1,
+            binding.btnRw2 to RwNumber.RW_2,
+            binding.btnRw3 to RwNumber.RW_3,
             binding.btnRw4 to RwNumber.RW_4,
             binding.btnRw5 to RwNumber.RW_5,
         )
