@@ -260,6 +260,58 @@
                     android:inputType="textMultiLine|textCapSentences"
                     android:maxLines="5" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Foto (opsional; tersimpan di HP, belum dikirim ke server) -->
+            <TextView
+                style="@style/Text.GHM.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/ghm_label_foto_opsional" />
+
+            <ImageView
+                android:id="@+id/imgFoto"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@drawable/bg_ghm_kartu"
+                android:contentDescription="@string/ghm_foto_alt"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPilihFoto"
+                    style="@style/Widget.GHM.Button.Saran"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ghm_tombol_pilih_foto" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHapusFoto"
+                    style="@style/Widget.GHM.Button.Saran"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/ghm_tombol_hapus_foto"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvFotoInfo"
+                style="@style/Text.GHM.Kecil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/ghm_foto_info"
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

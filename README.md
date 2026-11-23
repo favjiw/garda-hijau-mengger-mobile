@@ -26,13 +26,19 @@ Dibuat untuk program **BEM Mahasiswa Berdampak 2026 — Sinergi Garda Hijau Meng
 | Tab / layar | Yang bisa dilakukan |
 |---|---|
 | **Masuk & Daftar** | Satu akun per pengelola, terhubung ke RW yang dikelola (RW 1–5). |
-| **Sampah** | Ringkasan sampah 7 hari terakhir dengan grafik batang, riwayat catatan, dan form *Catat sampah* (tanggal, pukul, berat, catatan). |
-| **Maggot** | Daftar siklus dengan "Hari ke-N" dan pita tahap (Telur → Tetas → Besar → Panen), total perkiraan panen, form *Mulai siklus* dan *Catat fase besar*. |
-| **Detail siklus & Perkiraan panen** | Linimasa fase per siklus dan perkiraan hasil panen (kg) beserta data yang dipakai untuk menghitungnya. Perkiraan dihitung di server. |
+| **Sampah** | Rekapan sampah organik dengan filter rentang (7 hari / 30 hari / bulan ini / kustom) + grafik batang, riwayat catatan, dan form *Catat sampah organik* (tanggal, pukul, berat, catatan, foto opsional). |
+| **Maggot** | Daftar siklus dengan "Hari ke-N" dan pita 5 fase SOP (Telur → Besar → Prepupa → Pupa → Lalat) yang berpindah otomatis dari umur siklus, total perkiraan panen, form *Mulai siklus* (tanggal otomatis hari ini) dan *Catat fase besar*. |
+| **Detail siklus & Perkiraan panen** | Fase sekarang + panduan tindakan SOP, jadwal 5 fase, dan perkiraan hasil panen (kg) beserta data yang dipakai untuk menghitungnya. Perkiraan dihitung di server. |
 | **GardaBot** | Tanya-jawab seputar budidaya maggot dan pemilahan sampah, dengan saran pertanyaan. |
 | **Notifikasi** | Notifikasi dikelompokkan per hari, dengan penanda belum dibaca. |
 
 Tampilan dibuat untuk pengguna lapangan: teks besar, tombol lebar, bahasa sehari-hari, dan huruf kalimat (bukan kapital semua).
+
+**Antrean offline:** input sampah/siklus/fase yang gagal karena tidak ada internet disimpan di HP
+(Room) dan dikirim otomatis oleh WorkManager saat jaringan tersedia; layar menampilkan penanda
+"menunggu dikirim". **Pengingat lokal:** pindah fase (hari ke-13, 21, 28, 35) dan pakan harian
+fase Pembesaran (hari ke-13 s.d. 20), dijadwalkan dari tanggal mulai siklus.
+**Foto:** opsional, disimpan di HP saja (API belum menerima gambar).
 
 ## Teknologi
 

@@ -4,16 +4,20 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityTambahRiwayatBinding
+import com.codelabs.gardahijau.model.local.FotoLokal
 import com.codelabs.gardahijau.ui.util.LOCALE_ID
 import com.codelabs.gardahijau.ui.util.applySystemBarPadding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +35,18 @@ class TambahRiwayatActivity : AppCompatActivity() {
 
     /** Tanggal & pukul yang dipilih (zona waktu HP). Awalnya: sekarang. */
     private val waktuDipilih: Calendar = Calendar.getInstance()
+
+    /** Foto yang dipilih pengguna (opsional). Disimpan lokal saat catatan disimpan. */
+    private var fotoDipilih: Uri? = null
+
+    private val pilihFotoLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            fotoDipilih = uri
+            tampilkanFoto()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +68,7 @@ class TambahRiwayatActivity : AppCompatActivity() {
         setupToolbar()
         setupDatePicker()
         setupBerat()
+        setupFoto()
         setupObservers()
         setupClickListeners()
         tampilkanWaktu()
@@ -184,8 +201,40 @@ class TambahRiwayatActivity : AppCompatActivity() {
             val catatan = binding.inputKeterangan.text?.toString()?.trim().orEmpty()
 
             if (validateInput(totalSampah)) {
-                viewModel.addHistoryPencacahan(tanggalUntukApi(), totalSampah, catatan)
+                val tanggalApi = tanggalUntukApi()
+                // Foto disimpan lokal dengan kunci tanggalWaktu (API belum menerima gambar).
+                fotoDipilih?.let { FotoLokal.simpan(this, tanggalApi, it) }
+                viewModel.addHistoryPencacahan(tanggalApi, totalSampah, catatan)
             }
+        }
+    }
+
+    /** Pemilih foto opsional: pratinjau + tombol pilih/ganti/hapus. */
+    private fun setupFoto() {
+        binding.btnPilihFoto.setOnClickListener {
+            pilihFotoLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        }
+        binding.btnHapusFoto.setOnClickListener {
+            fotoDipilih = null
+            tampilkanFoto()
+        }
+        tampilkanFoto()
+    }
+
+    private fun tampilkanFoto() {
+        val uri = fotoDipilih
+        binding.imgFoto.visibility = if (uri == null) View.GONE else View.VISIBLE
+        binding.btnHapusFoto.visibility = if (uri == null) View.GONE else View.VISIBLE
+        binding.tvFotoInfo.visibility = if (uri == null) View.GONE else View.VISIBLE
+        binding.btnPilihFoto.setText(
+            if (uri == null) R.string.ghm_tombol_pilih_foto else R.string.ghm_tombol_ganti_foto
+        )
+        if (uri != null) {
+            binding.imgFoto.setImageURI(uri)
+        } else {
+            binding.imgFoto.setImageDrawable(null)
         }
     }
 

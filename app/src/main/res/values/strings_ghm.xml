@@ -10,7 +10,7 @@
     <string name="ghm_mode_demo">Mode demo: memakai data contoh, bukan server. Isi nama dan sandi apa saja.</string>
 
     <!-- Masuk -->
-    <string name="ghm_masuk_subjudul">Catat sampah yang masuk dan pantau kandang maggot di RW-mu.</string>
+    <string name="ghm_masuk_subjudul">Catat sampah organik yang masuk dan pantau kandang maggot di RW-mu.</string>
     <string name="ghm_masuk_judul">Masuk ke akunmu</string>
     <string name="ghm_label_nama_pengguna">Nama pengguna</string>
     <string name="ghm_hint_nama_pengguna">Contoh: pengelola.rw5</string>
@@ -26,7 +26,7 @@
 
     <!-- Daftar -->
     <string name="ghm_daftar_judul">Buat akun baru</string>
-    <string name="ghm_daftar_subjudul">Satu akun untuk tiap pengelola. Data sampah yang kamu catat akan masuk ke RW yang dipilih.</string>
+    <string name="ghm_daftar_subjudul">Satu akun untuk tiap pengelola. Data sampah organik yang kamu catat akan masuk ke RW yang dipilih.</string>
     <string name="ghm_hint_buat_kata_sandi">Buat kata sandi</string>
     <string name="ghm_label_pilih_rw">Kamu mengelola RW berapa?</string>
     <string name="ghm_rw_1">RW 1</string>
@@ -42,7 +42,7 @@
 
     <!-- Beranda sampah -->
     <string name="ghm_sapaan">Halo, pengelola</string>
-    <string name="ghm_sampah_judul">Rekapan sampah</string>
+    <string name="ghm_sampah_judul">Rekapan sampah organik</string>
     <string name="ghm_satuan_kg">kg</string>
     <string name="ghm_rentang_7_hari">masuk dalam 7 hari terakhir, %1$s</string>
     <string name="ghm_hari_terbanyak">%1$s paling banyak, %2$s kg.</string>
@@ -52,18 +52,18 @@
     <string name="ghm_filter_bulan_ini">Bulan ini</string>
     <string name="ghm_filter_kustom">Kustom</string>
     <string name="ghm_rentang_rekap">%1$s · %2$d catatan</string>
-    <string name="ghm_belum_ada_sampah_rentang">Belum ada sampah tercatat di rentang ini.</string>
+    <string name="ghm_belum_ada_sampah_rentang">Belum ada sampah organik tercatat di rentang ini.</string>
     <string name="ghm_pilih_tanggal_awal">Pilih tanggal awal</string>
     <string name="ghm_pilih_tanggal_akhir">Pilih tanggal akhir</string>
     <string name="ghm_riwayat">Riwayat</string>
-    <string name="ghm_riwayat_kosong">Belum ada catatan. Ketuk Catat sampah hari ini untuk mulai.</string>
-    <string name="ghm_tombol_catat_sampah">Catat sampah hari ini</string>
+    <string name="ghm_riwayat_kosong">Belum ada catatan. Ketuk Catat sampah organik untuk mulai.</string>
+    <string name="ghm_tombol_catat_sampah">Catat sampah organik</string>
     <string name="ghm_notifikasi">Notifikasi</string>
     <string name="ghm_keluar">Keluar dari akun</string>
     <string name="ghm_riwayat_judul_item">%1$s kg masuk</string>
     <string name="ghm_riwayat_pukul">Pukul %1$s</string>
     <string name="ghm_riwayat_pukul_catatan">Pukul %1$s. %2$s</string>
-    <string name="ghm_grafik_deskripsi">Grafik sampah masuk</string>
+    <string name="ghm_grafik_deskripsi">Grafik sampah organik masuk</string>
     <string name="ghm_keluar_judul">Keluar dari akun?</string>
     <string name="ghm_keluar_pesan">Kamu perlu masuk lagi untuk mencatat sampah.</string>
     <string name="ghm_batal">Batal</string>
@@ -71,21 +71,30 @@
 
     <!-- Catat sampah -->
     <string name="ghm_kembali">Kembali</string>
-    <string name="ghm_catat_judul">Catat sampah</string>
-    <string name="ghm_catat_subjudul">Isi setelah sampah selesai ditimbang.</string>
+    <string name="ghm_catat_judul">Catat sampah organik</string>
+    <string name="ghm_catat_subjudul">Isi setelah sampah organik selesai ditimbang.</string>
     <string name="ghm_label_tanggal">Tanggal</string>
     <string name="ghm_label_pukul">Pukul</string>
     <string name="ghm_pilih_tanggal">Pilih tanggal</string>
     <string name="ghm_pilih_pukul">Pilih pukul</string>
-    <string name="ghm_label_berat">Berat sampah</string>
+    <string name="ghm_label_berat">Berat sampah organik</string>
     <string name="ghm_hint_berat">0</string>
     <string name="ghm_kurangi_berat">Kurangi 1 kg</string>
     <string name="ghm_tambah_berat">Tambah 1 kg</string>
     <string name="ghm_label_catatan_opsional">Catatan (boleh dikosongkan)</string>
     <string name="ghm_hint_catatan">Misal: banyak sisa sayur dari pasar</string>
     <string name="ghm_tombol_simpan_catatan">Simpan catatan</string>
-    <string name="ghm_galat_berat_kosong">Isi berat sampah, lebih dari 0 kg</string>
+    <string name="ghm_galat_berat_kosong">Isi berat sampah organik, lebih dari 0 kg</string>
     <string name="ghm_galat_simpan">Gagal menyimpan: %1$s</string>
+
+    <!-- Foto lokal (opsional; API belum menerima gambar) -->
+    <string name="ghm_label_foto_opsional">Foto (boleh dikosongkan)</string>
+    <string name="ghm_tombol_pilih_foto">Pilih foto</string>
+    <string name="ghm_tombol_ganti_foto">Ganti foto</string>
+    <string name="ghm_tombol_hapus_foto">Hapus foto</string>
+    <string name="ghm_foto_judul">Foto</string>
+    <string name="ghm_foto_alt">Foto catatan sampah</string>
+    <string name="ghm_foto_info">Foto disimpan di HP, belum dikirim ke server.</string>
 
     <!-- Maggot: kandang -->
     <string name="ghm_maggot_judul">Kandang maggot</string>

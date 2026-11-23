@@ -127,6 +127,38 @@
                 android:padding="20dp"
                 tools:text="Banyak sisa sayur dari pasar" />
 
+            <!-- Foto (tersimpan di HP; belum dikirim ke server) -->
+            <LinearLayout
+                android:id="@+id/cardFoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    style="@style/Text.GHM.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ghm_foto_judul" />
+
+                <ImageView
+                    android:id="@+id/imgFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="@drawable/bg_ghm_kartu"
+                    android:contentDescription="@string/ghm_foto_alt"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    style="@style/Text.GHM.Kecil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/ghm_foto_info" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvCreatedAt"
                 style="@style/Text.GHM.Kecil"

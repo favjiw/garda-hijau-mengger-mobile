@@ -1,12 +1,15 @@
 package com.codelabs.gardahijau.ui.pencatatan_history.detail_pencatatan_history
 
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.codelabs.gardahijau.R
 import com.codelabs.gardahijau.databinding.ActivityHistoryDetailBinding
+import com.codelabs.gardahijau.model.local.FotoLokal
 import com.codelabs.gardahijau.model.remote.response.hitoryPencacahan.DataItem
 import com.codelabs.gardahijau.ui.util.LOCALE_ID
 import com.codelabs.gardahijau.ui.util.applySystemBarPadding
@@ -55,5 +58,14 @@ class HistoryDetailActivity : AppCompatActivity() {
         val dibuat = parseServerDate(item.createdAt)
             ?.let { SimpleDateFormat("d MMMM yyyy", LOCALE_ID).format(it) }
         binding.tvCreatedAt.text = dibuat?.let { getString(R.string.ghm_dicatat_pada, it) }.orEmpty()
+
+        // Foto lokal (kalau ada) dengan kunci tanggalWaktu catatan.
+        val foto = FotoLokal.ambil(this, item.tanggalWaktu)
+        if (foto != null) {
+            binding.cardFoto.visibility = View.VISIBLE
+            binding.imgFoto.setImageURI(Uri.fromFile(foto))
+        } else {
+            binding.cardFoto.visibility = View.GONE
+        }
     }
 }
